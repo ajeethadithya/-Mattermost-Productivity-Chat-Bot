@@ -74,4 +74,27 @@ Alternative Flows:
 - No available reminders.
 - No overdue tasks.
 
+Use Case 3: Scheduling a meeting with potentially available resources
+
+Preconditions: 
+- All users have provided access to Google calendars.
+- All users have Google Calendar API tokens.
+
+Main Flow: 
+- User requests availability of other users. 
+- Bot returns potential timeslots for peer-to-peer collaboration (schedule a meeting). 
+- Request and await collaborator’s confirmation for meeting scheduling. 
+- Schedule meetings and post links.
+
+Sub flows:
+- User enters a command to check other available user(s).
+- Bot returns other available user(s). User selects potential collaborators.
+- Bot requests the collaborator(s) for meeting approval.
+- Bot schedules meetings and posts links.
+
+Alternative Flows:
+No available time slots.
+All potential collaborators deny scheduling requests.
+
+
 
