@@ -34,7 +34,7 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ## Use Cases:
 
-Use Case: To-do list visualization 
+Use Case 1: To-do list visualization 
 
 Preconditions: 
 - All users share a GitHub repository with assigned issues.
@@ -52,4 +52,26 @@ Sub flows:
 
 Alternative Flows:
 - No available tasks for a given user.
+
+Use Case 2: Periodic reminders/ Identifying overdue Github issues
+
+Preconditions: 
+- Use case 1 (To-do list visualization has successfully returned pending tasks).
+
+Main Flow: 
+- User requests addition of new reminders/ view existing reminders.
+- The bot responds to user input. 
+- Bot checks overdue tasks and notifies users to perform action. 
+- User resolves the pending issue (or) proceeds to Use Case 3.
+
+Sub flows:
+- User enters a command to check available reminders/add new reminders.
+- Bot adds new reminders/returns current reminder information.
+- Bot identifies overdue tasks by comparing against a set threshold and notifies the user to perform the appropriate action. 
+- User resolves task (or) requests assistance from collaborators (Use Case 3).
+
+Alternative Flows:
+- No available reminders.
+- No overdue tasks.
+
 
