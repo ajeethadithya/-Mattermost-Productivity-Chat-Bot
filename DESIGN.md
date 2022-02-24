@@ -31,3 +31,23 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 
 ## *HOCUS POCUS, DON’T LOSE YOUR FOCUS*
+
+## Use Cases:
+
+Use Case: To-do list visualization 
+
+Preconditions: 
+All users share a GitHub repository with assigned issues.
+All users have provided Github token access.
+
+Main Flow: 
+User requests to-do list information  [S1]. Bot returns the list of GitHub issues assigned to the particular user [S2]. User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
+
+Sub flows:
+[S1]: User enters a command to check to-do list information.
+[S2]: Bot returns information regarding tasks and awaits user operation. Request and await user input.
+[S3]: User enters a command to add a new task(s)/mark existing tasks as completed.
+
+Alternative Flows:
+No available tasks for a given user.
+
