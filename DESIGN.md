@@ -93,8 +93,8 @@ Sub flows:
 - Bot schedules meetings and posts links.
 
 Alternative Flows:
-No available time slots.
-All potential collaborators deny scheduling requests.
+- No available time slots.
+- All potential collaborators deny scheduling requests.
 
 
 
