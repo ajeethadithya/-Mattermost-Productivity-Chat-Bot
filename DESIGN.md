@@ -36,22 +36,20 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 Use Case: To-do list visualization 
 
-1. Preconditions: 
-
-i) All users share a GitHub repository with assigned issues.
-
-ii) All users have provided Github token access.
+Preconditions: 
+- All users share a GitHub repository with assigned issues.
+- All users have provided Github token access.
 
 Main Flow: 
-User requests to-do list information  
+- User requests to-do list information  
 - Bot returns the list of GitHub issues assigned to the particular user 
 - User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
 
 Sub flows:
-[S1]: User enters a command to check to-do list information.
-[S2]: Bot returns information regarding tasks and awaits user operation. Request and await user input.
-[S3]: User enters a command to add a new task(s)/mark existing tasks as completed.
+- User enters a command to check to-do list information.
+- Bot returns information regarding tasks and awaits user operation. Request and await user input.
+- User enters a command to add a new task(s)/mark existing tasks as completed.
 
 Alternative Flows:
-No available tasks for a given user.
+- No available tasks for a given user.
 
