@@ -100,7 +100,7 @@ Alternative Flows:
 
 - Wireframe Mockup:
 
-![WireframeMockup](https://media.github.ncsu.edu/user/23514/files/985546ad-3bcf-4380-bebc-397490cab9c7)
+<img width="700" src="https://media.github.ncsu.edu/user/23514/files/985546ad-3bcf-4380-bebc-397490cab9c7">
 
 
 - Storyboard:
