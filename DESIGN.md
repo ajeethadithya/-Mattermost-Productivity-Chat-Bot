@@ -110,22 +110,22 @@ Alternative Flows:
 - Individual Slides from the Storyboard:
 
 - Slide 1:
-<img width="300" src="https://github.ncsu.edu/csc510-s2022/CSC510-24/files/863/Slide1.pdf">
+<img width="600" src="https://github.ncsu.edu/csc510-s2022/CSC510-24/files/863/Slide1.pdf">
 
 - Slide 2:
-<img width="300" src="https://media.github.ncsu.edu/user/23514/files/e6f7ce3f-9c62-4123-b656-571c483015d2">
+<img width="600" src="https://media.github.ncsu.edu/user/23514/files/e6f7ce3f-9c62-4123-b656-571c483015d2">
 
 - Slide 3:
-<img width="300" src="https://media.github.ncsu.edu/user/23514/files/d90ae7fe-a396-4f44-b6f8-8f84e0976d9a">
+<img width="600" src="https://media.github.ncsu.edu/user/23514/files/d90ae7fe-a396-4f44-b6f8-8f84e0976d9a">
 
 - Slide 4:
-<img width="300" src="https://media.github.ncsu.edu/user/23514/files/c0cf0777-6f75-40d4-a484-dd7e4902d1e0">
+<img width="600" src="https://media.github.ncsu.edu/user/23514/files/c0cf0777-6f75-40d4-a484-dd7e4902d1e0">
 
 - Slide 5:
-<img width="300" src="https://media.github.ncsu.edu/user/23514/files/f2b50cb7-12a0-499e-bdc1-7b464317fdfa">
+<img width="600" src="https://media.github.ncsu.edu/user/23514/files/f2b50cb7-12a0-499e-bdc1-7b464317fdfa">
 
 - Slide 6:
-<img width="300" src="https://github.ncsu.edu/csc510-s2022/CSC510-24/files/864/Slide6.pdf">
+<img width="600" src="https://github.ncsu.edu/csc510-s2022/CSC510-24/files/864/Slide6.pdf">
 
 
 
