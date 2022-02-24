@@ -96,5 +96,15 @@ Alternative Flows:
 - No available time slots.
 - All potential collaborators deny scheduling requests.
 
+## Design Sketches:
+
+- Wireframe Mockup:
+
+[wireframe.pdf](https://github.ncsu.edu/csc510-s2022/CSC510-24/files/862/wireframe.pdf)
+
+- Storyboard:
+
+![Storyboard](https://media.github.ncsu.edu/user/23514/files/168f6875-29cf-44d1-9f16-d6506c235d78)
+
 
 
