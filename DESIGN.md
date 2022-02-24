@@ -41,7 +41,9 @@ All users share a GitHub repository with assigned issues.
 All users have provided Github token access.
 
 Main Flow: 
-User requests to-do list information  [S1]. Bot returns the list of GitHub issues assigned to the particular user [S2]. User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
+User requests to-do list information  
+[S1]. Bot returns the list of GitHub issues assigned to the particular user 
+[S2]. User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
 
 Sub flows:
 [S1]: User enters a command to check to-do list information.
