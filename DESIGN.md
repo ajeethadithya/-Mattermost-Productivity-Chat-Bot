@@ -36,9 +36,9 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 Use Case: To-do list visualization 
 
-Preconditions: 
-All users share a GitHub repository with assigned issues.
-All users have provided Github token access.
+1. Preconditions: 
+i) All users share a GitHub repository with assigned issues.
+ii) All users have provided Github token access.
 
 Main Flow: 
 User requests to-do list information  
