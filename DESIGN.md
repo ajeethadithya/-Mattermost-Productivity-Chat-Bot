@@ -127,6 +127,8 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 - Slide 6:
 <img width="800" src="https://github.ncsu.edu/csc510-s2022/CSC510-24/files/864/Slide6.pdf">
 
+## Architecture Design:
+
 
 
 
