@@ -34,7 +34,7 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ## Use Cases:
 
-<b>Use Case 1: To-do list visualization </b>
+#### Use Case 1: To-do list visualization
 
 <b> Preconditions: </b>
 - All users share a GitHub repository with assigned issues.
@@ -53,7 +53,7 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 <b> Alternative Flows: </b>
 - No available tasks for a given user.
 
-<b> Use Case 2: Periodic reminders/ Identifying overdue Github issues </b>
+#### Use Case 2: Periodic reminders/ Identifying overdue Github issues
 
 <b> Preconditions: </b>
 - Use case 1 (To-do list visualization has successfully returned pending tasks).
@@ -74,7 +74,7 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 - No available reminders.
 - No overdue tasks.
 
-<b> Use Case 3: Scheduling a meeting with potentially available resources </b>
+#### Use Case 3: Scheduling a meeting with potentially available resources
 
 <b> Preconditions: </b>
 - All users have provided access to Google calendars.
@@ -157,17 +157,20 @@ In general, a hybrid of designs can be attributed to a software project. The sam
 We consider our Focus bot P.A.M to be a hybrid structure of the notifier, reactors, responders, space reactors and space responder patterns. We use the concept of ‘spaces’ as each channel for the user with the bot is considered to be the ‘space’ and based on each user’s data and requests in their space, the bot reacts and responds accordingly. P.A.M reacts to messages (predominantly commands) from the user and reacts with the output as a message. For example, if the user instructs P.A.M to ‘show to-do list’, then it reacts to the command and executes respective procedures and conditionals to fetch the data from the database and displays the list. Since, P.A.M has to fetch data for the user, it is considered to be a responder bot as it is aware of the user that is conversing with. Moreover, the bot is considered to have a Notifier Pattern since based on each user’s To-Do list, it sets reminders and notifies with a message regarding the due dates and over-due tasks from the To-Do list. However, it does not currently learn from what was said or remember the overall conversation and hence it does not abide by the conversationalist pattern. This could be a scope of future development for P.A.M. 
 
 ### Additional Diagrams 
-For a better understanding of the implementation and flow of the software, use case diagrams, sequence diagram and a flowchart has been provided.
-
+For a better understanding of the implementation and flow of the software, use case diagrams, sequence diagram, and a flowchart has been provided.
 
 #### Flowchart 
 <img src="https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/ad1499f5d3ffae6756c878db8b1607db3e48aab4/Architecture/Flowchart.png" height="500" width="500">
 
 #### Use Case Diagram
+###### Use Case 1: To-do list visualization
+<img src="https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/e7b552dbecb091f83219ffc251c1f570b5e7cc79/Architecture/Usecase%20DIagram%201.png" height="500" width="500">
+
+###### Use Case 2: Periodic reminders/ Identifying overdue Github issues
+<img src="https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/e7b552dbecb091f83219ffc251c1f570b5e7cc79/Architecture/Usecase%20Diagram%202.png" height="500" width="500">
+
+###### Use Case 3: Scheduling a meeting with potentially available resources
+<img src="https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/e7b552dbecb091f83219ffc251c1f570b5e7cc79/Architecture/Usecase%20Diagram%203.png" height="500" width="500">
 
 #### Sequence Diagram
 <img src="https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/ad1499f5d3ffae6756c878db8b1607db3e48aab4/Architecture/Sequence.png" height="500" width="500">
-
-
-
-
