@@ -45,7 +45,7 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 - Bot returns the list of GitHub issues assigned to the particular user 
 - User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
 
-<b Sub flows: </b>
+<b> Sub flows: </b>
 - User enters a command to check to-do list information.
 - Bot returns information regarding tasks and awaits user operation. Request and await user input.
 - User enters a command to add a new task(s)/mark existing tasks as completed.
