@@ -98,20 +98,43 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ## Design Sketches:
 
-- Wireframe Mockup:
+#### Wireframe Mockup:
 
 <img width="550" src="https://media.github.ncsu.edu/user/23514/files/985546ad-3bcf-4380-bebc-397490cab9c7">
 
 
-- Storyboard:
+#### Storyboard:
 
 ![Storyboard](https://media.github.ncsu.edu/user/23514/files/168f6875-29cf-44d1-9f16-d6506c235d78)
 
 ## Architecture Design:
+#### Architecture Diagram
 
 ![Component](https://media.github.ncsu.edu/user/22704/files/e91222a1-7039-4727-a12e-4789eaa3cb14)
 
+#### Architecture Explanation
+Usually, a software project is considered to have a variety of architecture styles combined to form a hybrid style. We have listed a few styles that would resemble the structure and implementation of our Focus bot to simplify the understanding of the workings of the bot with multiple diagrams as well.
 
+Our bot resembles a basic repository style where there are several components whose computational processes are triggered by input requests and independently access the repository for any sort of data manipulation and fetching. Majority of the actions that our bot is designed to do, requires the usage of the user database. As any repository style consists of a client querying data, the user inputs from the Mattermost chat server are considered the client and the commands given by the user to view to-do list, view reminders, add tasks, add reminders among other actions will utilize the repository i.e., the user database.
 
+We can consider our bot to also resemble an event-driven architectural paradigm where the program would wait for an event to occur (e.g.: a WebSocket event perhaps) and based on the event an action is triggered. Post the execution, the program comes back to a waiting state. Such an endless loop keeps happening over and over again and hence automation is achieved by the bot. In our case, our bot would receive an event from the Mattermost server and performs specific set of actions based on the content of the event and relays information back.
+
+The following paragraphs explain the different components present in our software architecture for a simpler understanding of the Focus Bot.
+
+1)	**Mattermost:** We decided to use Mattermost as it is an open-source chat server designed to essentially use in organizations for internal chat/communication and file sharing.  Our bot will be designed to listen to various channels for respective users on Mattermost using appropriate authentication and API calls for inputs to the server and the database. 
+
+2)	**P.A.M:** The next component in the architecture is Focus bot itself called P.A.M- Personal Accountability Manager. We consider it to be a subsystem/component consisting of several other components. It consists of a Command Parser, Action Generator, Response Analyzer, Output Generator.
+
+3) **Command Parser:**  As mentioned above, our Focus bot will be listening through appropriate ports to the user’s channel and waits for the input commands and instructions from the user to ease the user’s mundane tasks and increase productivity. The bot will have specific set of commands that we would configure to help with the tasks at hand. In order to identify if the set of commands are legal for further processing and to perform appropriate actions based on the commands, a parser checks the given input with a list of commands that the bot understands. If the command is legal, further execution of the program would take place.
+
+4) **Action on Command:** We could think of this component to be methods/ procedures that are called based on the given legal input that comes from the command parser. For example, if the user gives the command ‘show to-do’ in the channel with P.A.M, the program control would go to the method that executes the actions required for the command. These actions include making API calls to the user database to fetch the user’s ‘To-Do List’ or updating the list dynamically by checking if the user has been assigned more ‘GitHub Issues’ by using relevant API calls.
+
+5) **Response Analyzer:** This component can be considered as the part of software that formats the response appropriately and passes it to the output generator which is to be passed as a formal response of what was requested using the Mattermost API calls to the bot’s channel. This can be considered as an extension of the Action Component.
+
+6) **Knowledge Base:** Coming out of the subsystem, our next component is the Knowledge Base which essentially contains the necessary real time data that we need to access using API calls in order to come up with the right response for P.A.M to give. This includes GitHub being the primary source for the ‘To-Do List’ from which we get user’s issues, Google Calendars from which we need the team member’s schedules, Reminder APIs that would trigger events based on time intervals.
+
+7) **User Database:** This component is essential to the project as it would be set to contain all the data from user channel details, their input commands, each user’s To-Do list and even their reminders. Having a database is important to the project as it would maintain information about whether a user ‘Agree/Disagree’ to help/meet with another team member to solve pending issues for the team. We plan on using a NoSQL database like MongoDB to utilize the JSON format and to store the above-mentioned information for users and more as implementation progresses.
+
+In a nutshell, all the above-mentioned components are a part of the server side i.e., our bot itself. It interacts with users in Mattermost which can be considered as the client. 
 
 
