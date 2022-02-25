@@ -4,7 +4,7 @@ Team members
 | Name      | Unity ID |
 | ----------- | ----------- |
 | Ajeeth Adithya Narayan    | anaray23     |
-| Sriram Sudarshan   | ssudhar        |
+| Sriram Sudharsan   | ssudhar        |
 |Smerithee Govindhen | sgovind5|
 |Srivatsan Ramesh | srames22|
 
@@ -98,21 +98,21 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ## Design Sketches:
 
-#### Wireframe Mockup:
+### Wireframe Mockup:
 
 <img width="550" src="https://media.github.ncsu.edu/user/23514/files/985546ad-3bcf-4380-bebc-397490cab9c7">
 
 
-#### Storyboard:
+### Storyboard:
 
 ![Storyboard](https://media.github.ncsu.edu/user/23514/files/168f6875-29cf-44d1-9f16-d6506c235d78)
 
 ## Architecture Design:
-#### Architecture Diagram
+### Architecture Diagram
 
 ![Component](https://media.github.ncsu.edu/user/22704/files/e91222a1-7039-4727-a12e-4789eaa3cb14)
 
-#### Architecture Explanation
+### Architecture Explanation
 Usually, a software project is considered to have a variety of architecture styles combined to form a hybrid style. We have listed a few styles that would resemble the structure and implementation of our Focus bot to simplify the understanding of the workings of the bot with multiple diagrams as well.
 
 Our bot resembles a basic repository style where there are several components whose computational processes are triggered by input requests and independently access the repository for any sort of data manipulation and fetching. Majority of the actions that our bot is designed to do, requires the usage of the user database. As any repository style consists of a client querying data, the user inputs from the Mattermost chat server are considered the client and the commands given by the user to view to-do list, view reminders, add tasks, add reminders among other actions will utilize the repository i.e., the user database.
@@ -136,5 +136,9 @@ The following paragraphs explain the different components present in our softwar
 7) **User Database:** This component is essential to the project as it would be set to contain all the data from user channel details, their input commands, each user’s To-Do list and even their reminders. Having a database is important to the project as it would maintain information about whether a user ‘Agree/Disagree’ to help/meet with another team member to solve pending issues for the team. We plan on using a NoSQL database like MongoDB to utilize the JSON format and to store the above-mentioned information for users and more as implementation progresses.
 
 In a nutshell, all the above-mentioned components are a part of the server side i.e., our bot itself. It interacts with users in Mattermost which can be considered as the client. 
+
+### Constraints and Guidelines
+
+The project currently assumes that every participating user has previously installed and set up Mattermost. The Github OAUTH token required for access to Github accounts for each individual user must be configured for every user (ideally until the user is logged into their GitHub account). Each user’s necessary authentication tokens must be set as an environment variable. We also assume that every user has a pre-configured Google account to facilitate Google Calendar API creating and scheduling meetings. This would also require the user to provide the necessary permissions for the bot to access their respective Google Calendar. Taking into account the scope of work planned, the bot can respond to a pre-defined set of commands. Also, it is assumed that every user and a bot share one designated channel, implying a user’s respective bot might not be able to communicate with another user’s bot. This is because the application essentially runs on the respective user’s machine and not on a server.
 
 
