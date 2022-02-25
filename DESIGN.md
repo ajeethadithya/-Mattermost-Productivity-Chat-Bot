@@ -141,4 +141,17 @@ In a nutshell, all the above-mentioned components are a part of the server side 
 
 The project currently assumes that every participating user has previously installed and set up Mattermost. The Github OAUTH token required for access to Github accounts for each individual user must be configured for every user (ideally until the user is logged into their GitHub account). Each user’s necessary authentication tokens must be set as an environment variable. We also assume that every user has a pre-configured Google account to facilitate Google Calendar API creating and scheduling meetings. This would also require the user to provide the necessary permissions for the bot to access their respective Google Calendar. Taking into account the scope of work planned, the bot can respond to a pre-defined set of commands. Also, it is assumed that every user and a bot share one designated channel, implying a user’s respective bot might not be able to communicate with another user’s bot. This is because the application essentially runs on the respective user’s machine and not on a server.
 
+### Additional Patterns and Designs
+
+In general, a hybrid of designs can be attributed to a software project. The same holds for bot architecture and designs. There are plenty of designs that can be attributed bots, not just in terms of software engineering designs, but different Bot Design Patterns. From our understanding, there are 6 types of bot design patterns:
+
+1.	Notifiers
+2.	Reactors
+3.	Space Reactors
+4.	Responders 
+5.	Space Responders
+6.	Conversationalists
+
+We consider our Focus bot P.A.M to be a hybrid structure of the notifier, reactors, responders, space reactors and space responder patterns. We use the concept of ‘spaces’ as each channel for the user with the bot is considered to be the ‘space’ and based on each user’s data and requests in their space, the bot reacts and responds accordingly. P.A.M reacts to messages (predominantly commands) from the user and reacts with the output as a message. For example, if the user instructs P.A.M to ‘show to-do list’, then it reacts to the command and executes respective procedures and conditionals to fetch the data from the database and displays the list. Since, P.A.M has to fetch data for the user, it is considered to be a responder bot as it is aware of the user that is conversing with. Moreover, the bot is considered to have a Notifier Pattern since based on each user’s To-Do list, it sets reminders and notifies with a message regarding the due dates and over-due tasks from the To-Do list. However, it does not currently learn from what was said or remember the overall conversation and hence it does not abide by the conversationalist pattern. This could be a scope of future development for P.A.M. 
+
 
