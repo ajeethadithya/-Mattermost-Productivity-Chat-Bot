@@ -34,65 +34,65 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ## Use Cases:
 
-Use Case 1: To-do list visualization 
+<b>Use Case 1: To-do list visualization </b>
 
-Preconditions: 
+<b> Preconditions: </b>
 - All users share a GitHub repository with assigned issues.
 - All users have provided Github token access.
 
-Main Flow: 
+<b> Main Flow: </b>
 - User requests to-do list information  
 - Bot returns the list of GitHub issues assigned to the particular user 
 - User verifies tasks and may modify/add new tasks/close existing tasks (mark as completed)[S3].
 
-Sub flows:
+<b Sub flows: </b>
 - User enters a command to check to-do list information.
 - Bot returns information regarding tasks and awaits user operation. Request and await user input.
 - User enters a command to add a new task(s)/mark existing tasks as completed.
 
-Alternative Flows:
+<b> Alternative Flows: </b>
 - No available tasks for a given user.
 
-Use Case 2: Periodic reminders/ Identifying overdue Github issues
+<b> Use Case 2: Periodic reminders/ Identifying overdue Github issues </b>
 
-Preconditions: 
+<b> Preconditions: </b>
 - Use case 1 (To-do list visualization has successfully returned pending tasks).
 
-Main Flow: 
+<b> Main Flow: </b>
 - User requests addition of new reminders/ view existing reminders.
 - The bot responds to user input. 
 - Bot checks overdue tasks and notifies users to perform action. 
 - User resolves the pending issue (or) proceeds to Use Case 3.
 
-Sub flows:
+<b> Sub flows: </b>
 - User enters a command to check available reminders/add new reminders.
 - Bot adds new reminders/returns current reminder information.
 - Bot identifies overdue tasks by comparing against a set threshold and notifies the user to perform the appropriate action. 
 - User resolves task (or) requests assistance from collaborators (Use Case 3).
 
-Alternative Flows:
+<b> Alternative Flows: </b>
 - No available reminders.
 - No overdue tasks.
 
-Use Case 3: Scheduling a meeting with potentially available resources
+<b> Use Case 3: Scheduling a meeting with potentially available resources </b>
 
-Preconditions: 
+<b> Preconditions: </b>
 - All users have provided access to Google calendars.
 - All users have Google Calendar API tokens.
 
-Main Flow: 
+<b> Main Flow: </b>
 - User requests availability of other users. 
 - Bot returns potential timeslots for peer-to-peer collaboration (schedule a meeting). 
 - Request and await collaborator’s confirmation for meeting scheduling. 
 - Schedule meetings and post links.
 
-Sub flows:
+<b> Sub flows: </b>
 - User enters a command to check other available user(s).
 - Bot returns other available user(s). User selects potential collaborators.
 - Bot requests the collaborator(s) for meeting approval.
 - Bot schedules meetings and posts links.
 
-Alternative Flows:
+<b> Alternative Flows: </b>
 - No available time slots.
 - All potential collaborators deny scheduling requests.
 
