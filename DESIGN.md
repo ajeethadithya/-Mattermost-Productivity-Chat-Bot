@@ -107,6 +107,8 @@ To facilitate this transition - a bot acting as a mini personal assistant with a
 
 ![Storyboard](https://media.github.ncsu.edu/user/23514/files/168f6875-29cf-44d1-9f16-d6506c235d78)
 
+P.S: Kindly zoom-in to read the content.
+
 ## Architecture Design:
 ### Architecture Diagram
 
@@ -143,7 +145,7 @@ The project currently assumes that every participating user has previously insta
 
 ### Additional Patterns and Designs
 
-In general, a hybrid of designs can be attributed to a software project. The same holds for bot architecture and designs. There are plenty of designs that can be attributed bots, not just in terms of software engineering designs, but different Bot Design Patterns. From our understanding, there are 6 types of bot design patterns:
+In general, a hybrid of designs can be attributed to a software project. The same holds for bot architecture and designs. There are plenty of designs that can be attributed to bots, not just in terms of software engineering designs, but different Bot Design Patterns. From our understanding, there are 6 types of bot design patterns:
 
 1.	Notifiers
 2.	Reactors
