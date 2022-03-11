@@ -47,7 +47,7 @@ function listAuthenicatedUserRepos()
 					repo_name.push(data[i].name);
 					//console.log(name);
 				}
-				resolve(repo_name);
+				resolve(Object.values(repo_name));
 			})
 			.catch(function (error) {
 				console.log(chalk.red(error));
@@ -69,7 +69,7 @@ function getIssues(owner, repo)
     axios(options)
       .then(function (response) {
         data = response.data
-        console.log(data);
+        //console.log(data);
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
         {
