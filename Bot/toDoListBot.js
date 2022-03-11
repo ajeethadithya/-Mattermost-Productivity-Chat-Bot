@@ -47,7 +47,7 @@ function listAuthenicatedUserRepos()
 					repo_name.push(data[i].name);
 					//console.log(name);
 				}
-				resolve(repo_name);
+				resolve(Object.values(repo_name));
 			})
 			.catch(function (error) {
 				console.log(chalk.red(error));
@@ -69,7 +69,7 @@ function getIssues(owner, repo)
     axios(options)
       .then(function (response) {
         data = response.data
-        console.log(data);
+        //console.log(data);
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
         {
@@ -86,25 +86,54 @@ function getIssues(owner, repo)
   });
 }
 
-// Function to close issues
-function closeIssues(owner, issue_id)
+// Function to get issues for closeIssues
+function getIssuesForClosing(owner, repo, issue_id)
 { 
-  // Need to make a call to the database to get the repository name and the issue number 
-  let options = getDefaultOptions(`/repos/` + owner + '/' + repo + '/' + 'issues/' + issue_id + '?state=closed' , "PATCH");
+  let options = getDefaultOptions(`/repos/` + owner + '/' + repo + '/' + 'issues?state=open' , "GET");
 
   // Making a call using axios
   return new Promise(function(resolve, reject)
   {
     axios(options)
       .then(function (response) {
-        return_status = response.status
-        console.log(data);
-        var issue_list = [];
+        data = response.data
+        //console.log(data);
         for(var i = 0; i < data.length; i++)
         {
-          issue_list.push(data[i].title + ": " + data[i].body + "   ID: " + " " + data[i].id);
+          if(issue_id == data[i].id)
+          {
+            var issue_number = data[i].number;
+            break; 
+          }
         }
-        resolve(issue_list);
+        resolve(issue_number);
+        
+      })
+      .catch(function (error) {
+        //console.log(chalk.red(error));
+        reject(error);
+        return; // Terminate Execution
+      });
+  });
+}
+
+
+// Function to close issues
+async function closeIssues(owner, repo, issue_id)
+{ 
+  var issue_number = await getIssuesForClosing(owner, repo, issue_id).catch( 
+    err => console.error(`No issue in ${repo}`) );
+
+  let options = getDefaultOptions(`/repos/` + owner + '/' + repo + '/' + 'issues/' + issue_number, "PATCH");
+  options['data'] = {state: 'closed'}  
+  // Making a call using axios
+  return new Promise(function(resolve, reject)
+  {
+    axios(options)
+      .then(function (response) {
+        return_status = response.status
+        //console.log(response.data);
+        resolve(return_status);
         
       })
       .catch(function (error) {
@@ -118,6 +147,7 @@ function closeIssues(owner, issue_id)
 
 exports.getIssues = getIssues;
 exports.listAuthenicatedUserRepos = listAuthenicatedUserRepos;
+exports.closeIssues = closeIssues;
 
 // (async () => {
 //     console.log("Inside async");
