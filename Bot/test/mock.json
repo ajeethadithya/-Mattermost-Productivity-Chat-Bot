@@ -1,0 +1,24 @@
+{
+  "msg":
+{
+  "event": "posted",
+  "data": {
+    "channel_display_name": "srames22's Channel",
+    "channel_name": "srames22",
+    "channel_type": "P",
+    "post": {"id":"khubyy3hupgg7q9tpx6ah3qtsr","create_at":1647048515539,"update_at":1647048515539,"edit_at":0,"delete_at":0,"is_pinned":false,"user_id":"86m7yxqda7rdixd5dthqkeggah","channel_id":"sptfq15q83d5iexq9fygye18pc","root_id":"","original_id":"","message":["CSC501", "CSC548", "CSC600"],"type":"","props":{},"hashtags":"","pending_post_id":"","reply_count":0,"last_reply_at":0,"participants":null,"metadata":{}},
+    "sender_name": "@srames22",
+    "set_online": true,
+    "team_id": "kzsmo64zkbbcb8jgf1691i4xrc"
+  },
+  "broadcast": {
+    "omit_users": null,
+    "user_id": "",
+    "channel_id": "sptfq15q83d5iexq9fygye18pc",
+    "team_id": "" 
+  },
+  "seq": 16
+}
+}
+
+

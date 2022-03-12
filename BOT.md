@@ -100,15 +100,20 @@
 - BOTTOKEN env has been set up previously.
 
 <b> Main Flow: </b>
-- User requests todo list visualization. [S1]
-- The bot responds to user input and Bot displays the todo list visualization. [S2]
+- User enters command. [S1]
+- The bot responds to user input and Bot displays the repository. [S2]
+-User enters the repository name. [S3]
+-User is prompted to enter the issue. [S4]
 
 <b> Sub flows: </b>
-- [S1] User enters a command to check all reminders (Command: show todo).
-- [S2] Bot displays user's todo list with todo list serial number.
+- [S1] User enters a command to create an issue (Command: create issue).
+- [S2] Bot displays user's repo list.
+- [S3] User enters with a "+" presceding the repo name.
+ -[S4] User enters issue body with "++" precedig the body. Bot acknowledges the issue creation.
 
 <b> Alternative Flows: </b>
-- [E1] No available todo tasks.
+- [E1] _Invalid repo name_.
+ -[E2] - Incorrect syntax
 
  
  
@@ -186,3 +191,10 @@
  -The command format is mentioned in detail to better facilitate understanding of syntax (eg.show meeting, -<task name>
  -Sequential flow is discussed in more detail to understand the workflow. 
  -Use Cases have been seperated into modular units to better represent their functionality.
+
+ 
+ ScreenCast
+
+
+Here is the link to our screencast: [Screencast for Bot Implementation](https://drive.google.com/file/d/15GZYqPbz0IFviM3cXxRbrFXh69wolDwK/view?usp=sharing)
+
