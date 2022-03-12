@@ -7,9 +7,9 @@
 - All users have provided Github token access.
 
 <b> Main Flow: </b>
-- User requests issues information [S1] [Command: "Show Issues"]
-- Bot returns the list of GitHub repositories available to the particular user [S2]
-- Bot requests user to select repository to return the issues for [S3] 
+- User requests issues information [S1].
+- Bot returns the list of GitHub repositories available to the particular user [S2].
+- Bot requests user to select repository to return the issues for [S3].
 - Bot displays Issues in the selected repository [S4].
 
 <b> Sub flows: </b>
@@ -37,7 +37,7 @@
 - Bot displays Issues in the selected repository and awaits user input (Issue ID that is requried to be closed).[S4]
 
 <b> Sub flows: </b>
-- [S1] User enters a command to close issue [Command: close issues].
+- [S1] User enters a command to close issue (Command: close issues).
 - [S2] Bot returns information regarding all available repositories. Request and await user input.
 - [S3] User enters a command to select repository.
 - [S4] Bot displays all the issues for the given user in the selected repository (Displays unique Issue ID that will be required to close the particular issue).
@@ -49,28 +49,99 @@
 - [E3] User has no available repositories.
 - [E4] The Issue number doesn't exist.
 
-#### Use Case 3: Periodic reminders/ Identifying overdue Github issues
+
+
+
+
+#### Use Case 3: Add To-do
 
 <b> Preconditions: </b>
-- Use case 1 (To-do list visualization has successfully returned pending tasks).
+- User has access to the PAM Bot and Mattermost account.
+- BOTTOKEN env has been set up previously.
 
 <b> Main Flow: </b>
-- User requests addition of new reminders/ view existing reminders. [S1]
-- The bot responds to user input. [S2]
-- Bot checks overdue tasks and notifies users to perform action. [S3]
-- User resolves the pending issue (or) proceeds to Use Case 3. [S4]
+- User requests to add To-Do list information.[S1]
+- Bot requests user to enter the task details (refer to pattern in Sub Flow (S2).[S2]
+- User enters To-Do list details.[S3] 
+- Bot acknowledges to-do list addition.[S4]
 
 <b> Sub flows: </b>
-- [S1] User enters a command to check available reminders/add new reminders [Command: show reminders].
-- [S2] Bot adds new reminders/returns current reminder information.
-- [S3] Bot identifies overdue tasks by comparing against a set threshold and notifies the user to perform the appropriate action [Logic: Current Date - Updated_at > set threshold].  
-- [S4] User resolves task (or) requests assistance from collaborators (Use Case 3).
+- [S1] User enters a command to close issue (Command: "add todo").
+- [S2] Bot returns message detailing information "Enter the task to be added with a hyphen before it (-task_one):". 
+- [S3] User enters the task name in the appropriate format. (Command " - <task name> ") !Note the hyphen addition preceding task name!.
+- [S4] Bot adds the todo list information and displays acknowledgement (Output: "Task Added").
 
 <b> Alternative Flows: </b>
-- [E1] No available reminders.
-- [E2] No overdue tasks.
+- [E1] User doesn't follow the pattern required.
 
-#### Use Case 4: Scheduling a meeting with potentially available resources
+ #### <b> Use Case 4: show todo list visualization. </b>
+
+<b> Preconditions: </b>
+- User has access to the PAM Bot and Mattermost account.
+- BOTTOKEN env has been set up previously.
+
+<b> Main Flow: </b>
+- User requests todo list visualization. [S1]
+- The bot responds to user input and Bot displays the todo list visualization. [S2]
+
+<b> Sub flows: </b>
+- [S1] User enters a command to check all reminders (Command: show todo).
+- [S2] Bot displays user's todo list with todo list serial number.
+
+<b> Alternative Flows: </b>
+- [E1] No available todo tasks.
+ 
+ 
+
+ #### <b> Use Case 5: Create Issues. </b>
+
+<b> Preconditions: </b>
+- User has access to the PAM Bot and Mattermost account.
+- BOTTOKEN env has been set up previously.
+
+<b> Main Flow: </b>
+- User requests todo list visualization. [S1]
+- The bot responds to user input and Bot displays the todo list visualization. [S2]
+
+<b> Sub flows: </b>
+- [S1] User enters a command to check all reminders (Command: show todo).
+- [S2] Bot displays user's todo list with todo list serial number.
+
+<b> Alternative Flows: </b>
+- [E1] No available todo tasks.
+
+ 
+ 
+
+#### Use Case 6: Creating a Google Calender Meeting
+
+<b> Preconditions: </b>
+ -All users have a Google service account.
+- All users have provided access to Google calendars.
+- All users have Google Calendar API tokens.
+ -All users have provided their credential ID and OAUTH tokens.
+
+<b> Main Flow: </b>
+- [S1]
+- Bot returns potential timeslots for peer-to-peer collaboration (schedule a meeting). [S2] 
+- Request and await collaborator’s confirmation for meeting scheduling. [S3]
+- Schedule meetings and post links. [S4]
+
+<b> Sub flows: </b>
+- [S1] User enters a command to check other available user(s).
+- [S2] Bot returns other available user(s). User selects potential collaborators.
+- [S3] Bot requests the collaborator(s) for meeting approval.
+- [S4] Bot schedules meetings and posts links.
+
+<b> Alternative Flows: </b>
+- [E1] No available time slots.
+- [E2] All potential collaborators deny scheduling requests.
+
+
+ 
+ 
+ 
+#### Use Case 5: Scheduling a meeting with potentially available resources
 
 <b> Preconditions: </b>
 - All users have provided access to Google calendars.
