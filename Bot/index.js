@@ -13,7 +13,7 @@ var os = require("os");
 
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
-let bot_name = "weather-bot"
+let bot_name = "focus-bot"
 let client = new Client(host, group, {});
 
 //  curl -i -X POST -H 'Content-Type: application/json' -d '{"channel_id":"tunithmojpbyxbt77pg8hirqbc", "message":"This is a message from a bot", "props":{"attachments": [{"pretext": "Look some text","text": "This is text"}]}}' -H 'Authorization: Bearer 4eqq51jr1b8n5ytftbcs8auz9a' https://chat.robotcodelab.com/api/v4/posts
@@ -25,6 +25,9 @@ let req_repo_name = ""
 let global_issues = []
 let issue_id = 0;
 var todoList = []
+let repo_name_for_create_issue = ""
+let issue_title = ""
+let issue_body = ""
 
 async function main()
 {
@@ -32,7 +35,7 @@ async function main()
     
     client.on('message', function(msg)
     {
-        //console.log(msg);
+        console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
@@ -75,6 +78,22 @@ async function main()
         else if(hearsForTaskNumber(msg))
         {
             removeTodo(msg);
+        }
+        else if(hears(msg, "create issue"))
+        {
+            displayCreateIssue(msg);
+        }
+        else if(hearsRepoNameForCreateIssue(msg))
+        {   
+            displayNextMsgForCreateIssue(msg);
+        }
+        else if(hearsForIssueTitle(msg))
+        {
+            displayThirdMsgForCreateIssue(msg);
+        }
+        else if(hearsForIssueBody(msg))
+        {
+            createIssueBody(msg, issue_title, repo_name_for_create_issue);
         }
         else
         {
@@ -174,6 +193,47 @@ function hearsForTaskNumber(msg)
     return false;
 }
 
+function hearsRepoNameForCreateIssue(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if( msg.data.post )
+    {
+        let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) === '+' && post.message.charAt(1) != '+')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+function hearsForIssueTitle(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) != '+')
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+function hearsForIssueBody(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) == '+')
+        {
+            return true;
+        }
+    }
+    
+    return false;
+}
 
 
 function greetingsReply(msg)
@@ -293,6 +353,49 @@ async function removeTodo(msg)
     client.postMessage("Task " + post.message + " successfully removed", channel);
 }
 
+async function displayCreateIssue(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    client.postMessage("Enter a repo to create an issue from the list below: ", channel);
+    await listRepos(msg);
+    client.postMessage("Use + before entering the repo name", channel);
+}
+
+async function displayNextMsgForCreateIssue(msg)
+{   
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    repo_name_for_create_issue =  post.message;
+    repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
+    client.postMessage("Enter the Title of the issue with ++ infront of it", channel);
+}
+
+async function displayThirdMsgForCreateIssue(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_title =  post.message;
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the body of the issue with +++ infront of it", channel);
+}
+
+async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
+{   
+    let owner = msg.data.sender_name.replace('@', '');
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_body = post.message;
+    issue_body = issue_body.replace(issue_body.charAt(0), "");
+    issue_body = issue_body.replace(issue_body.charAt(0), "");
+    issue_body = issue_body.replace(issue_body.charAt(0), "");
+    let status_of_api = await toDoListBot.createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
+        err => client.postMessage("Unable to complete request, sorry!", channel) );
+    if(status_of_api)
+    {
+        client.postMessage("Issue has been created!", channel);
+    }
+}
 (async () => 
 {
 

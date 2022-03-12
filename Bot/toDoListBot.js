@@ -69,7 +69,7 @@ function getIssues(owner, repo)
     axios(options)
       .then(function (response) {
         data = response.data
-        //console.log(data);
+        console.log(data);
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
         {
@@ -144,10 +144,32 @@ async function closeIssues(owner, repo, issue_id)
   });
 }
 
+async function createIssue(owner, repo, issueName, issueBody)
+{
+	let options = getDefaultOptions(`/repos/` + owner + '/' + repo + '/' + 'issues' , "POST");
+	options['data'] = {title: issueName, body: issueBody};
+
+	// Send a http request to url and specify a callback that will be called upon its return.
+	return new Promise(function(resolve, reject)
+	{
+		axios(options)
+			.then(function (response) {
+				resolve(response.status);
+		})
+		.catch((error) => {
+			console.log(chalk.red(error));
+			reject(error);
+			return;
+		});
+	});
+}
+
+
 
 exports.getIssues = getIssues;
 exports.listAuthenicatedUserRepos = listAuthenicatedUserRepos;
 exports.closeIssues = closeIssues;
+exports.createIssue = createIssue;
 
 // (async () => {
 //     console.log("Inside async");
