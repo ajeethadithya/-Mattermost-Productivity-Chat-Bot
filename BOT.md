@@ -115,3 +115,53 @@
 <b> Alternative Flows: </b>
 - [E1] No available time slots.
 - [E2] All potential collaborators deny scheduling requests.
+
+
+Alternative 
+
+#### Use Case 1: List Issues of a Specific Repository
+
+<b> Preconditions: </b>
+- All users share a GitHub repository with assigned issues.
+- All users have provided Github token access.
+
+<b> Main Flow: </b>
+- User requests to display the Github issues. [S1] 
+- Bot returns the list of Repos of that particular user [S2]
+- User enters the repos name whose issues they want to be displayed [S3].
+- Bot returns the list of issues along with their issue id for the specified repo name. [S4].
+
+<b> Sub flows: </b>
+- [S1] User enters the ‘Show Issues’ command to check the Github issues.
+- [S2] Bot returns the repo names and awaits user operation. Request and await user input.
+- [S3] User enters the repo name.
+- [S4] Bot responds by displaying the issues.
+
+<b> Alternative Flows: </b>
+- [E1] No available repositories for a given user.
+- [E2] No available issues in the specified repository.
+
+#### Use Case 2: Close Issues from a Specific Repository
+
+<b> Preconditions: </b>
+- Use case 1 (List Issues of a Specific Repository has successfully returned the issues).
+
+<b> Main Flow: </b>
+- User requests to close issues. [S1]
+- The bot returns the list of repositories of that user. [S2]
+- The user enters the repository name from which they want to close issues. [S3]
+- Bot displays the list of issues along with the issue id for the specified repo name. [S4]
+- User enters the id of the issue that they want to close. [S5]
+- Bot displays a message saying that the specified issue has been closed. [S6]
+
+<b> Sub flows: </b>
+- [S1] User enters the ‘Close issues’ command to close Github issues.
+- [S2] Bot returns the repo names and awaits user operation. Request and await user input.
+- [S3] User enters the repo name.
+- [S4] Bot responds by displaying the issues along with their id. 
+- [S5] User enters the issue id.
+ - [S6] Bot responds by confirming that the issue has been closed.
+
+<b> Alternative Flows: </b>
+- [E1] No available repositories for a given user.
+- [E2] No available issues in the specified repository.
