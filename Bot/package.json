@@ -10,7 +10,7 @@
     "mattermost",
     "bot"
   ],
-  "author": "John-Paul Ore based on work by Chris Parnin",
+  "author": "Focus Bot Team-24",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.22.0",
