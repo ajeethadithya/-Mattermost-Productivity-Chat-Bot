@@ -113,7 +113,7 @@
  
  
 
-#### Use Case 6: Creating a Google Calender Meeting
+#### Use Case 6: Displaying Google Calender Meetings
 
 <b> Preconditions: </b>
  -All users have a Google service account.
@@ -122,26 +122,22 @@
  -All users have provided their credential ID and OAUTH tokens.
 
 <b> Main Flow: </b>
-- [S1]
-- Bot returns potential timeslots for peer-to-peer collaboration (schedule a meeting). [S2] 
-- Request and await collaborator’s confirmation for meeting scheduling. [S3]
-- Schedule meetings and post links. [S4]
+- User enters command to display his google calender details. [S1] 
+- Bot inputs user's Google Credential ID.[S2]
+- Displays all available meetings for the user int he given day [S3]
 
 <b> Sub flows: </b>
-- [S1] User enters a command to check other available user(s).
-- [S2] Bot returns other available user(s). User selects potential collaborators.
-- [S3] Bot requests the collaborator(s) for meeting approval.
-- [S4] Bot schedules meetings and posts links.
+- [S1] User enters a command to check meeting schedule(s) (Command: "show meetings").
+- [S2] Bot inputs user's credential ID (in this case email address, eg. UNITYID@ncsu.edu).
+- [S3] Bot displays all the available meeting schedules. 
 
 <b> Alternative Flows: </b>
-- [E1] No available time slots.
-- [E2] All potential collaborators deny scheduling requests.
+- [E1] No meetings scheduled for user.
+- [E2] Incompatible timezones.
 
-
  
  
- 
-#### Use Case 5: Scheduling a meeting with potentially available resources
+#### Use Case 7: Scheduling a meeting with potential resource.
 
 <b> Preconditions: </b>
 - All users have provided access to Google calendars.
@@ -154,8 +150,8 @@
 - Schedule meetings and post links. [S4]
 
 <b> Sub flows: </b>
-- [S1] User enters a command to check other available user(s).
-- [S2] Bot returns other available user(s). User selects potential collaborators.
+- [S1] User enters a command to check other available user(s) (Command: "Check available users").
+- [S2] Bot returns other available user(s). User selects potential collaborators. ("Enters collaborator's email address, in this case, ABC@ncsu.edu")
 - [S3] Bot requests the collaborator(s) for meeting approval.
 - [S4] Bot schedules meetings and posts links.
 
@@ -164,75 +160,29 @@
 - [E2] All potential collaborators deny scheduling requests.
 
 
-
-#### Use Case 5: Scheduling a meeting with potentially available resources
-
-<b> Preconditions: </b>
-- All users have provided access to Google calendars.
-- All users have Google Calendar API tokens.
-
-<b> Main Flow: </b>
-- User requests availability of other users. [S1]
-- Bot returns potential timeslots for peer-to-peer collaboration (schedule a meeting). [S2] 
-- Request and await collaborator’s confirmation for meeting scheduling. [S3]
-- Schedule meetings and post links. [S4]
-
-<b> Sub flows: </b>
-- [S1] User enters a command to check other available user(s).
-- [S2] Bot returns other available user(s). User selects potential collaborators.
-- [S3] Bot requests the collaborator(s) for meeting approval.
-- [S4] Bot schedules meetings and posts links.
-
-<b> Alternative Flows: </b>
-- [E1] No available time slots.
-- [E2] All potential collaborators deny scheduling requests.
-
-
-Alternative 
-
-#### Use Case 1: List Issues of a Specific Repository
+ #### <b> Use Case 8: Remind issues </b>
 
 <b> Preconditions: </b>
-- All users share a GitHub repository with assigned issues.
-- All users have provided Github token access.
+- User has access to the PAM Bot and Mattermost account.
+- BOTTOKEN env has been set up previously.
 
 <b> Main Flow: </b>
-- User requests to display the Github issues. [S1] 
-- Bot returns the list of Repos of that particular user [S2]
-- User enters the repos name whose issues they want to be displayed [S3].
-- Bot returns the list of issues along with their issue id for the specified repo name. [S4].
+- User requests reminder. [S1]
+- Bot returns overdue issues [S2]
 
 <b> Sub flows: </b>
-- [S1] User enters the ‘Show Issues’ command to check the Github issues.
-- [S2] Bot returns the repo names and awaits user operation. Request and await user input.
-- [S3] User enters the repo name.
-- [S4] Bot responds by displaying the issues.
+- [S1] User enters a command to check all reminders (Command: remind todo).
+- [S2] Bot computes the overdue period (Using: CurrentDate - Issued_at > (set threshold)).
+- [S3] Bot returns tasks overdue beyond the threshold limit.
+ -[S4] Bot triggers the initialization of Use Case X
 
-<b> Alternative Flows: </b>
-- [E1] No available repositories for a given user.
-- [E2] No available issues in the specified repository.
-
-#### Use Case 2: Close Issues from a Specific Repository
-
-<b> Preconditions: </b>
-- Use case 1 (List Issues of a Specific Repository has successfully returned the issues).
-
-<b> Main Flow: </b>
-- User requests to close issues. [S1]
-- The bot returns the list of repositories of that user. [S2]
-- The user enters the repository name from which they want to close issues. [S3]
-- Bot displays the list of issues along with the issue id for the specified repo name. [S4]
-- User enters the id of the issue that they want to close. [S5]
-- Bot displays a message saying that the specified issue has been closed. [S6]
-
-<b> Sub flows: </b>
-- [S1] User enters the ‘Close issues’ command to close Github issues.
-- [S2] Bot returns the repo names and awaits user operation. Request and await user input.
-- [S3] User enters the repo name.
-- [S4] Bot responds by displaying the issues along with their id. 
-- [S5] User enters the issue id.
- - [S6] Bot responds by confirming that the issue has been closed.
-
-<b> Alternative Flows: </b>
-- [E1] No available repositories for a given user.
-- [E2] No available issues in the specified repository.
+ <b> Alternative Flows: </b>
+- [E1] No overdue issues.
+ 
+ #### Changes from previous submission:
+ 
+ - Use Case refinement - The feedback provided was taken into consideration and the following were modified. 
+ 
+ -The command format is mentioned in detail to better facilitate understanding of syntax (eg.show meeting, -<task name>
+ -Sequential flow is discussed in more detail to understand the workflow. 
+ -Use Cases have been seperated into modular units to better represent their functionality.
