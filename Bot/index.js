@@ -1,6 +1,7 @@
 // Instructions to make commands through the Mattermost Server:
 // show issues | type repo name that is displayed | issues in that repo is displayed
 // close issue | type repo name that is displayed | issues with ID displayed | type ID to remove
+// create issue | Enter +{repo name} | Enter ++{Issue Title} | Enter +++{Issue Body}"
 // show todo | if todo list exists, displays else says nothing there 
 // add todo | type task with hyphen in front of it | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
@@ -16,8 +17,6 @@ let group = "CSC510-S22"
 let bot_name = "focus-bot"
 let client = new Client(host, group, {});
 
-//  curl -i -X POST -H 'Content-Type: application/json' -d '{"channel_id":"tunithmojpbyxbt77pg8hirqbc", "message":"This is a message from a bot", "props":{"attachments": [{"pretext": "Look some text","text": "This is text"}]}}' -H 'Authorization: Bearer 4eqq51jr1b8n5ytftbcs8auz9a' https://chat.robotcodelab.com/api/v4/posts
-
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
 // To access the issue number with repo name and issue ID entered
@@ -32,10 +31,11 @@ let issue_body = ""
 async function main()
 {
     let request = await client.tokenLogin(process.env.BOTTOKEN);
-    
+    console.log(request);
+    console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
-        console.log(msg);
+        //console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
@@ -44,13 +44,11 @@ async function main()
         {
             listRepos(msg);            
         }
-        // CHANGE THE LOGIC HERE TO SEND ALL THE REPO NAMES DYNAMICALLY TO HEARS FUNCTION SO THAT LISTISSUES IS CALLED.
         else if(hearsForRepoName(msg, "dummy"))
         {   
             listIssues(msg)
                    
         }
-        // Flow incomplete after displaying issues
         else if(hears(msg, "close issue"))
         {
             listRepos(msg);
@@ -95,9 +93,13 @@ async function main()
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
         }
+        else if(hears(msg, "help"))
+        {
+            displayHelpWithCommands(msg);
+        }
         else
         {
-            console.error("ENTER VALID INPUT");
+            console.error("ENTER VALID INPUT- Type help for list of commands and instructions");
         }
 
     });
@@ -239,7 +241,18 @@ function hearsForIssueBody(msg)
 function greetingsReply(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Good to see you here!", channel);   
+    client.postMessage("Good to see you here! Hocus Focus- Let's help you Focus!", channel);   
+}
+
+function displayHelpWithCommands(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    client.postMessage("Command: show issues | Enter repo name from list | Issues with ID displayed", channel);
+    client.postMessage("Command: close issue | Enter repo name from list | Issues with ID displayed | Enter ID of issue to remove", channel);
+    client.postMessage("Command: create issue | Enter +{repo name} | Enter ++{Issue Title} | Enter +++{Issue Body}", channel);
+    client.postMessage("Command: show todo | if todo list exists, displays else says nothing there", channel);
+    client.postMessage("Command: add todo | -{task name} i.e type with hyphen in front", channel);
+    client.postMessage("Command: remove todo | {number of task shown} | removes task", channel); 
 }
 
 async function listRepos(msg)
