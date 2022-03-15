@@ -15,13 +15,7 @@ var os = require("os");
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-
-let channels = {'srames22': "sptfq15q83d5iexq9fygye18pc"};
-let users = {'focus-bot': 'focus-bot'}
-
 let client = new Client(host, group, {});
-
-//  curl -i -X POST -H 'Content-Type: application/json' -d '{"channel_id":"tunithmojpbyxbt77pg8hirqbc", "message":"This is a message from a bot", "props":{"attachments": [{"pretext": "Look some text","text": "This is text"}]}}' -H 'Authorization: Bearer 4eqq51jr1b8n5ytftbcs8auz9a' https://chat.robotcodelab.com/api/v4/posts
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -36,12 +30,12 @@ let issue_body = ""
 
 async function main()
 {
-    let request = await client.tokenLogin(process.env.BOTTOKEN);
-    console.log(request);
+    let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
+    console.log("REQUEST DATA" ,request);
     console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
-        console.log(msg);
+        //console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
@@ -50,13 +44,11 @@ async function main()
         {
             listRepos(msg);            
         }
-        // CHANGE THE LOGIC HERE TO SEND ALL THE REPO NAMES DYNAMICALLY TO HEARS FUNCTION SO THAT LISTISSUES IS CALLED.
         else if(hearsForRepoName(msg, "dummy"))
         {   
             listIssues(msg)
                    
         }
-        // Flow incomplete after displaying issues
         else if(hears(msg, "close issue"))
         {
             listRepos(msg);
@@ -101,7 +93,6 @@ async function main()
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
         }
-
         else if(hears(msg, "help"))
         {
             displayHelpWithCommands(msg);
@@ -109,11 +100,6 @@ async function main()
         else
         {
             console.error("ENTER VALID INPUT- Type help for list of commands and instructions");
-
-        else
-        {
-            console.error("ENTER VALID INPUT");
-
         }
 
     });
