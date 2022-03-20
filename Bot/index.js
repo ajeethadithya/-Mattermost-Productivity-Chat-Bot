@@ -6,18 +6,16 @@
 // add todo | type task with hyphen in front of it | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
 
+// Importing necessary packages and js files
 // Database connectivity
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, child, get, update, remove } from "firebase/database";
-// import { createRequire } from "module";
-// import fetch from "node-fetch";
-// const require = createRequire(import.meta.url);
-
-// const Client = require('mattermost-client');
 import Client from "mattermost-client";
-// const toDoListBot = require('./toDoListBot');
 import "./toDoListBot.cjs";
 import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue} from "./toDoListBot.cjs";
+//import cron from "node-cron";
+// const Client = require('mattermost-client');
+// const toDoListBot = require('./toDoListBot');
 // // const fs = require('fs');
 // import fs from "fs";
 // var os = require("os");
@@ -74,10 +72,11 @@ const firebaseApp = initializeApp({
     update(ref(db), updates);
 
 
-    let host = "chat.robotcodelab.com"
+let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-let client = new Client(host, group, {"id": "focus-bot"});
+let channel_id = "wkibg1y1qjy1pnpego1pxi8cua"
+let client = new Client(host, group, {'channel_id': channel_id});
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -89,11 +88,13 @@ var todoList = []
 let repo_name_for_create_issue = ""
 let issue_title = ""
 let issue_body = ""
+// To keep track the chain of commands
+let command_list = [] 
 
 async function main()
 {
     let request = await client.tokenLogin(process.env.BOTTOKEN);
-    console.log("REQUEST DATA" ,request);
+    // console.log("REQUEST DATA" ,request);
     console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
@@ -104,20 +105,25 @@ async function main()
         }
         else if(hears(msg, "show issues"))
         {
-            listRepos(msg);            
+            listRepos(msg);
+            command_list.push("show issues");         
         }
-        else if(hearsForRepoName(msg, "dummy"))
+        else if(command_list[0] == "show issues" && hearsForRepoName(msg, "dummy"))
         {   
-            listIssues(msg)
-                   
+            {
+                listIssues(msg)
+            }
+            command_list.pop();           
         }
         else if(hears(msg, "close issue"))
         {
             listRepos(msg);
+            command_list.push("close issue");
         }
-        else if(hearsForIssueID(msg))
-        {
+        else if(command_list[0] == "close issue" && hearsForIssueID(msg))
+        {   
             closeIssueID(msg, req_repo_name, issue_id);
+            command_list.pop();
         }
         else if(hears(msg, "show todo"))
         {
@@ -126,34 +132,55 @@ async function main()
         else if(hears(msg, "add todo"))
         {
             displayAddTodoMessage(msg);
+            command_list.push("add todo");
         }
-        else if(hearsTaskToAdd(msg))
-        {
+        else if(command_list[0] == "add todo" && hearsTaskToAdd(msg))
+        {   
             addTodo(msg);
+            command_list.pop();    
         }
         else if(hears(msg, "remove todo"))
-        {
-            displayRemoveTodo(msg);
+        {   
+            command_list.push("remove todo");
+            let channel = msg.broadcast.channel_id;
+            if (todoList.length === 0) 
+            { 
+                client.postMessage("There is nothing to show!", channel);
+                command_list.pop();
+            }
+            else
+            {   
+                for(var i=0; i < todoList.length; i++)
+                {
+                    client.postMessage(todoList[i], channel);
+                }
+        
+            }
         }
-        else if(hearsForTaskNumber(msg))
-        {
-            removeTodo(msg);
+        else if(command_list[0] == "remove todo" && hearsForTaskNumber(msg))
+        {   
+            removeTodo(msg);    
+            command_list.pop();
         }
         else if(hears(msg, "create issue"))
         {
             displayCreateIssue(msg);
+            command_list.push("create issue");
         }
-        else if(hearsRepoNameForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && hearsRepoNameForCreateIssue(msg))
         {   
             displayNextMsgForCreateIssue(msg);
+            command_list.push("Repo name entered")
         }
-        else if(hearsForIssueTitle(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && hearsForIssueTitle(msg))
         {
             displayThirdMsgForCreateIssue(msg);
+            command_list.push("Issue title entered");
         }
-        else if(hearsForIssueBody(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForIssueBody(msg))
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
+            command_list.splice(0, command_list.length)
         }
         else if(hears(msg, "help"))
         {
@@ -241,6 +268,21 @@ function hearsTaskToAdd(msg)
     }
     return false;
 }
+
+// function hearsTaskToAdd(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message != '')
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 
 function hearsForTaskNumber(msg)
 {
@@ -370,7 +412,7 @@ async function showTodo(msg)
     let channel = msg.broadcast.channel_id;
     if (todoList.length === 0) 
     { 
-        client.postMessage("There is nothing to show!", channel); 
+        client.postMessage("There is nothing to show!", channel);
     }
     else
     {   for(var i=0; i < todoList.length; i++)
@@ -405,12 +447,12 @@ async function addTodo(msg)
     client.postMessage("Task added!", channel);
 }
 
-async function displayRemoveTodo(msg)
-{
-    let channel = msg.broadcast.channel_id;
-    //client.postMessage("Enter the number of the task that you want to remove:  ", channel);
-    showTodo(msg);
-}
+// async function displayRemoveTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     //client.postMessage("Enter the number of the task that you want to remove:  ", channel);
+//     showTodo(msg);
+// }
 
 async function removeTodo(msg)
 {   
