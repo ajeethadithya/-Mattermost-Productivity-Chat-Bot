@@ -6,16 +6,78 @@
 // add todo | type task with hyphen in front of it | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
 
+// Database connectivity
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, child, get, update, remove } from "firebase/database";
+// import { createRequire } from "module";
+// import fetch from "node-fetch";
+// const require = createRequire(import.meta.url);
 
-const Client = require('mattermost-client');
-const toDoListBot = require('./toDoListBot');
-const fs = require('fs');
-var os = require("os");
+// const Client = require('mattermost-client');
+import Client from "mattermost-client";
+// const toDoListBot = require('./toDoListBot');
+import "./toDoListBot.cjs";
+import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue} from "./toDoListBot.cjs";
+// // const fs = require('fs');
+// import fs from "fs";
+// var os = require("os");
 
-let host = "chat.robotcodelab.com"
+const firebaseApp = initializeApp({
+    apiKey: "AIzaSyBcx5qVBh6obpe3tGDywWQV_4-crwOgcKo",
+    authDomain: "fir-test-4c03b.firebaseapp.com",
+    projectId: "fir-test-4c03b",
+    storageBucket: "fir-test-4c03b.appspot.com",
+    messagingSenderId: "386868535333",
+    appId: "1:386868535333:web:dbb791c704ed3622049fcc",
+    measurementId: "G-NQTNG31BYM"
+  });
+  
+  
+  const db = getDatabase();
+  
+  //write to Firebase
+  set(ref(db, 'users/' + 'User 1'), {
+      username: 'Ajeeth',
+      email: 'anaray23',
+    });
+  
+    set(ref(db, 'users/' + 'User 2'), {
+      username: 'Hank',
+      email: 'hankhank',
+    });
+  
+    //read from Firebase
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `users/User 1`)).then((snapshot) => {
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+      //get specific data from snapshot
+      console.log("Username: " + snapshot.child("username").val());
+      console.log("Email: " + snapshot.child("email").val());
+    } else {
+      console.log("No data available");
+    }
+    }).catch((error) => {
+    console.error(error);
+    });
+  
+  
+    //update data
+    const user2 = {
+      username: 'Sriram',
+      email: 'ssudhar'
+    };
+  
+    const updates = {};
+    updates['/users/User 2'] = user2;
+  
+    update(ref(db), updates);
+
+
+    let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-let client = new Client(host, group, {});
+let client = new Client(host, group, {"id": "focus-bot"});
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -31,7 +93,7 @@ let issue_body = ""
 async function main()
 {
     let request = await client.tokenLogin(process.env.BOTTOKEN);
-    console.log(request);
+    console.log("REQUEST DATA" ,request);
     console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
@@ -260,7 +322,7 @@ async function listRepos(msg)
     //let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     client.postMessage("Enter the repo name for which you want to execute the command: ", channel);
-    repo_names = await toDoListBot.listAuthenicatedUserRepos().catch( 
+    repo_names = await listAuthenicatedUserRepos().catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
 
     client.postMessage(JSON.stringify(repo_names, null, 4), channel);
@@ -272,7 +334,7 @@ async function listIssues(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     req_repo_name = post.message;
-    let issue = await toDoListBot.getIssues(owner, req_repo_name).catch( 
+    let issue = await getIssues(owner, req_repo_name).catch( 
         err => client.postMessage(`No issue in ${req_repo_name}`, channel) );
     global_issues = issue;
     if(issue)
@@ -295,7 +357,7 @@ async function closeIssueID(msg, req_repo_name, issue_id)
     // let post = JSON.parse(msg.data.post).message;
     // const temp_array = post.split(" ");
     // let issue_id_to_close = parseInt(temp_array[1]);
-    var closeStatus = await toDoListBot.closeIssues(owner, req_repo_name, issue_id).catch( 
+    var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( 
             err => client.postMessage(`Issue cannot be closed`));
         if( closeStatus )
         {   console.log("close status is " + closeStatus);
@@ -402,7 +464,7 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
     issue_body = issue_body.replace(issue_body.charAt(0), "");
     issue_body = issue_body.replace(issue_body.charAt(0), "");
     issue_body = issue_body.replace(issue_body.charAt(0), "");
-    let status_of_api = await toDoListBot.createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
+    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
     if(status_of_api)
     {
