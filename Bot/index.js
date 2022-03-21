@@ -34,7 +34,7 @@ const dbRef = ref(getDatabase());
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-let client = new Client(host, group);
+let client = new Client(host, group, {});
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -173,7 +173,7 @@ async function checkUserInDB()
       //console.log(snapshot.val());
       //write to Firebase
       set(ref(db, 'users/' + userID), {
-          todo_list: ""
+          todo_list: ["temp"]
         });
     }
     }).catch((error) => {
@@ -393,21 +393,45 @@ async function closeIssueID(msg, req_repo_name, issue_id)
         }
 }
 
+// async function showTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     if (todoList.length === 0) 
+//     { 
+//         client.postMessage("There is nothing to show!", channel);
+//     }
+//     else
+//     {   for(var i=0; i < todoList.length; i++)
+//         {
+//             client.postMessage(todoList[i], channel);
+//         }
+        
+//     }
+
+// }
+
 async function showTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
-    if (todoList.length === 0) 
-    { 
-        client.postMessage("There is nothing to show!", channel);
-    }
-    else
-    {   for(var i=0; i < todoList.length; i++)
+    let temp_todo_list = []
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
         {
-            client.postMessage(todoList[i], channel);
+          temp_todo_list = snapshot.val().todo_list;
         }
-        
+        if (temp_todo_list.length < 2) 
+        { 
+            client.postMessage("There is nothing to show!", channel);
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
+    
+    for(var i= 1; i < temp_todo_list.length; i++)
+    {
+        client.postMessage(temp_todo_list[i], channel);
     }
-
+    
 }
 
 async function displayAddTodoMessage(msg)
@@ -436,26 +460,24 @@ async function displayAddTodoMessage(msg)
 async function addTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
-    var todo_id = todoList.length + 1;
     let post = JSON.parse(msg.data.post);
     var message_to_push = post.message;
-    //console.log(message_to_push);
-    // Replace is not working
     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
-    message_to_push = todo_id.toString().concat("."," ").concat(post.message);
 
     // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
     let temp_todo_list = []
-    get(child(dbRef, `users/` + userID)).then((snapshot) => {
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
         if (snapshot.exists()) 
         {
           temp_todo_list = snapshot.val().todo_list;
+          var todo_id = temp_todo_list.length;
+          message_to_push = todo_id.toString().concat("."," ").concat(post.message);
+          temp_todo_list.push(message_to_push);
         } 
         }).catch((error) => {
         console.error(error);
         });
-    temp_todo_list.push(message_to_push);
-    
+
     //update data
     const user_todo_data = {todo_list: temp_todo_list};
     const updates = {};
