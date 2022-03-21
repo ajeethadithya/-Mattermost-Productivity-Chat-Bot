@@ -6,22 +6,48 @@
 // add todo | type task with hyphen in front of it | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
 
+// Importing necessary packages and js files
+// Database connectivity
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, set, child, get, update, remove } from "firebase/database";
+import Client from "mattermost-client";
+import "./toDoListBot.cjs";
+import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue, getUser} from "./toDoListBot.cjs";
 
-const Client = require('mattermost-client');
-const toDoListBot = require('./toDoListBot');
-const fs = require('fs');
-var os = require("os");
+//importing calendar.js file
+import "./calendar.js";
+import {dateTimeForCalander, createcalEvent} from "./calendar.js";
+
+//import cron from "node-cron";
+// const Client = require('mattermost-client');
+// const toDoListBot = require('./toDoListBot');
+
+
+//Credentials needed for Google Calender API:
+//Th following credentials have been encoded into a file and the
+//below lines of code will parse the JSON file to read the credentials.
+
+
+
+
+// Credentials needed for Database Connectivity
+const firebaseApp = initializeApp({
+    apiKey: "AIzaSyBcx5qVBh6obpe3tGDywWQV_4-crwOgcKo",
+    authDomain: "fir-test-4c03b.firebaseapp.com",
+    projectId: "fir-test-4c03b",
+    storageBucket: "fir-test-4c03b.appspot.com",
+    messagingSenderId: "386868535333",
+    appId: "1:386868535333:web:dbb791c704ed3622049fcc",
+    measurementId: "G-NQTNG31BYM"
+  });
+  
+const db = getDatabase();
+const dbRef = ref(getDatabase());
 
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-
-let channels = {'srames22': "sptfq15q83d5iexq9fygye18pc"};
-let users = {'focus-bot': 'focus-bot'}
-
 let client = new Client(host, group, {});
-
-//  curl -i -X POST -H 'Content-Type: application/json' -d '{"channel_id":"tunithmojpbyxbt77pg8hirqbc", "message":"This is a message from a bot", "props":{"attachments": [{"pretext": "Look some text","text": "This is text"}]}}' -H 'Authorization: Bearer 4eqq51jr1b8n5ytftbcs8auz9a' https://chat.robotcodelab.com/api/v4/posts
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -33,37 +59,49 @@ var todoList = []
 let repo_name_for_create_issue = ""
 let issue_title = ""
 let issue_body = ""
+// To keep track the chain of commands
+let command_list = [] 
+let userID = ""
 
 async function main()
-{
+{   
+
+    // To check if the current user exists in the database or not
+    checkUserInDB();
     let request = await client.tokenLogin(process.env.BOTTOKEN);
-    console.log(request);
-    console.log("CLIENT DATA: ", client);
+    //console.log("REQUEST DATA" ,request);
+    //console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
-        console.log(msg);
+        //console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
         }
         else if(hears(msg, "show issues"))
         {
-            listRepos(msg);            
+            listRepos(msg);
+            command_list.push("show issues");         
         }
-        // CHANGE THE LOGIC HERE TO SEND ALL THE REPO NAMES DYNAMICALLY TO HEARS FUNCTION SO THAT LISTISSUES IS CALLED.
-        else if(hearsForRepoName(msg, "dummy"))
+        else if(command_list[0] == "show issues" && hearsForRepoName(msg, "dummy"))
         {   
             listIssues(msg)
-                   
+            command_list.pop();           
         }
-        // Flow incomplete after displaying issues
         else if(hears(msg, "close issue"))
         {
             listRepos(msg);
+            command_list.push("close issue");
         }
-        else if(hearsForIssueID(msg))
-        {
+        else if(command_list[0] == "close issue" && hearsForRepoName(msg, "dummy"))
+        {   
+            listIssues(msg)
+            command_list.push("repo name entered for closing issue")           
+        }
+        else if(command_list[0] == "close issue" && command_list[1] == "repo name entered for closing issue" && hearsForIssueID(msg))
+        {   
             closeIssueID(msg, req_repo_name, issue_id);
+            command_list.splice(0, command_list.length);
         }
         else if(hears(msg, "show todo"))
         {
@@ -72,36 +110,56 @@ async function main()
         else if(hears(msg, "add todo"))
         {
             displayAddTodoMessage(msg);
+            command_list.push("add todo");
         }
-        else if(hearsTaskToAdd(msg))
-        {
+        else if(command_list[0] == "add todo" && hearsTaskToAdd(msg))
+        {   
             addTodo(msg);
+            command_list.pop();    
         }
         else if(hears(msg, "remove todo"))
-        {
-            displayRemoveTodo(msg);
+        {   
+            command_list.push("remove todo");
+            let channel = msg.broadcast.channel_id;
+            if (todoList.length === 0) 
+            { 
+                client.postMessage("There is nothing to show!", channel);
+                command_list.pop();
+            }
+            else
+            {   
+                for(var i=0; i < todoList.length; i++)
+                {
+                    client.postMessage(todoList[i], channel);
+                }
+        
+            }
         }
-        else if(hearsForTaskNumber(msg))
-        {
-            removeTodo(msg);
+        else if(command_list[0] == "remove todo" && hearsForTaskNumber(msg))
+        {   
+            removeTodo(msg);    
+            command_list.pop();
         }
         else if(hears(msg, "create issue"))
         {
             displayCreateIssue(msg);
+            command_list.push("create issue");
         }
-        else if(hearsRepoNameForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && hearsRepoNameForCreateIssue(msg))
         {   
             displayNextMsgForCreateIssue(msg);
+            command_list.push("Repo name entered")
         }
-        else if(hearsForIssueTitle(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && hearsForIssueTitle(msg))
         {
             displayThirdMsgForCreateIssue(msg);
+            command_list.push("Issue title entered");
         }
-        else if(hearsForIssueBody(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForIssueBody(msg))
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
+            command_list.splice(0, command_list.length);
         }
-
         else if(hears(msg, "help"))
         {
             displayHelpWithCommands(msg);
@@ -109,15 +167,193 @@ async function main()
         else
         {
             console.error("ENTER VALID INPUT- Type help for list of commands and instructions");
-
-        else
-        {
-            console.error("ENTER VALID INPUT");
-
         }
+
+// *****************************CALENDAR EVENT(s)**************************************************************
+
+        else if(hears(msg, "create calendar"))
+                {
+                    //displayCreateIssue(msg);
+                    //displayCreateCalendar(msg);
+                    
+                    command_list.push("creating calendar");
+                }
+                else if(command_list[0] == "creating calendar" && hearsForEventName(msg))
+                {   
+                    FirstCalendarInstruction(msg);
+                    command_list.push("Event Name Accepted")
+                }
+                else if(command_list[0] == "create calendar" && command_list[1] == "Event Name Accepted" && hearsForCalendarDescription(msg))
+                {
+                    displaySecondCalendarInstruction(msg);
+                    command_list.push("Calendar Description Accepted");
+                }
+                
+                else if(command_list[0] == "create calendar" && command_list[1] == "Event Name Accepted" && command_list[2] == "Calendar Description Accepted" && hearsForCalendarLocation(msg))
+                {
+                    displayThirdCalendarInstruction(msg);
+                    command_list.push("Calendar Location Accepted");
+                }
+                
+                else if(command_list[0] == "create calendar" && command_list[1] == "Event Name Accepted" && command_list[2] == "Calendar Description Accepted" && command_list[2] == "Calendar Location Accepted" && hearsForCalendarStartDate(msg))
+                {
+                    displayFourthCalendarInstruction(msg);
+                    command_list.push("Calendar Start Date Accepted");
+                }
+                
+                else if(command_list[0] == "create calendar" && command_list[1] == "Event Name Accepted" && command_list[2] == "Calendar Description Accepted" && command_list[3] == "Calendar Location Accepted" && command_list[4] == Calendar Start Date Accepted && hearsForCalendarEndDate(msg))
+                {
+                    displayFifthCalendarInstruction(msg);
+                    command_list.push("Calendar End Date Accepted");
+                }
+
+function hearsForEventName(msg, text)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '*' && post.message.charAt(1) != '*')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+
+async function displayFirstCalendarInstruction(msg)
+{   
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    repo_name_for_create_issue =  post.message;
+    repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
+    client.postMessage("Enter the Title of the calendar with * infront of it", channel);
+}
+
+function hearsForCalendarDescription(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '*' && post.message.charAt(1) != '*')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+async function displaySecondCalendarInstruction(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_title =  post.message;
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the body of the calendar with ** infront of it", channel);
+}
+
+function hearsForCalendarLocation(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '*' && post.message.charAt(1) == '*' && post.message.charAt(2) == '*' post.message.charAt(3) != '*')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+async function displayThirdCalendarInstruction(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_title =  post.message;
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the location of the calendar with *** infront of it", channel);
+    
+}
+
+function hearsForCalendarStartDate(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '*' && post.message.charAt(1) == '*' && post.message.charAt(2) == '*' post.message.charAt(3) == '*' && post.message.charAt(4) != "*")
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+async function displayFourthCalendarInstruction(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_title =  post.message;
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the Start Date of the calendar with **** infront of it", channel);
+    
+}
+
+function hearsForCalendarEndDate(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if(msg.data.post)
+    {   let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) == '*' && post.message.charAt(1) == '*' && post.message.charAt(2) == '*' post.message.charAt(3) == '*' && post.message.charAt(4) == "*" && post.message.charAt(5) != "*")
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+async function displayFifthCalendarInstruction(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    issue_title =  post.message;
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the Start Date of the calendar with ***** infront of it", channel);
+}
+
+
+// ********************************************************************************************
+
+
 
     });
 
+}
+
+async function checkUserInDB()
+{
+    // Getting userID using github api to get users that is common in github and mattermost as a pre-condition and checking to see if that userID exists in the database
+    userID = await getUser().catch( 
+        err => console.log("Unable to get UserID") );
+    
+    //read from Firebase to check if user exists or not
+    get(child(dbRef, `users/` + userID)).then((snapshot) => {
+    if (!snapshot.exists()) 
+    {
+      //console.log(snapshot.val());
+      //write to Firebase
+      set(ref(db, 'users/' + userID), {
+          todo_list: ["temp"]
+        });
+    }
+    }).catch((error) => {
+    console.error(error);
+    });
 }
 
 function hears(msg, text)
@@ -193,6 +429,21 @@ function hearsTaskToAdd(msg)
     }
     return false;
 }
+
+// function hearsTaskToAdd(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message != '')
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
 
 function hearsForTaskNumber(msg)
 {
@@ -274,7 +525,7 @@ async function listRepos(msg)
     //let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     client.postMessage("Enter the repo name for which you want to execute the command: ", channel);
-    repo_names = await toDoListBot.listAuthenicatedUserRepos().catch( 
+    repo_names = await listAuthenicatedUserRepos().catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
 
     client.postMessage(JSON.stringify(repo_names, null, 4), channel);
@@ -286,7 +537,7 @@ async function listIssues(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     req_repo_name = post.message;
-    let issue = await toDoListBot.getIssues(owner, req_repo_name).catch( 
+    let issue = await getIssues(owner, req_repo_name).catch( 
         err => client.postMessage(`No issue in ${req_repo_name}`, channel) );
     global_issues = issue;
     if(issue)
@@ -309,7 +560,7 @@ async function closeIssueID(msg, req_repo_name, issue_id)
     // let post = JSON.parse(msg.data.post).message;
     // const temp_array = post.split(" ");
     // let issue_id_to_close = parseInt(temp_array[1]);
-    var closeStatus = await toDoListBot.closeIssues(owner, req_repo_name, issue_id).catch( 
+    var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( 
             err => client.postMessage(`Issue cannot be closed`));
         if( closeStatus )
         {   console.log("close status is " + closeStatus);
@@ -317,21 +568,45 @@ async function closeIssueID(msg, req_repo_name, issue_id)
         }
 }
 
+// async function showTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     if (todoList.length === 0) 
+//     { 
+//         client.postMessage("There is nothing to show!", channel);
+//     }
+//     else
+//     {   for(var i=0; i < todoList.length; i++)
+//         {
+//             client.postMessage(todoList[i], channel);
+//         }
+        
+//     }
+
+// }
+
 async function showTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
-    if (todoList.length === 0) 
-    { 
-        client.postMessage("There is nothing to show!", channel); 
-    }
-    else
-    {   for(var i=0; i < todoList.length; i++)
+    let temp_todo_list = []
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
         {
-            client.postMessage(todoList[i], channel);
+          temp_todo_list = snapshot.val().todo_list;
         }
-        
+        if (temp_todo_list.length < 2) 
+        { 
+            client.postMessage("There is nothing to show!", channel);
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
+    
+    for(var i= 1; i < temp_todo_list.length; i++)
+    {
+        client.postMessage(temp_todo_list[i], channel);
     }
-
+    
 }
 
 async function displayAddTodoMessage(msg)
@@ -340,29 +615,63 @@ async function displayAddTodoMessage(msg)
     client.postMessage("Enter the task to be added with a hyphen before it (-task_one): ", channel);
 }
 
+// async function addTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     var todo_id = todoList.length + 1;
+//     let post = JSON.parse(msg.data.post);
+//     var message_to_push = post.message;
+//     //console.log(message_to_push);
+//     // Replace is not working
+//     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
+//     message_to_push = todo_id.toString().concat("."," ").concat(post.message);
+//     // fs.appendFile("taskList.txt", message_to_push + os.EOL, (err) => {
+//     //     if (err) {console.log(err);}
+//     //     else {client.postMessage("Task added!", channel);}
+//     todoList.push(message_to_push);
+//     client.postMessage("Task added!", channel);
+// }
+
 async function addTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
-    var todo_id = todoList.length + 1;
     let post = JSON.parse(msg.data.post);
     var message_to_push = post.message;
-    //console.log(message_to_push);
-    // Replace is not working
     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
-    message_to_push = todo_id.toString().concat("."," ").concat(post.message);
-    // fs.appendFile("taskList.txt", message_to_push + os.EOL, (err) => {
-    //     if (err) {console.log(err);}
-    //     else {client.postMessage("Task added!", channel);}
-    todoList.push(message_to_push);
+
+    // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
+    let temp_todo_list = []
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+          temp_todo_list = snapshot.val().todo_list;
+          var todo_id = temp_todo_list.length;
+          message_to_push = todo_id.toString().concat("."," ").concat(post.message);
+          temp_todo_list.push(message_to_push);
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
+
+    //update data
+    const user_todo_data = {todo_list: temp_todo_list};
+    const updates = {};
+    updates[`/users/` + userID] = user_todo_data;
+    update(ref(db), updates);
+    
+    // This was using a global list called todoList
+    //todoList.push(message_to_push);
     client.postMessage("Task added!", channel);
 }
 
-async function displayRemoveTodo(msg)
-{
-    let channel = msg.broadcast.channel_id;
-    //client.postMessage("Enter the number of the task that you want to remove:  ", channel);
-    showTodo(msg);
-}
+
+
+// async function displayRemoveTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     //client.postMessage("Enter the number of the task that you want to remove:  ", channel);
+//     showTodo(msg);
+// }
 
 async function removeTodo(msg)
 {   
@@ -416,7 +725,7 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
     issue_body = issue_body.replace(issue_body.charAt(0), "");
     issue_body = issue_body.replace(issue_body.charAt(0), "");
     issue_body = issue_body.replace(issue_body.charAt(0), "");
-    let status_of_api = await toDoListBot.createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
+    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
     if(status_of_api)
     {
