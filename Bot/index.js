@@ -108,19 +108,27 @@ async function main()
         {   
             command_list.push("remove todo");
             let channel = msg.broadcast.channel_id;
-            if (todoList.length === 0) 
-            { 
-                client.postMessage("There is nothing to show!", channel);
-                command_list.pop();
-            }
-            else
-            {   
-                for(var i=0; i < todoList.length; i++)
+            let temp_todo_list = []
+            get(child(dbRef, `users/` + userID)).then((snapshot) => {
+                if (snapshot.exists()) 
                 {
-                    client.postMessage(todoList[i], channel);
+                    temp_todo_list = snapshot.val().todo_list;
                 }
-        
-            }
+                if (temp_todo_list.length < 2) 
+                { 
+                    client.postMessage("There is nothing to show!", channel);
+                }
+                else
+                {
+                    for(var i= 1; i < temp_todo_list.length; i++)
+                    {
+                        client.postMessage(temp_todo_list[i], channel);
+                    }
+                    client.postMessage("Enter the task number that you want to remove", channel);
+                } 
+                }).catch((error) => {
+                console.error(error);
+            });
         }
         else if(command_list[0] == "remove todo" && hearsForTaskNumber(msg))
         {   
@@ -471,7 +479,7 @@ async function addTodo(msg)
         {
           temp_todo_list = snapshot.val().todo_list;
           var todo_id = temp_todo_list.length;
-          message_to_push = todo_id.toString().concat("."," ").concat(post.message);
+          message_to_push = todo_id.toString().concat("."," ").concat(message_to_push);
           temp_todo_list.push(message_to_push);
         } 
         }).catch((error) => {
@@ -501,16 +509,29 @@ async function addTodo(msg)
 async function removeTodo(msg)
 {   
     let channel = msg.broadcast.channel_id;
+    let temp_todo_list = []
     let post = JSON.parse(msg.data.post);
     var task_id_to_remove = parseInt(post.message);
-    var removed = todoList.splice(task_id_to_remove - 1, 1);
-    for(var i = 0; i < todoList.length; i++)
-    {
-        var new_index = i + 1;
-        todoList[i] = todoList[i].replace(todoList[i].charAt(0), "");
-        todoList[i] = new_index.toString().concat(todoList[i]);
-        console.log(todoList[i]);
-    }
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+            temp_todo_list = snapshot.val().todo_list;
+            var removed = temp_todo_list.splice(task_id_to_remove, 1);
+            for(var i = 1; i < temp_todo_list.length; i++)
+            {
+                temp_todo_list[i] = temp_todo_list[i].replace(temp_todo_list[i].charAt(0), "");
+                temp_todo_list[i] = i.toString().concat(temp_todo_list[i]);
+            }
+        } 
+        }).catch((error) => {
+        console.error(error);
+    });
+
+    //update data
+    const user_todo_data = {todo_list: temp_todo_list};
+    const updates = {};
+    updates[`/users/` + userID] = user_todo_data;
+    update(ref(db), updates);    
     client.postMessage("Task " + post.message + " successfully removed", channel);
 }
 
