@@ -166,12 +166,34 @@ async function createIssue(owner, repo, issueName, issueBody)
 	});
 }
 
+async function getUser()
+{	
+	let options = getDefaultOptions("/user", "GET");
+
+	// Send a http request to url and specify a callback that will be called upon its return.
+	return new Promise(function(resolve, reject)
+	{
+		axios(options)
+			.then(function (response) {
+				var userId = response.data.login;
+				//console.log(userId);
+				resolve(userId);
+		})
+    .catch((error) => {
+			console.log(chalk.red(error));
+			reject(error);
+			return;
+		});
+	});
+}
+
 
 
 exports.getIssues = getIssues;
 exports.listAuthenicatedUserRepos = listAuthenicatedUserRepos;
 exports.closeIssues = closeIssues;
 exports.createIssue = createIssue;
+exports.getUser = getUser;
 
 // (async () => {
 //     console.log("Inside async");

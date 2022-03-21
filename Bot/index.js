@@ -12,14 +12,12 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set, child, get, update, remove } from "firebase/database";
 import Client from "mattermost-client";
 import "./toDoListBot.cjs";
-import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue} from "./toDoListBot.cjs";
+import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue, getUser} from "./toDoListBot.cjs";
 //import cron from "node-cron";
 // const Client = require('mattermost-client');
 // const toDoListBot = require('./toDoListBot');
-// // const fs = require('fs');
-// import fs from "fs";
-// var os = require("os");
 
+// Credentials needed for Database Connectivity
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyBcx5qVBh6obpe3tGDywWQV_4-crwOgcKo",
     authDomain: "fir-test-4c03b.firebaseapp.com",
@@ -30,53 +28,13 @@ const firebaseApp = initializeApp({
     measurementId: "G-NQTNG31BYM"
   });
   
-  
-  const db = getDatabase();
-  
-  //write to Firebase
-  set(ref(db, 'users/' + 'User 1'), {
-      username: 'Ajeeth',
-      email: 'anaray23',
-    });
-  
-    set(ref(db, 'users/' + 'User 2'), {
-      username: 'Hank',
-      email: 'hankhank',
-    });
-  
-    //read from Firebase
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `users/User 1`)).then((snapshot) => {
-    if (snapshot.exists()) {
-      console.log(snapshot.val());
-      //get specific data from snapshot
-      console.log("Username: " + snapshot.child("username").val());
-      console.log("Email: " + snapshot.child("email").val());
-    } else {
-      console.log("No data available");
-    }
-    }).catch((error) => {
-    console.error(error);
-    });
-  
-  
-    //update data
-    const user2 = {
-      username: 'Sriram',
-      email: 'ssudhar'
-    };
-  
-    const updates = {};
-    updates['/users/User 2'] = user2;
-  
-    update(ref(db), updates);
-
+const db = getDatabase();
+const dbRef = ref(getDatabase());
 
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
 let bot_name = "focus-bot"
-let channel_id = "wkibg1y1qjy1pnpego1pxi8cua"
-let client = new Client(host, group, {'channel_id': channel_id});
+let client = new Client(host, group);
 
 // Global list to store the list of repo names to be used to call the listIssues function.
 let repo_names = []
@@ -90,12 +48,16 @@ let issue_title = ""
 let issue_body = ""
 // To keep track the chain of commands
 let command_list = [] 
+let userID = ""
 
 async function main()
-{
+{   
+
+    // To check if the current user exists in the database or not
+    checkUserInDB();
     let request = await client.tokenLogin(process.env.BOTTOKEN);
-    // console.log("REQUEST DATA" ,request);
-    console.log("CLIENT DATA: ", client);
+    //console.log("REQUEST DATA" ,request);
+    //console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
         //console.log(msg);
@@ -110,9 +72,7 @@ async function main()
         }
         else if(command_list[0] == "show issues" && hearsForRepoName(msg, "dummy"))
         {   
-            {
-                listIssues(msg)
-            }
+            listIssues(msg)
             command_list.pop();           
         }
         else if(hears(msg, "close issue"))
@@ -120,10 +80,15 @@ async function main()
             listRepos(msg);
             command_list.push("close issue");
         }
-        else if(command_list[0] == "close issue" && hearsForIssueID(msg))
+        else if(command_list[0] == "close issue" && hearsForRepoName(msg, "dummy"))
+        {   
+            listIssues(msg)
+            command_list.push("repo name entered for closing issue")           
+        }
+        else if(command_list[0] == "close issue" && command_list[1] == "repo name entered for closing issue" && hearsForIssueID(msg))
         {   
             closeIssueID(msg, req_repo_name, issue_id);
-            command_list.pop();
+            command_list.splice(0, command_list.length);
         }
         else if(hears(msg, "show todo"))
         {
@@ -180,7 +145,7 @@ async function main()
         else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForIssueBody(msg))
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
-            command_list.splice(0, command_list.length)
+            command_list.splice(0, command_list.length);
         }
         else if(hears(msg, "help"))
         {
@@ -193,6 +158,27 @@ async function main()
 
     });
 
+}
+
+async function checkUserInDB()
+{
+    // Getting userID using github api to get users that is common in github and mattermost as a pre-condition and checking to see if that userID exists in the database
+    userID = await getUser().catch( 
+        err => console.log("Unable to get UserID") );
+    
+    //read from Firebase to check if user exists or not
+    get(child(dbRef, `users/` + userID)).then((snapshot) => {
+    if (!snapshot.exists()) 
+    {
+      //console.log(snapshot.val());
+      //write to Firebase
+      set(ref(db, 'users/' + userID), {
+          todo_list: ""
+        });
+    }
+    }).catch((error) => {
+    console.error(error);
+    });
 }
 
 function hears(msg, text)
@@ -430,6 +416,23 @@ async function displayAddTodoMessage(msg)
     client.postMessage("Enter the task to be added with a hyphen before it (-task_one): ", channel);
 }
 
+// async function addTodo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     var todo_id = todoList.length + 1;
+//     let post = JSON.parse(msg.data.post);
+//     var message_to_push = post.message;
+//     //console.log(message_to_push);
+//     // Replace is not working
+//     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
+//     message_to_push = todo_id.toString().concat("."," ").concat(post.message);
+//     // fs.appendFile("taskList.txt", message_to_push + os.EOL, (err) => {
+//     //     if (err) {console.log(err);}
+//     //     else {client.postMessage("Task added!", channel);}
+//     todoList.push(message_to_push);
+//     client.postMessage("Task added!", channel);
+// }
+
 async function addTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
@@ -440,12 +443,31 @@ async function addTodo(msg)
     // Replace is not working
     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
     message_to_push = todo_id.toString().concat("."," ").concat(post.message);
-    // fs.appendFile("taskList.txt", message_to_push + os.EOL, (err) => {
-    //     if (err) {console.log(err);}
-    //     else {client.postMessage("Task added!", channel);}
-    todoList.push(message_to_push);
+
+    // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
+    let temp_todo_list = []
+    get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+          temp_todo_list = snapshot.val().todo_list;
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
+    temp_todo_list.push(message_to_push);
+    
+    //update data
+    const user_todo_data = {todo_list: temp_todo_list};
+    const updates = {};
+    updates[`/users/` + userID] = user_todo_data;
+    update(ref(db), updates);
+    
+    // This was using a global list called todoList
+    //todoList.push(message_to_push);
     client.postMessage("Task added!", channel);
 }
+
+
 
 // async function displayRemoveTodo(msg)
 // {
