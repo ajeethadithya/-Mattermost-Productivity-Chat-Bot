@@ -16,10 +16,11 @@
   "dependencies": {
     "axios": "^0.22.0",
     "chalk": "^2.4.2",
+    "cron": "^1.8.2",
     "express": "^4.17.3",
     "firebase": "^9.6.9",
     "install": "^0.13.0",
-    "mattermost-client": "^6.4.0",
+    "mattermost-client": "^6.5.0",
     "node-cron": "^3.0.0",
     "parse-link-header": "^2.0.0"
   }

@@ -13,7 +13,7 @@ import { getDatabase, ref, set, child, get, update, remove } from "firebase/data
 import Client from "mattermost-client";
 import "./toDoListBot.cjs";
 import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue, getUser} from "./toDoListBot.cjs";
-//import cron from "node-cron";
+import cron from "node-cron";
 // const Client = require('mattermost-client');
 // const toDoListBot = require('./toDoListBot');
 
@@ -42,25 +42,26 @@ let repo_names = []
 let req_repo_name = ""
 let global_issues = []
 let issue_id = 0;
-var todoList = []
+//var todoList = []
 let repo_name_for_create_issue = ""
 let issue_title = ""
 let issue_body = ""
 // To keep track the chain of commands
 let command_list = [] 
 let userID = ""
+let reminder = "";
 
 async function main()
 {   
 
     // To check if the current user exists in the database or not
     checkUserInDB();
-    let request = await client.tokenLogin(process.env.BOTTOKEN);
+    let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
     //console.log("REQUEST DATA" ,request);
     //console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
-        //console.log(msg);
+        console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
@@ -159,6 +160,21 @@ async function main()
         {
             displayHelpWithCommands(msg);
         }
+        else if(hears(msg, "create reminder"))
+        {
+            displayCreateReminderMessage(msg);
+            command_list.push("create reminder");
+        }
+        else if(command_list[0] == "create reminder" && hearsForReminder(msg))
+        {
+            displayCreateReminderMessageTwo(msg);
+            command_list.push("reminder entered");
+        }
+        else if(command_list[0] == "create reminder" && command_list[1] == "reminder entered" && hearsForReminderTime(msg))
+        {
+            createReminder(msg);
+            command_list.splice(0, command_list.length);
+        }
         else
         {
             console.error("ENTER VALID INPUT- Type help for list of commands and instructions");
@@ -181,7 +197,8 @@ async function checkUserInDB()
       //console.log(snapshot.val());
       //write to Firebase
       set(ref(db, 'users/' + userID), {
-          todo_list: ["temp"]
+          todo_list: ["temp"],
+          reminders: ["temp"]
         });
     }
     }).catch((error) => {
@@ -335,6 +352,33 @@ function hearsForIssueBody(msg)
     return false;
 }
 
+function hearsForReminder(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if( msg.data.post )
+    {
+        let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(0) === '!')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+function hearsForReminderTime(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if( msg.data.post )
+    {
+        let post = JSON.parse(msg.data.post);
+        if( post.message.charAt(2) === ':')
+        {
+            return true;
+        }
+    }
+    return false;;
+}
 
 function greetingsReply(msg)
 {
@@ -497,8 +541,6 @@ async function addTodo(msg)
     client.postMessage("Task added!", channel);
 }
 
-
-
 // async function displayRemoveTodo(msg)
 // {
 //     let channel = msg.broadcast.channel_id;
@@ -578,6 +620,88 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
         client.postMessage("Issue has been created!", channel);
     }
 }
+
+async function displayCreateReminderMessage(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    client.postMessage("Enter reminder with after entering ! (eg.: !reminder_1..): ", channel);
+}
+
+// THIS IS THE REMINDER PART WHERE I HAVE PARSED THE REMINDER ENTERED BY THE USER AND PUSHING IT TO THE DATABASE. RETHINK THE LOGIC OF PLACING THIS HERE AFTER CONSIDERING 
+// THE CRONJOB UNIQUE TASK FOR EACH REMINDER LOGIC 
+
+// async function displayCreateReminderMessageTwo(msg)
+// {
+//     let channel = msg.broadcast.channel_id;
+//     let post = JSON.parse(msg.data.post);
+//     var reminder_to_push = post.message;
+//     reminder_to_push = reminder_to_push.replace(message_to_push.charAt(0), "");
+
+//     // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
+//     let temp_reminder_list = []
+//     await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+//         if (snapshot.exists()) 
+//         {
+//           temp_reminder_list = snapshot.val().reminders;
+//           var rem_id = temp_reminder_list.length;
+//           reminder_to_push = rem_id.toString().concat("."," ").concat(reminder_to_push);
+//           temp_reminder_list.push(reminder_to_push);
+//         } 
+//         }).catch((error) => {
+//         console.error(error);
+//         });
+
+//     //update data
+//     const user_todo_data = {reminders: temp_reminder_list};
+//     const updates = {};
+//     updates[`/users/` + userID] = user_todo_data;
+//     update(ref(db), updates);
+    
+//     client.postMessage("Reminder added!", channel);
+//     reminder =  post.message;
+//     reminder = reminder.replace(reminder.charAt(0), "");
+//     client.postMessage("When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: hh:mm DD/MM/YYYY ): ", channel);
+// }
+
+
+// THIS IS THE REMINDER PART THAT I HAVE NOT YET COMPLETED. THIS WHERE I NEED TO READ THE HH:MM DD/MM/YYYY AND FEED IT TO THE CRON JOB BY CALLING THE CRON JOB FUNCTION
+
+// async function createReminder(msg)
+// {   
+//     let owner = msg.data.sender_name.replace('@', '');
+//     let channel = msg.broadcast.channel_id;
+//     let post = JSON.parse(msg.data.post);
+//     cronJob_time_details = post.message;
+//     issue_body = issue_body.replace(issue_body.charAt(0), "");
+//     issue_body = issue_body.replace(issue_body.charAt(0), "");
+//     issue_body = issue_body.replace(issue_body.charAt(0), "");
+//     let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
+//         err => client.postMessage("Unable to complete request, sorry!", channel) );
+//     if(status_of_api)
+//     {
+//         client.postMessage("Issue has been created!", channel);
+//     }
+// }
+
+// THE CRON JOB FUNCTION IS YET TO BE WRITTEN. HAS TO TAKE IN THE INPUT THAT I AM PARSING IN THE PREVIOUS FUNCTION.
+// THINK ABOUT THE LOGIC TO STORE THE KEY AND THE TASK BEFORE WRITING ANYTHING 
+
+
+// function createCronJobs()
+// {
+//     const reminder_task_map = {};
+//     let min = parseInt('21');
+//     const task = cron.schedule(`0 ${min} 20 21 3 Monday 2022 `,()=>{
+//     console.log("This is my job");
+//     });
+//     url_taskMap[url] = task;
+//     // // for some condition in some code
+//     // let my_job = url_taskMap[url];
+//     // my_job.stop();
+// }
+
+
+
 (async () => 
 {
 
