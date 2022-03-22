@@ -1,9 +1,9 @@
 // Instructions to make commands through the Mattermost Server:
 // show issues | type repo name that is displayed | issues in that repo is displayed
 // close issue | type repo name that is displayed | issues with ID displayed | type ID to remove
-// create issue | Enter +{repo name} | Enter ++{Issue Title} | Enter +++{Issue Body}"
+// create issue | Enter {repo name} | Enter {Issue Title} | Enter {Issue Body}"
 // show todo | if todo list exists, displays else says nothing there 
-// add todo | type task with hyphen in front of it | responds with added message
+// add todo | type task | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
 
 // Importing necessary packages and js files
@@ -33,7 +33,7 @@ const dbRef = ref(getDatabase());
 
 let host = "chat.robotcodelab.com"
 let group = "CSC510-S22"
-let bot_name = "focus-bot"
+let bot_name = "@focus-bot"
 let client = new Client(host, group, {});
 
 // Global list to store the list of repo names to be used to call the listIssues function.
@@ -61,7 +61,7 @@ async function main()
     //console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
-        console.log(msg);
+        //console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
             greetingsReply(msg);
@@ -100,7 +100,7 @@ async function main()
             displayAddTodoMessage(msg);
             command_list.push("add todo");
         }
-        else if(command_list[0] == "add todo" && hearsTaskToAdd(msg))
+        else if(command_list[0] == "add todo" && hearsForAddToDo(msg))
         {   
             addTodo(msg);
             command_list.pop();    
@@ -141,17 +141,18 @@ async function main()
             displayCreateIssue(msg);
             command_list.push("create issue");
         }
-        else if(command_list[0] == "create issue" && hearsRepoNameForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && command_list[1] != "Repo name entered" && hearsForCreateIssue(msg))
         {   
             displayNextMsgForCreateIssue(msg);
             command_list.push("Repo name entered")
+            for(var i = 0 ; i<command_list.length;i++){console.log(command_list[i]);}
         }
-        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && hearsForIssueTitle(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] != "Issue title entered" && hearsForCreateIssue(msg))
         {
             displayThirdMsgForCreateIssue(msg);
             command_list.push("Issue title entered");
         }
-        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForIssueBody(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForCreateIssue(msg))
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
             command_list.splice(0, command_list.length);
@@ -170,14 +171,19 @@ async function main()
             displayCreateReminderMessageTwo(msg);
             command_list.push("reminder entered");
         }
-        else if(command_list[0] == "create reminder" && command_list[1] == "reminder entered" && hearsForReminderTime(msg))
+        else if(command_list[0] == "create reminder" && command_list[1] == "reminder entered" && hearsForReminder(msg))
         {
             createReminder(msg);
             command_list.splice(0, command_list.length);
         }
         else
-        {
-            console.error("ENTER VALID INPUT- Type help for list of commands and instructions");
+        {   
+            let channel = msg.broadcast.channel_id;
+            if( msg.data.sender_name != bot_name)
+            {
+                client.postMessage("I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands", channel);
+            }
+            
         }
 
     });
@@ -266,13 +272,13 @@ function hearsForIssueID(msg)
     return false;
 }
 
-function hearsTaskToAdd(msg)
+function hearsForAddToDo(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
     {
         let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(0) === '-')
+        if( post.message != "")
         {
             return true;
         }
@@ -310,13 +316,27 @@ function hearsForTaskNumber(msg)
     return false;
 }
 
-function hearsRepoNameForCreateIssue(msg)
+// function hearsRepoNameForCreateIssue(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message.charAt(0) === '+' && post.message.charAt(1) != '+')
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+function hearsForCreateIssue(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
     {
         let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(0) === '+' && post.message.charAt(1) != '+')
+        if( post.message != "")
         {
             return true;
         }
@@ -324,33 +344,34 @@ function hearsRepoNameForCreateIssue(msg)
     return false;
 }
 
-function hearsForIssueTitle(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if(msg.data.post)
-    {   let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) != '+')
-        {
-            return true;
-        }
-    }
-    
-    return false;
-}
 
-function hearsForIssueBody(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if(msg.data.post)
-    {   let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) == '+')
-        {
-            return true;
-        }
-    }
+// function hearsForIssueTitle(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if(msg.data.post)
+//     {   let post = JSON.parse(msg.data.post);
+//         if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) != '+')
+//         {
+//             return true;
+//         }
+//     }
     
-    return false;
-}
+//     return false;
+// }
+
+// function hearsForIssueBody(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if(msg.data.post)
+//     {   let post = JSON.parse(msg.data.post);
+//         if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) == '+')
+//         {
+//             return true;
+//         }
+//     }
+    
+//     return false;
+// }
 
 function hearsForReminder(msg)
 {
@@ -358,7 +379,7 @@ function hearsForReminder(msg)
     if( msg.data.post )
     {
         let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(0) === '!')
+        if( post.message != '')
         {
             return true;
         }
@@ -366,19 +387,19 @@ function hearsForReminder(msg)
     return false;
 }
 
-function hearsForReminderTime(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if( msg.data.post )
-    {
-        let post = JSON.parse(msg.data.post);
-        if( post.message.charAt(2) === ':')
-        {
-            return true;
-        }
-    }
-    return false;;
-}
+// function hearsForReminderTime(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message.charAt(2) === ':')
+//         {
+//             return true;
+//         }
+//     }
+//     return false;;
+// }
 
 function greetingsReply(msg)
 {
@@ -389,11 +410,11 @@ function greetingsReply(msg)
 function displayHelpWithCommands(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Command: show issues | Enter repo name from list | Issues with ID displayed", channel);
-    client.postMessage("Command: close issue | Enter repo name from list | Issues with ID displayed | Enter ID of issue to remove", channel);
-    client.postMessage("Command: create issue | Enter +{repo name} | Enter ++{Issue Title} | Enter +++{Issue Body}", channel);
-    client.postMessage("Command: show todo | if todo list exists, displays else says nothing there", channel);
-    client.postMessage("Command: add todo | -{task name} i.e type with hyphen in front", channel);
+    client.postMessage("Command: show issues | Enter {repo name} | Issues with ID displayed", channel);
+    client.postMessage("Command: close issue | Enter {repo name} | Issues with ID displayed | Enter ID of issue to remove", channel);
+    client.postMessage("Command: create issue | Enter {repo name} | Enter {Issue Title} | Enter {Issue Body}", channel);
+    client.postMessage("Command: show todo | If todo list exists, displays else says nothing there", channel);
+    client.postMessage("Command: add todo | {task name}", channel);
     client.postMessage("Command: remove todo | {number of task shown} | removes task", channel); 
 }
 
@@ -489,7 +510,7 @@ async function showTodo(msg)
 async function displayAddTodoMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter the task to be added with a hyphen before it (-task_one): ", channel);
+    client.postMessage("Enter the task to be added: ", channel);
 }
 
 // async function addTodo(msg)
@@ -514,7 +535,7 @@ async function addTodo(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     var message_to_push = post.message;
-    message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
+    //message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
 
     // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
     let temp_todo_list = []
@@ -582,7 +603,7 @@ async function displayCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     client.postMessage("Enter a repo to create an issue from the list below: ", channel);
     await listRepos(msg);
-    client.postMessage("Use + before entering the repo name", channel);
+    //client.postMessage("Use + before entering the repo name", channel);
 }
 
 async function displayNextMsgForCreateIssue(msg)
@@ -590,8 +611,8 @@ async function displayNextMsgForCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     repo_name_for_create_issue =  post.message;
-    repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
-    client.postMessage("Enter the Title of the issue with ++ infront of it", channel);
+    //repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
+    client.postMessage("Enter the Title of the issue", channel);
 }
 
 async function displayThirdMsgForCreateIssue(msg)
@@ -599,9 +620,9 @@ async function displayThirdMsgForCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     issue_title =  post.message;
-    issue_title = issue_title.replace(issue_title.charAt(0), "");
-    issue_title = issue_title.replace(issue_title.charAt(0), "");
-    client.postMessage("Enter the body of the issue with +++ infront of it", channel);
+    // issue_title = issue_title.replace(issue_title.charAt(0), "");
+    // issue_title = issue_title.replace(issue_title.charAt(0), "");
+    client.postMessage("Enter the body of the issue", channel);
 }
 
 async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
@@ -610,9 +631,9 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     issue_body = post.message;
-    issue_body = issue_body.replace(issue_body.charAt(0), "");
-    issue_body = issue_body.replace(issue_body.charAt(0), "");
-    issue_body = issue_body.replace(issue_body.charAt(0), "");
+    // issue_body = issue_body.replace(issue_body.charAt(0), "");
+    // issue_body = issue_body.replace(issue_body.charAt(0), "");
+    // issue_body = issue_body.replace(issue_body.charAt(0), "");
     let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
     if(status_of_api)
@@ -624,7 +645,7 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
 async function displayCreateReminderMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter reminder with after entering ! (eg.: !reminder_1..): ", channel);
+    client.postMessage("Enter reminder: ", channel);
 }
 
 // THIS IS THE REMINDER PART WHERE I HAVE PARSED THE REMINDER ENTERED BY THE USER AND PUSHING IT TO THE DATABASE. RETHINK THE LOGIC OF PLACING THIS HERE AFTER CONSIDERING 
