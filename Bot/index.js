@@ -19,7 +19,7 @@ import cron from "node-cron";
 
 // Credentials needed for Database Connectivity
 const firebaseApp = initializeApp({
-    apiKey: "AIzaSyBcx5qVBh6obpe3tGDywWQV_4-crwOgcKo",
+    apiKey: process.env.FIREBASEAPIKEY,
     authDomain: "fir-test-4c03b.firebaseapp.com",
     projectId: "fir-test-4c03b",
     storageBucket: "fir-test-4c03b.appspot.com",
@@ -100,7 +100,7 @@ async function main()
             displayAddTodoMessage(msg);
             command_list.push("add todo");
         }
-        else if(command_list[0] == "add todo" && hearsForAddToDo(msg))
+        else if(command_list[0] == "add todo" && hearsForNonEmptyString(msg))
         {   
             addTodo(msg);
             command_list.pop();    
@@ -125,7 +125,10 @@ async function main()
                     {
                         client.postMessage(temp_todo_list[i], channel);
                     }
-                    client.postMessage("Enter the task number that you want to remove", channel);
+                    setTimeout(function(){
+                        client.postMessage("Enter the task number that you want to remove", channel);
+                    }, 1300);
+                    
                 } 
                 }).catch((error) => {
                 console.error(error);
@@ -141,18 +144,17 @@ async function main()
             displayCreateIssue(msg);
             command_list.push("create issue");
         }
-        else if(command_list[0] == "create issue" && command_list[1] != "Repo name entered" && hearsForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && command_list[1] != "Repo name entered" && hearsForNonEmptyString(msg))
         {   
             displayNextMsgForCreateIssue(msg);
             command_list.push("Repo name entered")
-            for(var i = 0 ; i<command_list.length;i++){console.log(command_list[i]);}
         }
-        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] != "Issue title entered" && hearsForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] != "Issue title entered" && hearsForNonEmptyString(msg))
         {
             displayThirdMsgForCreateIssue(msg);
             command_list.push("Issue title entered");
         }
-        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForCreateIssue(msg))
+        else if(command_list[0] == "create issue" && command_list[1] == "Repo name entered" && command_list[2] == "Issue title entered" && hearsForNonEmptyString(msg))
         {
             createIssueBody(msg, issue_title, repo_name_for_create_issue);
             command_list.splice(0, command_list.length);
@@ -166,12 +168,12 @@ async function main()
             displayCreateReminderMessage(msg);
             command_list.push("create reminder");
         }
-        else if(command_list[0] == "create reminder" && hearsForReminder(msg))
+        else if(command_list[0] == "create reminder" && hearsForNonEmptyString(msg))
         {
             displayCreateReminderMessageTwo(msg);
             command_list.push("reminder entered");
         }
-        else if(command_list[0] == "create reminder" && command_list[1] == "reminder entered" && hearsForReminder(msg))
+        else if(command_list[0] == "create reminder" && command_list[1] == "reminder entered" && hearsForNonEmptyString(msg))
         {
             createReminder(msg);
             command_list.splice(0, command_list.length);
@@ -189,7 +191,7 @@ async function main()
     });
 
 }
-
+// DB check is made to see if user exists else add the user
 async function checkUserInDB()
 {
     // Getting userID using github api to get users that is common in github and mattermost as a pre-condition and checking to see if that userID exists in the database
@@ -212,6 +214,7 @@ async function checkUserInDB()
     });
 }
 
+// Hears function to match the exact commands and given commands
 function hears(msg, text)
 {
     if( msg.data.sender_name == bot_name) return false;
@@ -226,13 +229,29 @@ function hears(msg, text)
     return false;
 }
 
+// Hear function that will listen to a message in a chain of commands. The chain of commands the user enters is already being stored and being checked and hence checking 
+// if what the user enters under a particular chain of commands is non empty legitimate string
+function hearsForNonEmptyString(msg)
+{
+    if( msg.data.sender_name == bot_name) return false;
+    if( msg.data.post )
+    {
+        let post = JSON.parse(msg.data.post);
+        if( post.message != "")
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Hears function just to listen to hte repo names
 function hearsForRepoName(msg, text)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
     {   
         let post = JSON.parse(msg.data.post);
-        //console.log(repo);
         // To store the list of repo_names as a string that is used to check if the user input repo_name is a valid one
         let repos = Object.values(repo_names);
         for(var i = 0 ; i < repos.length; i++)
@@ -248,6 +267,8 @@ function hearsForRepoName(msg, text)
     return false;
 }
 
+// Hears function just to listen to the issue ID. Cannot be combined with any other hears function as some preprocessing i.e issue entered is being checked with the list of 
+// issues for the repo name entered. Hence separate function required.
 function hearsForIssueID(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
@@ -272,35 +293,7 @@ function hearsForIssueID(msg)
     return false;
 }
 
-function hearsForAddToDo(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if( msg.data.post )
-    {
-        let post = JSON.parse(msg.data.post);
-        if( post.message != "")
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-// function hearsTaskToAdd(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if( msg.data.post )
-//     {
-//         let post = JSON.parse(msg.data.post);
-//         if( post.message != '')
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-
+// Hears function for any sort of number. remove todo and remove reminder would use this 
 function hearsForTaskNumber(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
@@ -330,19 +323,19 @@ function hearsForTaskNumber(msg)
 //     return false;
 // }
 
-function hearsForCreateIssue(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if( msg.data.post )
-    {
-        let post = JSON.parse(msg.data.post);
-        if( post.message != "")
-        {
-            return true;
-        }
-    }
-    return false;
-}
+// function hearsForCreateIssue(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message != "")
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 
 // function hearsForIssueTitle(msg)
@@ -373,19 +366,19 @@ function hearsForCreateIssue(msg)
 //     return false;
 // }
 
-function hearsForReminder(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if( msg.data.post )
-    {
-        let post = JSON.parse(msg.data.post);
-        if( post.message != '')
-        {
-            return true;
-        }
-    }
-    return false;
-}
+// function hearsForReminder(msg)
+// {
+//     if( msg.data.sender_name == bot_name) return false;
+//     if( msg.data.post )
+//     {
+//         let post = JSON.parse(msg.data.post);
+//         if( post.message != '')
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 // function hearsForReminderTime(msg)
 // {
@@ -444,7 +437,6 @@ async function listIssues(msg)
         {
             client.postMessage(issue[i], channel);
         }
-        //client.postMessage("Enter issue ID is it is a close issue command", channel);
         
     }   
 }
@@ -466,23 +458,7 @@ async function closeIssueID(msg, req_repo_name, issue_id)
         }
 }
 
-// async function showTodo(msg)
-// {
-//     let channel = msg.broadcast.channel_id;
-//     if (todoList.length === 0) 
-//     { 
-//         client.postMessage("There is nothing to show!", channel);
-//     }
-//     else
-//     {   for(var i=0; i < todoList.length; i++)
-//         {
-//             client.postMessage(todoList[i], channel);
-//         }
-        
-//     }
-
-// }
-
+// This show todo function uses the database to fetch the list for the user who is running the code. Previously had written the same functionality with todoList- a global list
 async function showTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
