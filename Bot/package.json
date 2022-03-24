@@ -10,19 +10,27 @@
     "mattermost",
     "bot"
   ],
-  "author": "John-Paul Ore based on work by Chris Parnin",
+  "type": "module",
+  "author": "Focus Bot Team-24",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.22.0",
+    "chai": "^4.3.6",
     "chalk": "^2.4.2",
+    "cron": "^1.8.2",
+    "express": "^4.17.3",
+    "firebase": "^9.6.9",
     "install": "^0.13.0",
-    "mattermost-client": "^6.4.0",
+    "json-schema-traverse": "^1.0.0",
+    "json-stringify-safe": "^5.0.1",
+    "jsprim": "^1.4.2",
+    "mattermost-client": "^6.5.0",
+    "mocha": "^9.2.2",
+    "node-cron": "^3.0.0",
     "parse-link-header": "^2.0.0"
   },
   "devDependencies": {
     "c8": "^7.11.0",
-    "chai": "^4.3.6",
-    "mocha": "^9.2.1",
     "nock": "^13.2.4"
   }
 }

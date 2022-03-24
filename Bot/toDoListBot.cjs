@@ -1,10 +1,13 @@
 const axios = require('axios');
+// import "axios";
+// import "chalk";
 const chalk = require('chalk');
 
 var config = {}
 // Retrieve our api token from the environment variables.
 config.token = process.env.GITHUBTOKEN;
 var urlRoot = "https://github.ncsu.edu/api/v3"
+var repo_name = [];
 
 if( !config.token )
 {
@@ -41,12 +44,27 @@ function listAuthenicatedUserRepos()
 		axios(options)
 			.then(function (response) {
 				var data = response.data;
-        const repo_name = [];
+        //const repo_name = [];
 				for( var i = 0; i < data.length; i++ )
 				{
 					repo_name.push(data[i].name);
 					//console.log(name);
 				}
+        
+        //test
+        const fs = require('fs')
+        const jsonString = JSON.stringify(data)
+    
+        fs.writeFile('./mock1.json', jsonString, err => {
+        if (err) {
+        console.log('Error writing file', err)
+        } else {
+        console.log('Successfully wrote file')
+        }
+        })
+        //testend
+
+
 				resolve(Object.values(repo_name));
 			})
 			.catch(function (error) {
@@ -69,12 +87,27 @@ function getIssues(owner, repo)
     axios(options)
       .then(function (response) {
         data = response.data
-        console.log(data);
+        //console.log(data);
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
         {
           issue_list.push(data[i].title + ": " + data[i].body + "   ID: " + " " + data[i].id);
         }
+
+        //test
+        const fs = require('fs')
+        const jsonString = JSON.stringify(data)
+    
+        fs.writeFile('./mock2.json', jsonString, err => {
+        if (err) {
+        console.log('Error writing file', err)
+        } else {
+        console.log('Successfully wrote file')
+        }
+        })
+        //testend
+
+
         resolve(issue_list);
         
       })
@@ -164,12 +197,37 @@ async function createIssue(owner, repo, issueName, issueBody)
 	});
 }
 
+async function getUser()
+{	
+	let options = getDefaultOptions("/user", "GET");
+
+	// Send a http request to url and specify a callback that will be called upon its return.
+	return new Promise(function(resolve, reject)
+	{
+		axios(options)
+			.then(function (response) {
+				var userId = response.data.login;
+				//console.log(userId);
+				resolve(userId);
+		})
+    .catch((error) => {
+			console.log(chalk.red(error));
+			reject(error);
+			return;
+		});
+	});
+}
+
 
 
 exports.getIssues = getIssues;
 exports.listAuthenicatedUserRepos = listAuthenicatedUserRepos;
+exports.getDefaultOptions = getDefaultOptions;
 exports.closeIssues = closeIssues;
 exports.createIssue = createIssue;
+exports.getUser = getUser;
+exports.repo_name = repo_name;
+
 
 // (async () => {
 //     console.log("Inside async");
