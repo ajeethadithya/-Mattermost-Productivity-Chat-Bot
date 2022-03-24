@@ -5,7 +5,9 @@
 // show todo | if todo list exists, displays else says nothing there 
 // add todo | type task | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
-// create reminder | Enter {reminder} | Enter date and time in formate specified |
+// create reminder | Enter {reminder} | Enter date and time in formate specified | Reminder Created i.e cronJob schedule
+// show reminders | displays list of reminders
+// remove reminder | Enter {reminder number to remove} | Reminder removed
 
 // Importing necessary packages and js files
 // Database connectivity
@@ -47,15 +49,20 @@ let client = new Client(host, group, {});
 let repo_names = []
 // To access the issue number with repo name and issue ID entered
 let req_repo_name = ""
+// To store the list of issues from github api, from specific repo entered by the user, and loop through it to find a match with the issues ID. Used in one of the hears for closing an issue
 let global_issues = []
 let issue_id = 0;
+//Initially used this global dictionary to store todo list before database connectivity was established
 //var todoList = []
+// All global values to store the details from api calls to be given to other functions. These values are overwritten for every time the commands are called. Temporary but global values since it is need by multiple functions
 let repo_name_for_create_issue = ""
 let issue_title = ""
 let issue_body = ""
 // To keep track the chain of commands
-let command_list = [] 
+let command_list = []
+// To store the user name that is fetched from github (from user and login) and using the same to check if user exists in db else creates a profile in DB. 
 let userID = "";
+// Global dictionary to save the reminder-Associated cronJob (key-value pair)
 let reminder_job_dict = {};
 
 async function main()
@@ -141,7 +148,7 @@ async function main()
                 console.error(error);
             });
         }
-        else if(command_list[0] == "remove todo" && hearsForTaskNumber(msg))
+        else if(command_list[0] == "remove todo" && hearsForNumber(msg))
         {   
             removeTodo(msg);    
             command_list.pop();
@@ -188,6 +195,44 @@ async function main()
         else if(hears(msg, "show reminders"))
         {
             showReminders(msg);
+        }
+        else if(hears(msg, "remove reminder"))
+        {
+            command_list.push("remove reminder");
+            let channel = msg.broadcast.channel_id;
+            let temp_reminder_list = []
+            get(child(dbRef, `users/` + userID)).then((snapshot) => {
+                if (snapshot.exists()) 
+                {
+                    temp_reminder_list = snapshot.val().reminders;
+                }
+                if (temp_reminder_list.length < 2) 
+                { 
+                    client.postMessage("There is nothing to show!", channel);
+                }
+                else
+                {
+                    for(var i= 1; i < temp_reminder_list.length; i++)
+                    {   
+                        let rem_array = temp_reminder_list[i].split(" ");
+                        rem_array.shift();
+                        let rem_to_post = rem_array.join(" ");
+                        rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
+                        client.postMessage(rem_to_post, channel);
+                    }
+                    setTimeout(function(){
+                        client.postMessage("Enter the reminder number that you want to remove: ", channel);
+                    }, 1300);
+                    
+                } 
+                }).catch((error) => {
+                console.error(error);
+            });
+        }
+        else if(command_list[0] == "remove reminder" && hearsForNumber(msg))
+        {   
+            removeReminders(msg);    
+            command_list.pop();
         }
         else
         {   
@@ -305,7 +350,7 @@ function hearsForIssueID(msg)
 }
 
 // Hears function for any sort of number. remove todo and remove reminder would use this 
-function hearsForTaskNumber(msg)
+function hearsForNumber(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -414,12 +459,21 @@ function greetingsReply(msg)
 function displayHelpWithCommands(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Command: show issues | Enter {repo name} | Issues with ID displayed", channel);
-    client.postMessage("Command: close issue | Enter {repo name} | Issues with ID displayed | Enter ID of issue to remove", channel);
-    client.postMessage("Command: create issue | Enter {repo name} | Enter {Issue Title} | Enter {Issue Body}", channel);
-    client.postMessage("Command: show todo | If todo list exists, displays else says nothing there", channel);
-    client.postMessage("Command: add todo | {task name}", channel);
-    client.postMessage("Command: remove todo | {number of task shown} | removes task", channel); 
+    client.postMessage("Here are the commands that you can use:", channel);
+
+    setTimeout(function(){
+        client.postMessage("show issues | Enter {repo name} | Issues with ID displayed", channel);
+        client.postMessage("close issue | Enter {repo name} | Issues with ID displayed | Enter ID of issue to remove", channel);
+        client.postMessage("create issue | Enter {repo name} | Enter {Issue Title} | Enter {Issue Body}", channel);
+        client.postMessage("show todo | If todo list exists, displays else says nothing there", channel);
+        client.postMessage("add todo | Enter {task}", channel);
+        client.postMessage("remove todo | Enter {number of task shown} | removes task", channel); 
+        client.postMessage("create reminder | Enter {reminder} | Enter date and time in formate specified | Reminder Created i.e cronJob schedule", channel);
+        client.postMessage("show reminders | displays list of reminders", channel);
+        client.postMessage("remove reminder | Enter {reminder number to remove} | Reminder removed", channel);
+    }, 1000);
+
+    
 }
 
 async function listRepos(msg)
@@ -684,13 +738,13 @@ async function createReminder(msg)
           // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
           temp_reminder_list = snapshot.val().reminders;
           reminder = temp_reminder_list[temp_reminder_list.length - 1];
-          reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
           let reminder_array = reminder.split(" ");
           reminder_array.shift();
           reminder = reminder_array.join(" ");
 
           //After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
           temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
+          reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
 
         } 
         }).catch((error) => {
@@ -761,7 +815,7 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
         updates[`/users/` + userID + `/reminders/`] = user_rem_data;
         update(ref(db), updates);
         });
-    //reminder_job_dict[reminder_with_id] = job
+    reminder_job_dict[reminder_with_id] = job;
     job.start();
     
 }
@@ -792,6 +846,40 @@ async function showReminders(msg)
         client.postMessage(rem_to_post, channel);
     }
     
+}
+
+async function removeReminders(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let temp_reminder_list = []
+    let post = JSON.parse(msg.data.post);
+    var rem_id_to_remove = parseInt(post.message);
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+            // Removing reminder from the database but haven't stopped cronJob yet
+            temp_reminder_list = snapshot.val().reminders;
+            var removed = temp_reminder_list.splice(rem_id_to_remove, 1);
+
+            // Stopping the cronJob scheduled using cronJob.stop() method by accessing the job with the unique reminder id which is the variable "removed"
+            Object.keys(reminder_job_dict).forEach((key) => {
+                if(key == removed){reminder_job_dict[key].stop()}
+              });
+            
+            // Removing the reminder and the job (key value pair) from the global dictionary 
+            delete reminder_job_dict[removed];
+        } 
+        }).catch((error) => {
+        console.error(error);
+    });
+
+    //update data
+    const user_reminder_data = temp_reminder_list;
+    const updates = {};
+    updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
+    update(ref(db), updates);    
+    client.postMessage("Reminder " + post.message + " successfully removed", channel);
+
 }
 
 (async () => 
