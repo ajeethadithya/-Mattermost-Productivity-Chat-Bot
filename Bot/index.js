@@ -57,7 +57,7 @@ let command_list = []
 let userID = ""
 // To store the reminder with the key appened to it so that it can be used as a key in the dictionary for the cronJobs generated
 // let reminder = "";
-// let reminder_with_id = "";
+let reminder_with_id = "";
 let reminder_job_dict = {};
 
 async function main()
@@ -650,6 +650,7 @@ async function displayCreateReminderMessageTwo(msg)
           // Generating random ID for the reminder to store its job uniquely
           const id = crypto.randomBytes(16).toString("hex"); 
           reminder_to_push = reminder_to_push.concat(" ", id);
+          reminder_with_id = reminder_to_push;
           temp_reminder_list.push(reminder_to_push);
         } 
         }).catch((error) => {
@@ -710,8 +711,9 @@ async function createReminder(msg)
 function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes,reminder, channel)
 {
     let date = new Date();
+    let cron_month_minus_one = parseInt(cron_month) - 1;
     date.setDate(parseInt(`${cron_day}`));
-    date.setMonth(parseInt(`${cron_month}`));
+    date.setMonth(`${cron_month_minus_one}`);
     date.setFullYear(cron_year);
     date.setHours(parseInt(`${cron_hours}`));
     date.setMinutes(parseInt(`${cron_minutes}`));
