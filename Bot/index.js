@@ -55,8 +55,7 @@ let issue_title = ""
 let issue_body = ""
 // To keep track the chain of commands
 let command_list = [] 
-let userID = ""
-let reminder_with_id = "";
+let userID = "";
 let reminder_job_dict = {};
 
 async function main()
@@ -653,7 +652,6 @@ async function displayCreateReminderMessageTwo(msg)
           // Generating random ID for the reminder to store its job uniquely
           const id = crypto.randomBytes(16).toString("hex"); 
           reminder_to_push = reminder_to_push.concat(" ", id);
-          reminder_with_id = reminder_to_push;
           temp_reminder_list.push(reminder_to_push);
         } 
         }).catch((error) => {
@@ -675,6 +673,7 @@ async function createReminder(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     let reminder = "";
+    let reminder_with_id = "";
 
     // Getting the reminder message to send it to the cronJob
     let temp_reminder_list = []
@@ -685,6 +684,7 @@ async function createReminder(msg)
           // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
           temp_reminder_list = snapshot.val().reminders;
           reminder = temp_reminder_list[temp_reminder_list.length - 1];
+          reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
           let reminder_array = reminder.split(" ");
           reminder_array.pop();
           reminder = reminder_array.join(" ");
@@ -706,12 +706,12 @@ async function createReminder(msg)
     let cron_minutes =  cronJob_time_array[1];
 
     // Generate a cronJob for these details here
-    createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, channel);
+    createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel);
     client.postMessage("Reminder Created!", channel);
 }
 
 // CronJob is getting created and the respective reminder is being posted in the channel
-function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes,reminder, channel)
+function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel)
 {
     let date = new Date();
     let cron_month_minus_one = parseInt(cron_month) - 1;
@@ -722,10 +722,32 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
     date.setMinutes(parseInt(`${cron_minutes}`));
     date.setSeconds(0);
 
-    const job = new cron.CronJob(date, function() {
+    const job = new cron.CronJob(date, async function() {
         // THIS IS WHERE I FIGURE OUT WHAT TO MAKE THE JOB TO DO
         client.postMessage(`REMINDER ALERT: ${reminder}`, channel);
-    });
+        let temp_reminder_list = []
+        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+            if (snapshot.exists()) 
+            {
+                temp_reminder_list = snapshot.val().reminders;
+                for(var i= 1; i < temp_reminder_list.length; i++)
+                {
+                    if(temp_reminder_list[i] == reminder_with_id)
+                    {
+                        temp_reminder_list.splice(i, 1);
+                    }
+                }
+            } 
+            }).catch((error) => {
+            console.error(error);
+            });
+
+        //update data
+        const user_rem_data = temp_reminder_list;
+        const updates = {};
+        updates[`/users/` + userID + `/reminders/`] = user_rem_data;
+        update(ref(db), updates);
+        });
     //reminder_job_dict[reminder_with_id] = job
     job.start();
     
