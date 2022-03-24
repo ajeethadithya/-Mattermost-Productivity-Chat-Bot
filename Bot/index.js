@@ -5,6 +5,7 @@
 // show todo | if todo list exists, displays else says nothing there 
 // add todo | type task | responds with added message
 // remove todo | shows todo list and asks you to enter a number to remove | removes task 
+// create reminder | Enter {reminder} | Enter date and time in formate specified |
 
 // Importing necessary packages and js files
 // Database connectivity
@@ -55,8 +56,6 @@ let issue_body = ""
 // To keep track the chain of commands
 let command_list = [] 
 let userID = ""
-// To store the reminder with the key appened to it so that it can be used as a key in the dictionary for the cronJobs generated
-// let reminder = "";
 let reminder_with_id = "";
 let reminder_job_dict = {};
 
@@ -186,6 +185,10 @@ async function main()
         {
             createReminder(msg);
             command_list.splice(0, command_list.length);
+        }
+        else if(hears(msg, "show reminders"))
+        {
+            showReminders(msg);
         }
         else
         {   
@@ -536,9 +539,9 @@ async function addTodo(msg)
         });
 
     //update data
-    const user_todo_data = {todo_list: temp_todo_list};
+    const user_todo_data = temp_todo_list;
     const updates = {};
-    updates[`/users/` + userID] = user_todo_data;
+    updates[`/users/` + userID + `/todo_list/`] = user_todo_data;
     update(ref(db), updates);
     
     // This was using a global list called todoList
@@ -658,9 +661,9 @@ async function displayCreateReminderMessageTwo(msg)
         });
 
     //update data
-    const user_rem_data = {reminders: temp_reminder_list};
+    const user_rem_data = temp_reminder_list;
     const updates = {};
-    updates[`/users/` + userID] = user_rem_data;
+    updates[`/users/` + userID + `/reminders/`] = user_rem_data;
     update(ref(db), updates);
 
     client.postMessage("When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: DD/MM/YYYY hh:mm ): ", channel);
@@ -728,7 +731,29 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
     
 }
 
-
+async function showReminders(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let temp_reminder_list = []
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+            temp_reminder_list = snapshot.val().reminders;
+        }
+        if (temp_reminder_list.length < 2) 
+        { 
+            client.postMessage("There is nothing to show!", channel);
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
+    
+    for(var i= 1; i < temp_reminder_list.length; i++)
+    {
+        client.postMessage(temp_reminder_list[i], channel);
+    }
+    
+}
 
 (async () => 
 {
