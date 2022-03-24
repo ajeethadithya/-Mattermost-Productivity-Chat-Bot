@@ -577,9 +577,9 @@ async function removeTodo(msg)
     });
 
     //update data
-    const user_todo_data = {todo_list: temp_todo_list};
+    const user_todo_data = temp_todo_list;
     const updates = {};
-    updates[`/users/` + userID] = user_todo_data;
+    updates[`/users/` + userID + `/todo_list/`] = user_todo_data;
     update(ref(db), updates);    
     client.postMessage("Task " + post.message + " successfully removed", channel);
 }
@@ -651,7 +651,7 @@ async function displayCreateReminderMessageTwo(msg)
           //var rem_id = temp_reminder_list.length;
           // Generating random ID for the reminder to store its job uniquely
           const id = crypto.randomBytes(16).toString("hex"); 
-          reminder_to_push = reminder_to_push.concat(" ", id);
+          reminder_to_push = id.concat(" ").concat(reminder_to_push);
           temp_reminder_list.push(reminder_to_push);
         } 
         }).catch((error) => {
@@ -686,12 +686,24 @@ async function createReminder(msg)
           reminder = temp_reminder_list[temp_reminder_list.length - 1];
           reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
           let reminder_array = reminder.split(" ");
-          reminder_array.pop();
+          reminder_array.shift();
           reminder = reminder_array.join(" ");
+
+          //After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
+          temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
+
         } 
         }).catch((error) => {
         console.error(error);
         });
+
+    // Adding the time details and updating the database with the details appended to the end of the string
+    // In DB: "{Unique ID} {reminder message} {time details}"
+    const user_rem_data = temp_reminder_list;
+    const updates = {};
+    updates[`/users/` + userID + `/reminders/`] = user_rem_data;
+    update(ref(db), updates);
+    
 
     // Converting String to array so that the first element can then be split according to "/" and second one according to ':'
     let cronJob_details_array = post.message.split(" ");
@@ -712,7 +724,8 @@ async function createReminder(msg)
 
 // CronJob is getting created and the respective reminder is being posted in the channel
 function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel)
-{
+{   
+    // Input being set appropriately since cronJob takes a date as an input and giving a date makes it run once and breaks. Giving an expression makes it run repeatedly
     let date = new Date();
     let cron_month_minus_one = parseInt(cron_month) - 1;
     date.setDate(parseInt(`${cron_day}`));
@@ -723,7 +736,7 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
     date.setSeconds(0);
 
     const job = new cron.CronJob(date, async function() {
-        // THIS IS WHERE I FIGURE OUT WHAT TO MAKE THE JOB TO DO
+        // Once the cronjob for a particular job kicks in, the reminder is removed and DB is updated in the code below
         client.postMessage(`REMINDER ALERT: ${reminder}`, channel);
         let temp_reminder_list = []
         await get(child(dbRef, `users/` + userID)).then((snapshot) => {
@@ -771,8 +784,12 @@ async function showReminders(msg)
         });
     
     for(var i= 1; i < temp_reminder_list.length; i++)
-    {
-        client.postMessage(temp_reminder_list[i], channel);
+    {   
+        let rem_array = temp_reminder_list[i].split(" ");
+        rem_array.shift();
+        let rem_to_post = rem_array.join(" ");
+        rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
+        client.postMessage(rem_to_post, channel);
     }
     
 }
