@@ -13,19 +13,24 @@ import { getDatabase, ref, set, child, get, update, remove } from "firebase/data
 import Client from "mattermost-client";
 import "./toDoListBot.cjs";
 import {listAuthenicatedUserRepos, getIssues, closeIssues, createIssue, getUser} from "./toDoListBot.cjs";
+import { readFile } from 'fs/promises';
+const firebase_data = JSON.parse(await readFile(new URL('./firebase_data.json', import.meta.url)));
 import cron from "node-cron";
+import crypto from "crypto";
+
+//import firebase_data from './firebase_data.json';
 // const Client = require('mattermost-client');
 // const toDoListBot = require('./toDoListBot');
 
 // Credentials needed for Database Connectivity
 const firebaseApp = initializeApp({
-    apiKey: process.env.FIREBASEAPIKEY,
-    authDomain: "fir-test-4c03b.firebaseapp.com",
-    projectId: "fir-test-4c03b",
-    storageBucket: "fir-test-4c03b.appspot.com",
-    messagingSenderId: "386868535333",
-    appId: "1:386868535333:web:dbb791c704ed3622049fcc",
-    measurementId: "G-NQTNG31BYM"
+    apiKey: firebase_data.firebase_metadata.apiKey,
+    authDomain: firebase_data.firebase_metadata.authDomain,
+    projectId: firebase_data.firebase_metadata.projectId,
+    storageBucket: firebase_data.firebase_metadata.storageBucket,
+    messagingSenderId: firebase_data.firebase_metadata.messagingSenderId,
+    appId: firebase_data.firebase_metadata.appId,
+    measurementId: firebase_data.firebase_metadata.measurementId
   });
   
 const db = getDatabase();
@@ -49,7 +54,9 @@ let issue_body = ""
 // To keep track the chain of commands
 let command_list = [] 
 let userID = ""
+// To store the reminder with the key appened to it so that it can be used as a key in the dictionary for the cronJobs generated
 let reminder = "";
+let reminder_job_dict = {};
 
 async function main()
 {   
@@ -168,7 +175,7 @@ async function main()
             displayCreateReminderMessage(msg);
             command_list.push("create reminder");
         }
-        else if(command_list[0] == "create reminder" && hearsForNonEmptyString(msg))
+        else if(command_list[0] == "create reminder" && command_list[1] != "reminder entered" && hearsForNonEmptyString(msg))
         {
             displayCreateReminderMessageTwo(msg);
             command_list.push("reminder entered");
@@ -511,7 +518,6 @@ async function addTodo(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     var message_to_push = post.message;
-    //message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
 
     // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
     let temp_todo_list = []
@@ -624,78 +630,83 @@ async function displayCreateReminderMessage(msg)
     client.postMessage("Enter reminder: ", channel);
 }
 
-// THIS IS THE REMINDER PART WHERE I HAVE PARSED THE REMINDER ENTERED BY THE USER AND PUSHING IT TO THE DATABASE. RETHINK THE LOGIC OF PLACING THIS HERE AFTER CONSIDERING 
-// THE CRONJOB UNIQUE TASK FOR EACH REMINDER LOGIC 
 
-// async function displayCreateReminderMessageTwo(msg)
-// {
-//     let channel = msg.broadcast.channel_id;
-//     let post = JSON.parse(msg.data.post);
-//     var reminder_to_push = post.message;
-//     reminder_to_push = reminder_to_push.replace(message_to_push.charAt(0), "");
+async function displayCreateReminderMessageTwo(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    var reminder_to_push = post.message;
 
-//     // Getting the todo_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
-//     let temp_reminder_list = []
-//     await get(child(dbRef, `users/` + userID)).then((snapshot) => {
-//         if (snapshot.exists()) 
-//         {
-//           temp_reminder_list = snapshot.val().reminders;
-//           var rem_id = temp_reminder_list.length;
-//           reminder_to_push = rem_id.toString().concat("."," ").concat(reminder_to_push);
-//           temp_reminder_list.push(reminder_to_push);
-//         } 
-//         }).catch((error) => {
-//         console.error(error);
-//         });
+    // Getting the reminder_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
+    let temp_reminder_list = []
+    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+        if (snapshot.exists()) 
+        {
+          temp_reminder_list = snapshot.val().reminders;
+          //var rem_id = temp_reminder_list.length;
+          // Generating random ID for the reminder to store its job uniquely
+          const id = crypto.randomBytes(16).toString("hex"); 
+          reminder_to_push = reminder_to_push.concat(" ", id);
+          // Saving it to the global reminder
+          reminder = reminder_to_push;
+          temp_reminder_list.push(reminder_to_push);
+        } 
+        }).catch((error) => {
+        console.error(error);
+        });
 
-//     //update data
-//     const user_todo_data = {reminders: temp_reminder_list};
-//     const updates = {};
-//     updates[`/users/` + userID] = user_todo_data;
-//     update(ref(db), updates);
+    //update data
+    const user_rem_data = {reminders: temp_reminder_list};
+    const updates = {};
+    updates[`/users/` + userID] = user_rem_data;
+    update(ref(db), updates);
+
+    client.postMessage("When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: DD/MM/YYYY hh:mm ): ", channel);
+}
+
+
+async function createReminder(msg)
+{   
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+
+    // Converting String to array so that the first element can then be split according to "/" and second one according to ':'
+    cronJob_details_array = post.message.split(" ");
     
-//     client.postMessage("Reminder added!", channel);
-//     reminder =  post.message;
-//     reminder = reminder.replace(reminder.charAt(0), "");
-//     client.postMessage("When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: hh:mm DD/MM/YYYY ): ", channel);
-// }
+    cronJob_date_array = cronJob_details_array[0].split('/');
+    cronJob_time_array = cronJob_details_array[1].split(':');
+    
+    cron_day = cronJob_date_array[0];
+    cron_month= cronJob_date_array[1];
+    cron_year = cronJob_date_array[2];
+    cron_hours =  cronJob_time_array[0];
+    cron_minutes =  cronJob_time_array[1];
 
+    // Generate a cronJob for these details here
+    createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes);
+}
 
-// THIS IS THE REMINDER PART THAT I HAVE NOT YET COMPLETED. THIS WHERE I NEED TO READ THE HH:MM DD/MM/YYYY AND FEED IT TO THE CRON JOB BY CALLING THE CRON JOB FUNCTION
+// INCOMPLETE
+function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes)
+{
+    let date = new Date();
+    date.setDate(parseInt(`${cron_day}`));
+    date.setMonth(parseInt(`${cron_month}`));
+    date.setFullYear(cron_year);
+    date.setHours(parseInt(`${cron_hours}`));
+    date.setMinutes(parseInt(`${cron_minutes}`));
+    date.setSeconds(0);
 
-// async function createReminder(msg)
-// {   
-//     let owner = msg.data.sender_name.replace('@', '');
-//     let channel = msg.broadcast.channel_id;
-//     let post = JSON.parse(msg.data.post);
-//     cronJob_time_details = post.message;
-//     issue_body = issue_body.replace(issue_body.charAt(0), "");
-//     issue_body = issue_body.replace(issue_body.charAt(0), "");
-//     issue_body = issue_body.replace(issue_body.charAt(0), "");
-//     let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
-//         err => client.postMessage("Unable to complete request, sorry!", channel) );
-//     if(status_of_api)
-//     {
-//         client.postMessage("Issue has been created!", channel);
-//     }
-// }
+    const job = new cron(date, function() {
+        // THIS IS WHERE I FIGURE OUT WHAT TO MAKE THE JOB TO DO
+        console.log('Specific date:', date, ', onTick at:', d);
+    });
+    reminder_job_dict[reminder] = job
+    job.start();
+    
+    
 
-// THE CRON JOB FUNCTION IS YET TO BE WRITTEN. HAS TO TAKE IN THE INPUT THAT I AM PARSING IN THE PREVIOUS FUNCTION.
-// THINK ABOUT THE LOGIC TO STORE THE KEY AND THE TASK BEFORE WRITING ANYTHING 
-
-
-// function createCronJobs()
-// {
-//     const reminder_task_map = {};
-//     let min = parseInt('21');
-//     const task = cron.schedule(`0 ${min} 20 21 3 Monday 2022 `,()=>{
-//     console.log("This is my job");
-//     });
-//     url_taskMap[url] = task;
-//     // // for some condition in some code
-//     // let my_job = url_taskMap[url];
-//     // my_job.stop();
-// }
+}
 
 
 
