@@ -87,7 +87,8 @@ async function main()
         }
         else if(command_list[0] == "show issues" && hearsForRepoName(msg, "dummy"))
         {   
-            listIssues(msg)
+            let close_issue_flag = 0;
+            listIssues(msg, close_issue_flag)
             command_list.pop();           
         }
         else if(hears(msg, "close issue"))
@@ -97,7 +98,8 @@ async function main()
         }
         else if(command_list[0] == "close issue" && hearsForRepoName(msg, "dummy"))
         {   
-            listIssues(msg)
+            let close_issue_flag = 1;
+            listIssues(msg, close_issue_flag)
             command_list.push("repo name entered for closing issue")           
         }
         else if(command_list[0] == "close issue" && command_list[1] == "repo name entered for closing issue" && hearsForIssueID(msg))
@@ -141,7 +143,7 @@ async function main()
                     }
                     setTimeout(function(){
                         client.postMessage("Enter the task number that you want to remove", channel);
-                    }, 1300);
+                    }, 1000);
                     
                 } 
                 }).catch((error) => {
@@ -453,7 +455,7 @@ function hearsForNumber(msg)
 function greetingsReply(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Good to see you here! Hocus Focus- Let's help you Focus!", channel);   
+    client.postMessage(`Good to see you here! Hocus Pocus- Let's help you Focus \u270A`, channel);   
 }
 
 function displayHelpWithCommands(msg)
@@ -481,14 +483,14 @@ async function listRepos(msg)
 {   
     //let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter the repo name for which you want to execute the command: ", channel);
+    client.postMessage(`\u261B Enter the repo name for which you want to execute the command:`, channel);
     repo_names = await listAuthenicatedUserRepos().catch( 
         err => client.postMessage("Unable to complete request, sorry!", channel) );
 
     client.postMessage(JSON.stringify(repo_names, null, 4), channel);
 }
     
-async function listIssues(msg)
+async function listIssues(msg, close_issue_flag)
 {   
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
@@ -506,6 +508,9 @@ async function listIssues(msg)
             client.postMessage(`Title: ${issue_array[0]}
             \u21E7 ID: ${issue_id}`, channel);
         }
+        setTimeout(function(){
+            if(close_issue_flag == 1){client.postMessage("\u261B Enter the Issue ID of the issue that you want to close", channel);}
+        }, 1300);
         
     }   
 }
@@ -554,7 +559,7 @@ async function showTodo(msg)
 async function displayAddTodoMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter the task to be added: ", channel);
+    client.postMessage("\u261B Enter the task to be added: ", channel);
 }
 
 // async function addTodo(msg)
@@ -644,7 +649,7 @@ async function removeTodo(msg)
 async function displayCreateIssue(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter a repo to create an issue from the list below: ", channel);
+    client.postMessage("\u261B Enter a repo to create an issue from the list below: ", channel);
     await listRepos(msg);
     //client.postMessage("Use + before entering the repo name", channel);
 }
@@ -655,7 +660,7 @@ async function displayNextMsgForCreateIssue(msg)
     let post = JSON.parse(msg.data.post);
     repo_name_for_create_issue =  post.message;
     //repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
-    client.postMessage("Enter the Title of the issue", channel);
+    client.postMessage("\u261B Enter the Title of the issue", channel);
 }
 
 async function displayThirdMsgForCreateIssue(msg)
@@ -665,7 +670,7 @@ async function displayThirdMsgForCreateIssue(msg)
     issue_title =  post.message;
     // issue_title = issue_title.replace(issue_title.charAt(0), "");
     // issue_title = issue_title.replace(issue_title.charAt(0), "");
-    client.postMessage("Enter the body of the issue", channel);
+    client.postMessage("\u261B Enter the body of the issue", channel);
 }
 
 async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
@@ -688,7 +693,7 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
 async function displayCreateReminderMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Enter reminder: ", channel);
+    client.postMessage("\u261B Enter reminder: ", channel);
 }
 
 
@@ -721,7 +726,7 @@ async function displayCreateReminderMessageTwo(msg)
     updates[`/users/` + userID + `/reminders/`] = user_rem_data;
     update(ref(db), updates);
 
-    client.postMessage("When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: DD/MM/YYYY hh:mm ): ", channel);
+    client.postMessage("\u261B When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: DD/MM/YYYY hh:mm ): ", channel);
 }
 
 
