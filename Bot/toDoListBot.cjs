@@ -75,7 +75,7 @@ function getIssues(owner, repo)
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
         {
-          issue_list.push(data[i].title + ": " + data[i].body + "   ID: " + " " + data[i].id);
+          issue_list.push(data[i].title + ":\n" + data[i].body + "   ID: " + " " + data[i].id);
         }
         resolve(issue_list);
         

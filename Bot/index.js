@@ -131,7 +131,7 @@ async function main()
                 }
                 if (temp_todo_list.length < 2) 
                 { 
-                    client.postMessage("There is nothing to show!", channel);
+                    client.postMessage('There is nothing to show \u2705', channel);
                 }
                 else
                 {
@@ -208,7 +208,7 @@ async function main()
                 }
                 if (temp_reminder_list.length < 2) 
                 { 
-                    client.postMessage("There is nothing to show!", channel);
+                    client.postMessage("You have no reminders!", channel);
                 }
                 else
                 {
@@ -501,7 +501,10 @@ async function listIssues(msg)
     {   
         for(var i = 0; i < issue.length; i++)
         {
-            client.postMessage(issue[i], channel);
+            let issue_array = issue[i].split("ID: ");
+            let issue_id = issue_array[1];
+            client.postMessage(`Title: ${issue_array[0]}
+            \u21E7 ID: ${issue_id}`, channel);
         }
         
     }   
@@ -510,7 +513,6 @@ async function listIssues(msg)
 // Fucntion to close the issue specified by the issue number that the user enters in the chat
 async function closeIssueID(msg, req_repo_name, issue_id)
 {   
-    
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     // let post = JSON.parse(msg.data.post).message;
@@ -519,7 +521,7 @@ async function closeIssueID(msg, req_repo_name, issue_id)
     var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( 
             err => client.postMessage(`Issue cannot be closed`));
         if( closeStatus )
-        {   console.log("close status is " + closeStatus);
+        {  
             client.postMessage(`Issue has been successfully closed!`, channel);
         }
 }
@@ -536,7 +538,7 @@ async function showTodo(msg)
         }
         if (temp_todo_list.length < 2) 
         { 
-            client.postMessage("There is nothing to show!", channel);
+            client.postMessage("There is nothing to show \u2705", channel);
         } 
         }).catch((error) => {
         console.error(error);
@@ -792,7 +794,8 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
 
     const job = new cron.CronJob(date, async function() {
         // Once the cronjob for a particular job kicks in, the reminder is removed and DB is updated in the code below
-        client.postMessage(`REMINDER ALERT: ${reminder}`, channel);
+        client.postMessage(`REMINDER ALERT: 
+        \u23F1 ${reminder}`, channel);
         let temp_reminder_list = []
         await get(child(dbRef, `users/` + userID)).then((snapshot) => {
             if (snapshot.exists()) 
@@ -832,7 +835,7 @@ async function showReminders(msg)
         }
         if (temp_reminder_list.length < 2) 
         { 
-            client.postMessage("There is nothing to show!", channel);
+            client.postMessage("You have no reminders!", channel);
         } 
         }).catch((error) => {
         console.error(error);
@@ -842,9 +845,12 @@ async function showReminders(msg)
     {   
         let rem_array = temp_reminder_list[i].split(" ");
         rem_array.shift();
+        let time_details = rem_array.at(-2).concat(" ").concat(rem_array.at(-1));
+        rem_array.splice(-2,2);
         let rem_to_post = rem_array.join(" ");
         rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
-        client.postMessage(rem_to_post, channel);
+        client.postMessage(`${rem_to_post}
+        \u2022 ${time_details}`, channel);
     }
     
 }
