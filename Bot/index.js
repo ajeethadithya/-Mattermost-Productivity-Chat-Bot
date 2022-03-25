@@ -240,7 +240,7 @@ async function main()
         else
         {   
             let channel = msg.broadcast.channel_id;
-            if( msg.data.sender_name != bot_name && (command_list[0] == "show issues" || command_list[0] == "close issue" || command_list[0] == "create issue") )
+            if( msg.data.sender_name != bot_name && (command_list[0] == "show issues" || command_list[0] == "close issue" || command_list[0] == "create issue") && command_list[1] != "repo name entered for closing issue" )
             {   
                 // Error handling for repo name not matching with the list of repo names for that user
                 client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
@@ -250,6 +250,12 @@ async function main()
             {   
                 // Error handling for task number to remove not being valid
                 client.postMessage("Please enter a valid number, kindly start over", channel);
+                command_list.splice(0, command_list.length);
+            }
+            else if( msg.data.sender_name != bot_name && command_list[0] == "close issue" && command_list[1] == "repo name entered for closing issue" )
+            {   
+                // Error handling for task number to remove not being valid
+                client.postMessage("Please enter a valid Issue ID from the ones given above , kindly start over", channel);
                 command_list.splice(0, command_list.length);
             }
             else if( msg.data.sender_name != bot_name)
@@ -657,7 +663,6 @@ async function removeTodo(msg)
         {
             temp_todo_list = snapshot.val().todo_list;
             removed = temp_todo_list.splice(task_id_to_remove, 1);
-            console.log(removed);
         } 
         }).catch((error) => {
         console.error(error);
