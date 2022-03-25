@@ -134,7 +134,7 @@ async function main()
                 }
                 if (temp_todo_list.length < 2) 
                 { 
-                    client.postMessage('There is nothing to show \u2705', channel);
+                    client.postMessage('You have no tasks to remove \u2705', channel);
                 }
                 else
                 {
@@ -244,6 +244,12 @@ async function main()
             {   
                 // Error handling for repo name not matching with the list of repo names for that user
                 client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
+                command_list.splice(0, command_list.length);
+            }
+            else if( msg.data.sender_name != bot_name && (command_list[0] == "remove todo"))
+            {   
+                // Error handling for task number to remove not being valid
+                client.postMessage("Please enter a valid number, kindly start over", channel);
                 command_list.splice(0, command_list.length);
             }
             else if( msg.data.sender_name != bot_name)
@@ -643,29 +649,41 @@ async function removeTodo(msg)
 {   
     let channel = msg.broadcast.channel_id;
     let temp_todo_list = []
+    let removed = []
     let post = JSON.parse(msg.data.post);
     var task_id_to_remove = parseInt(post.message);
     await get(child(dbRef, `users/` + userID)).then((snapshot) => {
         if (snapshot.exists()) 
         {
             temp_todo_list = snapshot.val().todo_list;
-            var removed = temp_todo_list.splice(task_id_to_remove, 1);
-            for(var i = 1; i < temp_todo_list.length; i++)
-            {
-                temp_todo_list[i] = temp_todo_list[i].replace(temp_todo_list[i].charAt(0), "");
-                temp_todo_list[i] = i.toString().concat(temp_todo_list[i]);
-            }
+            removed = temp_todo_list.splice(task_id_to_remove, 1);
+            console.log(removed);
         } 
         }).catch((error) => {
         console.error(error);
     });
 
-    //update data
-    const user_todo_data = temp_todo_list;
-    const updates = {};
-    updates[`/users/` + userID + `/todo_list/`] = user_todo_data;
-    update(ref(db), updates);    
-    client.postMessage("Task " + post.message + " successfully removed", channel);
+    if(removed.length == 0)
+    {
+        client.postMessage("Please enter a number from the list shown above, try again from the beginning", channel);
+        command_list.splice(0, command_list.length);
+    }
+    else
+    {
+        // To update the serial number of the tasks
+        for(var i = 1; i < temp_todo_list.length; i++)
+        {
+            temp_todo_list[i] = temp_todo_list[i].replace(temp_todo_list[i].charAt(0), "");
+            temp_todo_list[i] = i.toString().concat(temp_todo_list[i]);
+        }
+
+        //update data
+        const user_todo_data = temp_todo_list;
+        const updates = {};
+        updates[`/users/` + userID + `/todo_list/`] = user_todo_data;
+        update(ref(db), updates);    
+        client.postMessage("Task " + post.message + " successfully removed", channel);
+    }
 }
 
 async function displayCreateIssue(msg)
