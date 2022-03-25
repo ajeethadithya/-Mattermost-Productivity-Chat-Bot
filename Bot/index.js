@@ -459,18 +459,19 @@ function greetingsReply(msg)
 function displayHelpWithCommands(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("Here are the commands that you can use:", channel);
+    client.postMessage("Here are the commands that you can use, followed by their usage instructions:", channel);
 
-    setTimeout(function(){
-        client.postMessage("show issues | Enter {repo name} | Issues with ID displayed", channel);
-        client.postMessage("close issue | Enter {repo name} | Issues with ID displayed | Enter ID of issue to remove", channel);
-        client.postMessage("create issue | Enter {repo name} | Enter {Issue Title} | Enter {Issue Body}", channel);
-        client.postMessage("show todo | If todo list exists, displays else says nothing there", channel);
-        client.postMessage("add todo | Enter {task}", channel);
-        client.postMessage("remove todo | Enter {number of task shown} | removes task", channel); 
-        client.postMessage("create reminder | Enter {reminder} | Enter date and time in formate specified | Reminder Created i.e cronJob schedule", channel);
-        client.postMessage("show reminders | displays list of reminders", channel);
-        client.postMessage("remove reminder | Enter {reminder number to remove} | Reminder removed", channel);
+    setTimeout(function()
+    {
+        client.postMessage("\u2192 show issues" + "\n \t \u2022  Enter {repo name}" + "\t \u2022  Issues with ID displayed", channel);
+        client.postMessage("\u2192 close issue" + "\n \t \u2022  Enter {repo name}" + "\t \u2022  Issues with ID displayed" + "\t \u2022  Enter ID of issue to remove", channel);
+        client.postMessage("\u2192 create issue" + "\n \t \u2022  Enter {repo name}" + "\t \u2022  Enter {Issue Title}" + "\t \u2022  Enter {Issue Body}", channel);
+        client.postMessage("\u2192 show todo" + "\n \t \u2022   If todo list exists, displays else says nothing there", channel);
+        client.postMessage("\u2192 add todo" + "\n \t \u2022  Enter {task}", channel);
+        client.postMessage("\u2192 remove todo" + "\n \t \u2022   Enter {number of task shown}" + "\t \u2022   removes task", channel); 
+        client.postMessage("\u2192 create reminder" + "\n \t \u2022 Enter {reminder}" + "\t \u2022  Enter date and time in format specified" + "\t \u2022  Reminder Created i.e cronJob schedule", channel);
+        client.postMessage("\u2192 show reminders" + "\n \t \u2022  displays list of reminders", channel);
+        client.postMessage("\u2192 remove reminder" + "\n \t \u2022  Enter {reminder number to remove}" + "\t \u2022  Reminder removed", channel);
     }, 1000);
 
     
