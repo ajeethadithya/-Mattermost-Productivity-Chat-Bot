@@ -143,7 +143,7 @@ async function main()
                         client.postMessage(temp_todo_list[i], channel);
                     }
                     setTimeout(function(){
-                        client.postMessage("Enter the task number that you want to remove", channel);
+                        client.postMessage("\u261B Enter the task number that you want to remove", channel);
                     }, 1000);
                     
                 } 
@@ -161,7 +161,7 @@ async function main()
             displayCreateIssue(msg);
             command_list.push("create issue");
         }
-        else if(command_list[0] == "create issue" && command_list[1] != "Repo name entered" && hearsForNonEmptyString(msg))
+        else if(command_list[0] == "create issue" && command_list[1] != "Repo name entered" && hearsForRepoName(msg))
         {   
             displayNextMsgForCreateIssue(msg);
             command_list.push("Repo name entered")
@@ -240,7 +240,7 @@ async function main()
         else
         {   
             let channel = msg.broadcast.channel_id;
-            if( msg.data.sender_name != bot_name && (command_list[0] == "show issues" || command_list[0] == "close issue") )
+            if( msg.data.sender_name != bot_name && (command_list[0] == "show issues" || command_list[0] == "close issue" || command_list[0] == "create issue") )
             {   
                 // Error handling for repo name not matching with the list of repo names for that user
                 client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
@@ -260,7 +260,7 @@ async function checkUserInDB()
 {
     // Getting userID using github api to get users that is common in github and mattermost as a pre-condition and checking to see if that userID exists in the database
     userID = await getUser().catch( 
-        err => console.log("Unable to get UserID") );
+        err => console.log("Unable to get UserID, check internet, or try again after awhile. Server down") );
     
     //read from Firebase to check if user exists or not
     get(child(dbRef, `users/` + userID)).then((snapshot) => {
@@ -490,8 +490,10 @@ async function listRepos(msg)
     //let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     client.postMessage(`\u261B Enter the repo name for which you want to execute the command:`, channel);
-    repo_names = await listAuthenicatedUserRepos().catch( 
-        err => client.postMessage("Unable to complete request, sorry!", channel) );
+    repo_names = await listAuthenicatedUserRepos().catch( (err) => {
+        client.postMessage("Unable to complete request, sorry! Github server down!", channel);
+        command_list.splice(0, command_list.length); 
+    });
 
     client.postMessage(JSON.stringify(repo_names, null, 4), channel);
 }
@@ -505,7 +507,9 @@ async function listIssues(msg, close_issue_flag)
     req_repo_name = post.message;
     // let issue = await getIssues(owner, req_repo_name).catch( 
     //     err => client.postMessage(`Unable to access ${req_repo_name}`, channel) );
-        // command_list must be popped otherwise when user performs a new command, error hanling for close issue takes places
+    
+    // command_list must be popped otherwise when user performs a new command, error hanling for close issue takes places
+    // This way, if an api call fails or if there is some sort of error, the command list is made empty and user has to start closing the issue again
     let issue = await getIssues(owner, req_repo_name).catch( (err) => {
         client.postMessage(`Unable to access ${req_repo_name}`, channel);
         command_list.splice(0, command_list.length);
@@ -539,8 +543,10 @@ async function closeIssueID(msg, req_repo_name, issue_id)
     // let post = JSON.parse(msg.data.post).message;
     // const temp_array = post.split(" ");
     // let issue_id_to_close = parseInt(temp_array[1]);
-    var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( 
-            err => client.postMessage(`Issue cannot be closed`));
+    var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( (err) => {
+        client.postMessage(`Issue cannot be closed, start close issue chain again`, channel);
+        command_list.splice(0, command_list.length);
+    });
         if( closeStatus )
         {  
             client.postMessage(`Issue has been successfully closed!`, channel);
@@ -698,8 +704,10 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
     // issue_body = issue_body.replace(issue_body.charAt(0), "");
     // issue_body = issue_body.replace(issue_body.charAt(0), "");
     // issue_body = issue_body.replace(issue_body.charAt(0), "");
-    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( 
-        err => client.postMessage("Unable to complete request, sorry!", channel) );
+    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( (err) => {
+        client.postMessage("Unable to complete request, sorry!", channel);
+        command_list.splice(0,command_list.length); 
+    });
     if(status_of_api)
     {
         client.postMessage("Issue has been created!", channel);
