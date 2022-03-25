@@ -87,6 +87,7 @@ async function main()
         }
         else if(command_list[0] == "show issues" && hearsForRepoName(msg, "dummy"))
         {   
+            // Flag to check if command chain is "show issues" or "close issues" and if "close issues" then appropriate message will be displayed and flag only for that reason
             let close_issue_flag = 0;
             listIssues(msg, close_issue_flag)
             command_list.pop();           
@@ -239,7 +240,13 @@ async function main()
         else
         {   
             let channel = msg.broadcast.channel_id;
-            if( msg.data.sender_name != bot_name)
+            if( msg.data.sender_name != bot_name && (command_list[0] == "show issues" || command_list[0] == "close issue") )
+            {   
+                // Error handling for repo name not matching with the list of repo names for that user
+                client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
+                command_list.splice(0, command_list.length);
+            }
+            else if( msg.data.sender_name != bot_name)
             {
                 client.postMessage("I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands", channel);
             }
@@ -247,7 +254,6 @@ async function main()
         }
 
     });
-
 }
 // DB check is made to see if user exists else add the user
 async function checkUserInDB()
@@ -309,18 +315,18 @@ function hearsForRepoName(msg, text)
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
     {   
+        let channel = msg.broadcast.channel_id;
         let post = JSON.parse(msg.data.post);
         // To store the list of repo_names as a string that is used to check if the user input repo_name is a valid one
         let repos = Object.values(repo_names);
         for(var i = 0 ; i < repos.length; i++)
         {   
             text = repos[i]
-            if( post.message === text)
-            {
+            if( post.message == text)
+            {   
                 return true;
             }
         }
-        
     }
     return false;
 }
@@ -489,17 +495,23 @@ async function listRepos(msg)
 
     client.postMessage(JSON.stringify(repo_names, null, 4), channel);
 }
-    
+
 async function listIssues(msg, close_issue_flag)
 {   
+    let flag = 0;
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     req_repo_name = post.message;
-    let issue = await getIssues(owner, req_repo_name).catch( 
-        err => client.postMessage(`No issue in ${req_repo_name}`, channel) );
+    // let issue = await getIssues(owner, req_repo_name).catch( 
+    //     err => client.postMessage(`Unable to access ${req_repo_name}`, channel) );
+        // command_list must be popped otherwise when user performs a new command, error hanling for close issue takes places
+    let issue = await getIssues(owner, req_repo_name).catch( (err) => {
+        client.postMessage(`Unable to access ${req_repo_name}`, channel);
+        command_list.splice(0, command_list.length);
+    });    
     global_issues = issue;
-    if(issue)
+    if(issue && issue.length != 0)
     {   
         for(var i = 0; i < issue.length; i++)
         {
@@ -512,6 +524,10 @@ async function listIssues(msg, close_issue_flag)
             if(close_issue_flag == 1){client.postMessage("\u261B Enter the Issue ID of the issue that you want to close", channel);}
         }, 1300);
         
+    }
+    else if(issue && issue.length == 0)
+    {   // Accessible repo but no issues in the repo so "issue" list will be empty
+        client.postMessage(`No issues in ${req_repo_name}`, channel);
     }   
 }
 
