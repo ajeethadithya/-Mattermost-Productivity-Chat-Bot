@@ -71,8 +71,6 @@ async function main()
     // To check if the current user exists in the database or not
     checkUserInDB();
     let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
-    //console.log("REQUEST DATA" ,request);
-    //console.log("CLIENT DATA: ", client);
     client.on('message', function(msg)
     {
         //console.log(msg);
@@ -211,7 +209,7 @@ async function main()
                 }
                 if (temp_reminder_list.length < 2) 
                 { 
-                    client.postMessage("You have no reminders!", channel);
+                    client.postMessage("You have no reminders \u23F0", channel);
                 }
                 else
                 {
@@ -224,7 +222,7 @@ async function main()
                         client.postMessage(rem_to_post, channel);
                     }
                     setTimeout(function(){
-                        client.postMessage("Enter the reminder number that you want to remove: ", channel);
+                        client.postMessage("\u261B Enter the reminder number that you want to remove: ", channel);
                     }, 1300);
                     
                 } 
@@ -385,91 +383,6 @@ function hearsForNumber(msg)
     return false;
 }
 
-// function hearsRepoNameForCreateIssue(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if( msg.data.post )
-//     {
-//         let post = JSON.parse(msg.data.post);
-//         if( post.message.charAt(0) === '+' && post.message.charAt(1) != '+')
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// function hearsForCreateIssue(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if( msg.data.post )
-//     {
-//         let post = JSON.parse(msg.data.post);
-//         if( post.message != "")
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-
-// function hearsForIssueTitle(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if(msg.data.post)
-//     {   let post = JSON.parse(msg.data.post);
-//         if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) != '+')
-//         {
-//             return true;
-//         }
-//     }
-    
-//     return false;
-// }
-
-// function hearsForIssueBody(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if(msg.data.post)
-//     {   let post = JSON.parse(msg.data.post);
-//         if( post.message.charAt(0) == '+' && post.message.charAt(1) == '+' && post.message.charAt(2) == '+')
-//         {
-//             return true;
-//         }
-//     }
-    
-//     return false;
-// }
-
-// function hearsForReminder(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if( msg.data.post )
-//     {
-//         let post = JSON.parse(msg.data.post);
-//         if( post.message != '')
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-// function hearsForReminderTime(msg)
-// {
-//     if( msg.data.sender_name == bot_name) return false;
-//     if( msg.data.post )
-//     {
-//         let post = JSON.parse(msg.data.post);
-//         if( post.message.charAt(2) === ':')
-//         {
-//             return true;
-//         }
-//     }
-//     return false;;
-// }
-
 function greetingsReply(msg)
 {
     let channel = msg.broadcast.channel_id;
@@ -489,9 +402,9 @@ function displayHelpWithCommands(msg)
         client.postMessage("\u2192 show todo" + "\n \t \u2022   If todo list exists, displays else says nothing there", channel);
         client.postMessage("\u2192 add todo" + "\n \t \u2022  Enter {task}", channel);
         client.postMessage("\u2192 remove todo" + "\n \t \u2022   Enter {number of task shown}" + "\t \u2022   removes task", channel); 
-        client.postMessage("\u2192 create reminder" + "\n \t \u2022 Enter {reminder}" + "\t \u2022  Enter date and time in format specified" + "\t \u2022  Reminder Created i.e cronJob schedule", channel);
+        client.postMessage("\u2192 create reminder" + "\n \t \u2022 Enter {reminder}" + "\t \u2022  Enter date and time in format specified", channel);
         client.postMessage("\u2192 show reminders" + "\n \t \u2022  displays list of reminders", channel);
-        client.postMessage("\u2192 remove reminder" + "\n \t \u2022  Enter {reminder number to remove}" + "\t \u2022  Reminder removed", channel);
+        client.postMessage("\u2192 remove reminder" + "\n \t \u2022  Enter {reminder number to remove}", channel);
     }, 1000);
 
     
@@ -596,23 +509,6 @@ async function displayAddTodoMessage(msg)
     client.postMessage("\u261B Enter the task to be added: ", channel);
 }
 
-// async function addTodo(msg)
-// {
-//     let channel = msg.broadcast.channel_id;
-//     var todo_id = todoList.length + 1;
-//     let post = JSON.parse(msg.data.post);
-//     var message_to_push = post.message;
-//     //console.log(message_to_push);
-//     // Replace is not working
-//     message_to_push = message_to_push.replace(message_to_push.charAt(0), "");
-//     message_to_push = todo_id.toString().concat("."," ").concat(post.message);
-//     // fs.appendFile("taskList.txt", message_to_push + os.EOL, (err) => {
-//     //     if (err) {console.log(err);}
-//     //     else {client.postMessage("Task added!", channel);}
-//     todoList.push(message_to_push);
-//     client.postMessage("Task added!", channel);
-// }
-
 async function addTodo(msg)
 {
     let channel = msg.broadcast.channel_id;
@@ -643,13 +539,6 @@ async function addTodo(msg)
     //todoList.push(message_to_push);
     client.postMessage("Task added!", channel);
 }
-
-// async function displayRemoveTodo(msg)
-// {
-//     let channel = msg.broadcast.channel_id;
-//     //client.postMessage("Enter the number of the task that you want to remove:  ", channel);
-//     showTodo(msg);
-// }
 
 async function removeTodo(msg)
 {   
@@ -687,7 +576,7 @@ async function removeTodo(msg)
         const updates = {};
         updates[`/users/` + userID + `/todo_list/`] = user_todo_data;
         update(ref(db), updates);    
-        client.postMessage("Task " + post.message + " successfully removed", channel);
+        client.postMessage("Task " + post.message + " successfully removed!", channel);
     }
 }
 
@@ -696,7 +585,6 @@ async function displayCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     client.postMessage("\u261B Enter a repo to create an issue from the list below: ", channel);
     await listRepos(msg);
-    //client.postMessage("Use + before entering the repo name", channel);
 }
 
 async function displayNextMsgForCreateIssue(msg)
@@ -704,7 +592,6 @@ async function displayNextMsgForCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     repo_name_for_create_issue =  post.message;
-    //repo_name_for_create_issue = repo_name_for_create_issue.replace(repo_name_for_create_issue.charAt(0), "");
     client.postMessage("\u261B Enter the Title of the issue", channel);
 }
 
@@ -713,8 +600,6 @@ async function displayThirdMsgForCreateIssue(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     issue_title =  post.message;
-    // issue_title = issue_title.replace(issue_title.charAt(0), "");
-    // issue_title = issue_title.replace(issue_title.charAt(0), "");
     client.postMessage("\u261B Enter the body of the issue", channel);
 }
 
@@ -724,9 +609,6 @@ async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     issue_body = post.message;
-    // issue_body = issue_body.replace(issue_body.charAt(0), "");
-    // issue_body = issue_body.replace(issue_body.charAt(0), "");
-    // issue_body = issue_body.replace(issue_body.charAt(0), "");
     let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( (err) => {
         client.postMessage("Unable to complete request, sorry!", channel);
         command_list.splice(0,command_list.length); 
@@ -749,7 +631,6 @@ async function displayCreateReminderMessageTwo(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     var reminder_to_push = post.message;
-    // Saving it to the global reminder
 
     // Getting the reminder_list in the database for this user as a list and appending to this list and replacing the old list with the new list in the database
     let temp_reminder_list = []
@@ -757,7 +638,6 @@ async function displayCreateReminderMessageTwo(msg)
         if (snapshot.exists()) 
         {
           temp_reminder_list = snapshot.val().reminders;
-          //var rem_id = temp_reminder_list.length;
           // Generating random ID for the reminder to store its job uniquely
           const id = crypto.randomBytes(16).toString("hex"); 
           reminder_to_push = id.concat(" ").concat(reminder_to_push);
@@ -773,9 +653,8 @@ async function displayCreateReminderMessageTwo(msg)
     updates[`/users/` + userID + `/reminders/`] = user_rem_data;
     update(ref(db), updates);
 
-    client.postMessage("\u261B When shall I remind you? Enter time in 24 hours, day of the month, year (FORMAT: DD/MM/YYYY hh:mm ): ", channel);
+    client.postMessage("\u261B When shall I remind you? Enter date and time- 24 hour format (FORMAT: YYYY-MM-DD hh:mm ): ", channel);
 }
-
 
 async function createReminder(msg)
 {   
@@ -784,56 +663,19 @@ async function createReminder(msg)
     let reminder = "";
     let reminder_with_id = "";
 
-    // Getting the reminder message to send it to the cronJob
-    let temp_reminder_list = []
-    await get(child(dbRef, `users/` + userID)).then((snapshot) => {
-        if (snapshot.exists()) 
-        {  
-          // Getting the reminder from the Database, removing the ID from it, and passing it to the cronJob here so that the cronJob will know which reminder to print
-          // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
-          temp_reminder_list = snapshot.val().reminders;
-          reminder = temp_reminder_list[temp_reminder_list.length - 1];
-          let reminder_array = reminder.split(" ");
-          reminder_array.shift();
-          reminder = reminder_array.join(" ");
-
-          //After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
-          temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
-          reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
-
-        } 
-        }).catch((error) => {
-        console.error(error);
-        });
-
-    // Adding the time details and updating the database with the details appended to the end of the string
-    // In DB: "{Unique ID} {reminder message} {time details}"
-    const user_rem_data = temp_reminder_list;
-    const updates = {};
-    updates[`/users/` + userID + `/reminders/`] = user_rem_data;
-    update(ref(db), updates);
-    
-
-    // Converting String to array so that the first element can then be split according to "/" and second one according to ':'
+    // Converting String to array so that the first element can then be split according to "-" and second one according to ':'
     let cronJob_details_array = post.message.split(" ");
     
-    let cronJob_date_array = cronJob_details_array[0].split('/');
+    let cronJob_date_array = cronJob_details_array[0].split('-');
     let cronJob_time_array = cronJob_details_array[1].split(':');
     
-    let cron_day = cronJob_date_array[0];
+    // Generate a cronJob for these details here from user input
+    let cron_day = cronJob_date_array[2];
     let cron_month= cronJob_date_array[1];
-    let cron_year = cronJob_date_array[2];
+    let cron_year = cronJob_date_array[0];
     let cron_hours =  cronJob_time_array[0];
     let cron_minutes =  cronJob_time_array[1];
 
-    // Generate a cronJob for these details here
-    createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel);
-    client.postMessage("Reminder Created!", channel);
-}
-
-// CronJob is getting created and the respective reminder is being posted in the channel
-function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel)
-{   
     // Input being set appropriately since cronJob takes a date as an input and giving a date makes it run once and breaks. Giving an expression makes it run repeatedly
     let date = new Date();
     let cron_month_minus_one = parseInt(cron_month) - 1;
@@ -844,6 +686,82 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
     date.setMinutes(parseInt(`${cron_minutes}`));
     date.setSeconds(0);
 
+    // To get the current date and compare it with the date entered. Proceeds only if the entered date is equal or greater than the current date
+    var q = new Date();
+    var m = q.getMonth();
+    var d = q.getDate();
+    var y = q.getFullYear();
+    var h = q.getHours();
+    var min = q.getMinutes();
+    var current_date = new Date(y,m,d, h, min);
+
+    // Error handling for create reminder command. If user makes an error, making the command_list array empty so that the user starts over again
+    if(date < current_date || (parseInt(`${cron_day}`) < 1 && parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 && parseInt(`${cron_day}`) > 11 ))
+    {
+        client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
+        command_list.splice(0, command_list.length);
+
+        // Removing the reminder that was inserted as the user has to start over as part of error handling if they entered invalid time and date
+        let temp_reminder_list = []
+        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+            if (snapshot.exists()) 
+            {
+                // Removing the last element from the list of reminders
+                temp_reminder_list = snapshot.val().reminders;
+                var removed = temp_reminder_list.splice(temp_reminder_list.length - 1, 1);
+            } 
+            }).catch((error) => {
+            console.error(error);
+        });
+    
+        //update data
+        const user_reminder_data = temp_reminder_list;
+        const updates = {};
+        updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
+        update(ref(db), updates);
+    }
+    else
+    {
+        // Getting the reminder message to send it to the cronJob
+        let temp_reminder_list = []
+        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+            if (snapshot.exists()) 
+            {  
+            // Getting the reminder from the Database, removing the ID from it, and passing it to the cronJob here so that the cronJob will know which reminder to print
+            // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
+            temp_reminder_list = snapshot.val().reminders;
+            reminder = temp_reminder_list[temp_reminder_list.length - 1];
+            let reminder_array = reminder.split(" ");
+            reminder_array.shift();
+            reminder = reminder_array.join(" ");
+
+            // After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
+            temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
+            reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
+
+            } 
+            }).catch((error) => {
+            console.error(error);
+            });
+
+        // Adding the time details and updating the database with the details appended to the end of the string
+        // In DB: "{Unique ID} {reminder message} {time details}"
+        const user_rem_data = temp_reminder_list;
+        const updates = {};
+        updates[`/users/` + userID + `/reminders/`] = user_rem_data;
+        update(ref(db), updates);
+
+        // createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel);
+        createCronJobs(date, reminder, reminder_with_id, channel);
+        client.postMessage("Reminder Created!", channel);
+    }   
+}
+
+// CronJob is getting created and the respective reminder is being posted in the channel
+// function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel)
+function createCronJobs(date, reminder, reminder_with_id, channel)
+{   
+    // Creating the cronJob with the date and time read from the user
     const job = new cron.CronJob(date, async function() {
         // Once the cronjob for a particular job kicks in, the reminder is removed and DB is updated in the code below
         client.postMessage(`REMINDER ALERT: 
@@ -876,6 +794,7 @@ function createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minute
     
 }
 
+// Getting the list of reminders from the database, numbering them, displaying them on mattermost channel
 async function showReminders(msg)
 {
     let channel = msg.broadcast.channel_id;
@@ -887,7 +806,7 @@ async function showReminders(msg)
         }
         if (temp_reminder_list.length < 2) 
         { 
-            client.postMessage("You have no reminders!", channel);
+            client.postMessage("You have no reminders \u23F0", channel);
         } 
         }).catch((error) => {
         console.error(error);
