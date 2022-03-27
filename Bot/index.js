@@ -21,6 +21,7 @@ const firebase_data = JSON.parse(await readFile(new URL('./firebase_data.json', 
 import cron from "cron";
 import crypto from "crypto";
 import { channel } from 'diagnostics_channel';
+import axios from "axios";
 
 //import firebase_data from './firebase_data.json';
 // const Client = require('mattermost-client');
@@ -70,6 +71,26 @@ async function main()
 
     // To check if the current user exists in the database or not
     checkUserInDB();
+    // To send a welcome message the moment the code is run, using axios to post a message to a given ID
+    var options = {
+		url: "https://chat.robotcodelab.com/api/v4/posts",
+		method: 'POST',
+		headers: {
+			"content-type": "application/json",
+			"Authorization": `token ${process.env.FOCUSBOTTOKEN}`,
+			"accept": "application/json, text/plain, */*"
+		},
+    data: {"channel_id": "wkibg1y1qjy1pnpego1pxi8cua", "message": "Hi there! I am PAM- your Personal Accountability Manager",  "props":{"attachments": [{"pretext": "Hocus Pocus- Let's Focus!", "text": "Type \"help\" to see how I can assist you to be productive"}]}}
+	};
+
+    axios(options) 
+    .then(function(response) {
+    console.log(response.data);
+    })
+    .catch(function (error) {
+    console.log((error));
+    }); 
+
     let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
     client.on('message', function(msg)
     {
