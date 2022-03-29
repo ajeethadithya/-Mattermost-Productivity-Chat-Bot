@@ -3,7 +3,7 @@
 | Deliverable | Item/Status | Issues/Tasks |
 | --- | --- | --- |
 | **Use Case: Personal To-Do List** |  |   |
-| Display To-Do List of the User (Show To-Do) | Completed with formatting | #39 |
+| Display To-Do List of the User (Show To-Do) | Completed with formatting | #16 |
 | User adds tasks to a List (Add To-Do)| Completed with formatting | Initial Dev: Storage in a global array. Sprint1: Database integration of tasks |
 | Delete tasks specified by user from the To-Do List (Remove To-Do) | Completed with formatting | #26-The issues comments specify the tasks completed iteratively|
 | Unit Tests | Complete |  |
