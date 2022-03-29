@@ -16,7 +16,7 @@
 | Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | #36-Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), listRepos(), listIssues(), closeIssueID(), createIssueBody() |
 | Use Case: Reminders |  |   |
 | Display reminders for a user (Show Reminders) | Completed with formatting | #18 |
-| User adds reminders (Set Reminders)| Completed with formatting | #24 |
+| User adds reminders (Create Reminders)| Completed with formatting | #24 |
 | Delete reminders specified by the user (Remove Reminders) | Completed with formatting | #18 The issues comments specify the tasks completed iteratively. |
 | Unit Tests | Complete | testGetMeetingDataFromUser, testFindAvailability, ... |
-| Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | #36-Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), createReminder(), removeReminders() |
+| Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | #36-Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), createReminder()[ Edge Case #39 ], removeReminders() |
