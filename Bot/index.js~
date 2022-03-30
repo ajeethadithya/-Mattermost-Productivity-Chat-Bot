@@ -212,12 +212,12 @@ async function main()
         
         else if(command_list[0] == "create calendar" && command_list[1] != "calendar name entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateCalenderMessageTwo(msg);
+            displayCreateReminderMessageTwo(msg);
             command_list.push("calendar name entered");
         }
         else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] != "start date entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateCalenderMessagestart(msg);
+            displayCreateReminderMessagestart(msg);
             command_list.push("start date entered");
         }
         else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] == "start date entered" && command_list[3] != "end date entered" && hearsForNonEmptyString(msg))
