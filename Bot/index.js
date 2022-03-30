@@ -65,13 +65,18 @@ let command_list = []
 let userID = "";
 // Global dictionary to save the reminder-Associated cronJob (key-value pair)
 let reminder_job_dict = {};
+let issue_reminder_job_dict = {};
 
 async function main()
 {   
 
     // To check if the current user exists in the database or not
     checkUserInDB();
+    // Idea: cronJob to make an api call every few to get issues, compare with the ones in the database, and create cronJob if it doesn't exist. Getting issues
+    // from every repo and making a check if it exists in db. Yet to think of a logic to handle a deleted issue before reminder kicks in. Might have to stop the job.
+    issueReminders();
     // To send a welcome message the moment the code is run, using axios to post a message to a given ID
+    // However, here we are using the channel ID and not getting it dynamically for which we will have to come up with a solution
     var options = {
 		url: "https://chat.robotcodelab.com/api/v4/posts",
 		method: 'POST',
@@ -85,10 +90,10 @@ async function main()
 
     axios(options) 
     .then(function(response) {
-    console.log(response.data);
+    //console.log(response.data);
     })
     .catch(function (error) {
-    console.log((error));
+    //console.log((error));
     }); 
 
     let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
@@ -286,6 +291,7 @@ async function main()
 
     });
 }
+
 // DB check is made to see if user exists else add the user
 async function checkUserInDB()
 {
@@ -301,7 +307,8 @@ async function checkUserInDB()
       //write to Firebase
       set(ref(db, 'users/' + userID), {
           todo_list: ["temp"],
-          reminders: ["temp"]
+          reminders: ["temp"],
+          issues: ["temp"]
         });
     }
     }).catch((error) => {
@@ -375,8 +382,6 @@ function hearsForIssueID(msg)
         {
             let arr = global_issues[i].split(' ');
             let temp_issue_id = arr[arr.length - 1]
-            //console.log(temp_issue_id);
-
             if( post.message === temp_issue_id)
             {   
                 issue_id = parseInt(temp_issue_id);
@@ -880,6 +885,126 @@ async function removeReminders(msg)
     client.postMessage("Reminder " + post.message + " successfully removed", channel);
 
 }
+
+// issueReminder function begins here
+async function issueReminders()
+{   
+    // Idea: cronJob to make an api call every minute (for now) to get issues, compare with the ones in the database, and create cronJob if it doesn't exist. Getting issues
+    // from every repo and making a check if it exists in db. Yet to think of a logic to handle a deleted issue before reminder kicks in. Might have to stop the job.
+    
+    // Step 1: create a cron job that will fetch all repos every 5 seconds
+    // Cron expression that runs every minute
+    const job = new cron.CronJob("*/5 * * * * *", async function() {
+        let repository_names_list = await listAuthenicatedUserRepos().catch( (err) => {
+            console.error("Unable to complete request, sorry! Github server down!");
+        });
+    // Step 2: Still within the cronJob. Using the list of repos, get issues for every repo
+        if(repository_names_list)
+        {
+        let all_issues_list = [];
+        for(var i = 0; i < repository_names_list.length; i++)
+        {   
+            let issue_list_for_each_repo = [];
+            issue_list_for_each_repo = await getIssues(userID, repository_names_list[i]).catch( (err) => {
+                console.error(`Unable to access ${repository_names_list[i]}`);
+                // if the list is empty also concat of two arrays takes place but if the api gives an error then we need to make the list empty so that concat works and 
+                // results don't change
+            });
+            // To save all issues for each repo in one list itself every time we get a list of issues. Even if api returns error or empty this must work
+            if(issue_list_for_each_repo)
+            {
+                all_issues_list = all_issues_list.concat(issue_list_for_each_repo);
+                console.log(repository_names_list[i], all_issues_list.length);
+            }
+        }
+    // Step 3: After getting all the issues, need to check with the database if the issue exists
+        // Get list of issues from db
+        let db_issues = [];
+        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+            if (snapshot.exists()) 
+            {
+              db_issues = snapshot.val().issues;
+            }
+            // Step 4: To check if an issue has been closed in GitHub before the bot reminds you on the channel, i = 1 because index 0 is always going to be "temp" which was needed to create the list in db
+            // This is done first before creating cronJob to avoid read and write to db twice in the same function
+            // "removed_issue_id_list" will store a list of indices of the issues in db but not in GitHub i.e those that are closed
+            let removed_issue_id_list = [];
+            for(var i = 1; i < db_issues.length; i++ )
+            {   
+                let issue_check_index = all_issues_list.indexOf(db_issues[i]); 
+                if( issue_check_index == -1)
+                {   removed_issue_id_list.push(i);
+                    // Then the issue has been closed whether or not the reminder has taken place so we need to check to see if reminder has taken place or not
+                    Object.keys(issue_reminder_job_dict).forEach((key) => {
+                        if(key == db_issues[i])
+                        {
+                            issue_reminder_job_dict[key].stop();
+                            // Removing job from the dict
+                            delete issue_reminder_job_dict[db_issues[i]];
+                        }
+
+                    });
+                }   
+            }
+            // This removes all the closed issues from the list that is going to be updated to the database
+            for(var i=0; i < removed_issue_id_list.length; i++)
+            {
+                db_issues.splice(removed_issue_id_list[i], 1);
+            }
+
+            // To check if each issue does not exist in the db, running a for loop through all_issues_list and checking with db_issues, if it does not exist it creates a cronJob
+            for(var i = 0; i < all_issues_list.length; i++)
+            {   
+                // returns -1 if element does not exist
+                if(db_issues.indexOf(all_issues_list[i]) == -1)
+                {   
+        // Step 5: If the issues does not exist in the database, create a cronJob and set a reminder for after 1 minutes to test then update the database
+                    let issue_reminder_date = new Date();
+                    let issue_to_be_posted = all_issues_list[i];
+                    issue_reminder_date.setMinutes(issue_reminder_date.getMinutes() + 1);
+                    const issue_reminder_job = new cron.CronJob(issue_reminder_date, function() {
+                        // Hardcoding the channel ID, with better permissions for the bot from the admin side we will be able to use api calls to retieve the ID
+                        client.postMessage(`ISSUE REMINDER ALERT: 
+                        \u23F1 ${issue_to_be_posted}`, "wkibg1y1qjy1pnpego1pxi8cua");
+                    });
+                    issue_reminder_job_dict[issue_to_be_posted] = issue_reminder_job;
+                    issue_reminder_job.start();
+                    // Update the database with the new issue 
+                    db_issues.push(all_issues_list[i]);
+                }
+            }
+            const user_issues_data = db_issues;
+            const updates = {};
+            updates[`/users/` + userID + `/issues/`] = user_issues_data;
+            update(ref(db), updates);
+             
+            }).catch((error) => {
+            console.error(error);
+            });
+        }
+    });
+    job.start();
+}
+
+// async function tempfunc()
+// {
+//     let issue_reminder_date = new Date();
+// issue_reminder_date.setSeconds(issue_reminder_date.getSeconds() + 2);
+// const issue_reminder_job = new cron.CronJob(issue_reminder_date, function() {
+//     console.log("CronJob kicked in");
+// }, null, "start");  
+// issue_reminder_job_dict["i1"] = issue_reminder_job;
+// console.log(Object.values(issue_reminder_job_dict));
+
+// setTimeout(function(){
+//     issue_reminder_job.stop();
+//     console.log(Object.values(issue_reminder_job_dict));
+// }, 5000);
+
+// }
+
+
+
 
 (async () => 
 {
