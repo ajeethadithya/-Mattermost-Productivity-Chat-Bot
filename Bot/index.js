@@ -160,6 +160,7 @@ async function main()
                 if (temp_todo_list.length < 2) 
                 { 
                     client.postMessage('You have no tasks to remove \u2705', channel);
+                    command_list.pop();
                 }
                 else
                 {
@@ -237,6 +238,7 @@ async function main()
                 if (temp_reminder_list.length < 2) 
                 { 
                     client.postMessage("You have no reminders \u23F0", channel);
+                    command_list.pop();
                 }
                 else
                 {
@@ -271,7 +273,7 @@ async function main()
                 client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
                 command_list.splice(0, command_list.length);
             }
-            else if( msg.data.sender_name != bot_name && (command_list[0] == "remove todo"))
+            else if( msg.data.sender_name != bot_name && (command_list[0] == "remove todo" || command_list[0] == "remove reminder") && !hearsForNumber(msg))
             {   
                 // Error handling for task number to remove not being valid
                 client.postMessage("Please enter a valid number, kindly start over", channel);
@@ -847,7 +849,7 @@ async function showReminders(msg)
         rem_array.splice(-2,2);
         let rem_to_post = rem_array.join(" ");
         rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
-        client.postMessage(`${rem_to_post}
+        await client.postMessage(`${rem_to_post}
         \u2022 ${time_details}`, channel);
     }
     
