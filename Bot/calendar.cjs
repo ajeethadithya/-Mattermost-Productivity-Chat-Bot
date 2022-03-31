@@ -60,55 +60,84 @@ const prompt = require('prompt-sync')();
 
 //********************************
 // Event for Google Calendar - Hardcoding event details for testing purposes.
-let event = {
+function defaultOptions(event_name,desc,start,end)
+{
+    let event = {
+            'summary': event_name, 
+            'description': desc,
+            'start': {
+                'dateTime': start,
+                'timeZone': 'America/New_York'
+            },
+            'end': {
+                'dateTime': end,
+                'timeZone': 'America/New_York'
+            }
+        };
+    return event;
+}
 
-
-    'summary': name, 
-    'description': desc,
-    'start': {
-        'dateTime': start,
-        'timeZone': 'America/New_York'
-    },
-    'end': {
-        'dateTime': end,
-        'timeZone': 'America/New_York'
-    }
-};
 
     
 // Create new event to Google Calendar
-const createcalEvent = async (event,description,start,end) => {
+const createcalEvent = async (event_name,desc,start,end) => {
 
     try {
     // Event for Google Calendar - Hardcoding event details for testing purposes.
 
-        let response = await calendar.events.insert({
-            auth: auth,
-            calendarId: calendarId,
-            resource: event
-        });
+        // event = {
+
+
+        //     'summary': event_name, 
+        //     'description': desc,
+        //     'start': {
+        //         'dateTime': start,
+        //         'timeZone': 'America/New_York'
+        //     },
+        //     'end': {
+        //         'dateTime': end,
+        //         'timeZone': 'America/New_York'
+        //     }
+        // };
+
+        let event = defaultOptions(event_name,desc,start,end);	
+
+        // let response = calendar.events.insert({
+        //     auth: auth,
+        //     calendarId: calendarId,
+        //     resource: event
+        // });
+        let response=await response_generator(auth,calendarId,event);
         //Checking if the event was successfully created.
         // 200 "OK" implies successful event creation
+        console.log(response);
         if (response['status'] == 200 && response['statusText'] === 'OK') {
-		console.log("Event was successfully created");
+		return response['status'];
         } else {
-		console.log("Failed to set up meeting");
+		return "not okay";
         }
     } catch (error) {
         console.log(`CreatecalEvent error ${error}`);
-        return -1;
+        return "failed in catch";
     }
 };
 
-
-
-createcalEvent(event)
-    .then((res) => {
-        console.log(res);
-    })
-    .catch((err) => {
-        console.log(err);
+async function response_generator(auth, calendarId, event){
+    let response = calendar.events.insert({
+        auth: auth,
+        calendarId: calendarId,
+        resource: event
     });
+    return response;
+}
+
+// createcalEvent(event)
+//     .then((res) => {
+//         console.log(res);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 // const startview = prompt('What is your start view date?  2022-03-30T19:46:00.000Z');
 // console.log(`Event name is  ${startview}`);
 
@@ -129,30 +158,40 @@ const getEvents = async (startview, endview) => {
             timeMax: endview,
             timeZone: 'America/New_York'
         });
-       for (let i = 0; i < response['data']['items'].length; i++)
+        let output_list = [];
+        console.log(response["data"]["items"]);
+        for (let i = 0; i < response['data']['items'].length; i++)
 
-{
-        let items_id = response['data']['items'][i].id;
-        console.log(items_id);
-        let items = response['data']['items'][i].summary;
-        console.log(items);
-}        
+        {
+            // let items_id = response['data']['items'][i].id;
+            // console.log(items_id);
+            // let items = response['data']['items'][i].summary;
+            // console.log(items);
+            let items_id = response['data']['items'][i].id;
+            items_id = items_id.concat(": ");
+            let items = response['data']['items'][i].summary;
+            items = items_id.concat(items);
+            output_list.push(items);
+        }
+        return output_list;        
     } catch (error) {
         console.log(`Check getEvents function for ${error}`);
+        return "not okay";
         
     }
 };
+
 //Harcoded for testing purposes
 //let start = '2022-03-22T19:46:00.000Z';
 //let end = '2022-03-24T20:46:00.000Z';
 
-getEvents(startview, endview)
-    .then((res) => {
-        console.log(res);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+// getEvents(startview, endview)
+//     .then((res) => {
+//         console.log(res);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
 //     
 // const eventId = prompt('What is the ID you wish to delete');
 // console.log(`Event ID is  ${eventId}`);
@@ -187,3 +226,6 @@ getEvents(startview, endview)
 //     .catch((err) => {
 //         console.log(err);
 //     });
+
+exports.createcalEvent = createcalEvent;
+exports.getEvents = getEvents;
