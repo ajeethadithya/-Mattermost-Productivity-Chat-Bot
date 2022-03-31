@@ -204,6 +204,14 @@ async function main()
             displayHelpWithCommands(msg);
         }
         //********************************************************************************************************************
+        let event = ""
+        
+        let desc = ""
+        
+        let start = ""
+        
+        let end = ""
+
         else if(hears(msg, "create calendar"))
         {
             displayCreateCalendarMessage(msg);
@@ -212,22 +220,21 @@ async function main()
         
         else if(command_list[0] == "create calendar" && command_list[1] != "calendar name entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateCalenderMessageTwo(msg);
+            displayCreateCalenderMessagestart(msg);
             command_list.push("calendar name entered");
         }
         else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] != "start date entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateCalenderMessagestart(msg);
+            displayCreateCalenderMessageend(msg);
             command_list.push("start date entered");
         }
         else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] == "start date entered" && command_list[3] != "end date entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateReminderMessageend(msg);
+            displayCreateReminderMessagedesc(msg);
             command_list.push("end date entered");
         }
         else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] == "start date entered" && command_list[3] == "end date entered" && command_list[3] != "Description entered" && hearsForNonEmptyString(msg))
         {
-            displayCreateReminderMessagedesc(msg);
             command_list.push("Description entered");
         }
 
@@ -235,34 +242,51 @@ async function main()
 async function displayCreateCalendarMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
+    
     client.postMessage("\u261B Enter Name of event: ", channel);
 }
 async function displayCreateCalendarMessagedesc(msg)
 {
     let channel = msg.broadcast.channel_id;
+    end =  post.message;
     client.postMessage("\u261B Enter a brief description of event: ", channel);
+
 }
 async function displayCreateCalendarMessagestart(msg)
 {
     let channel = msg.broadcast.channel_id;
+    event =  post.message;
     client.postMessage("\u261B Enter Start date of event: ", channel);
 }
 async function displayCreateCalendarMessageend(msg)
 {
     let channel = msg.broadcast.channel_id;
+    start =  post.message;
     client.postMessage("\u261B Enter End date of event: ", channel);
 }
 
-function hearsForName(msg)
-{
-    if( msg.data.sender_name == bot_name) return false;
-    if( msg.data.post )
+
+
+async function createCalenderPayload(event, desc, start, end)
+{   
+    let owner = msg.data.sender_name.replace('@', '');
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    cal_payload = post.message;
+    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, cal_payload).catch( (err) => {
+        client.postMessage("Unable to complete request, sorry!", channel);
+        command_list.splice(0,command_list.length); 
+    });
+    if(status_of_api)
     {
-        let post = JSON.parse(msg.data.post);
-
-
+        client.postMessage("Issue has been created!", channel);
     }
-    return false;
+}
+
+
+
+
+
         //********************************************************************************************************************
         else if(hears(msg, "create reminder"))
         {

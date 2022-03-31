@@ -254,7 +254,7 @@ let event = {
 
     
 // Create new event to Google Calendar
-const createcalEvent = async (event,description,start,end) => {
+const createcalEvent = async (name,desc,start,end) => {
 
     try {
     // Event for Google Calendar - Hardcoding event details for testing purposes.
