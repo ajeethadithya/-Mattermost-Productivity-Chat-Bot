@@ -8,6 +8,7 @@
 // create reminder | Enter {reminder} | Enter date and time in formate specified | Reminder Created i.e cronJob schedule
 // show reminders | displays list of reminders
 // remove reminder | Enter {reminder number to remove} | Reminder removed
+// (Not a Command) | Automatic Issue reminders that have been created
 
 // Importing necessary packages and js files
 // Database connectivity
@@ -722,7 +723,7 @@ async function createReminder(msg)
     var current_date = new Date(y,m,d, h, min);
 
     // Error handling for create reminder command. If user makes an error, making the command_list array empty so that the user starts over again
-    if(date < current_date || (parseInt(`${cron_day}`) < 1 && parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 && parseInt(`${cron_day}`) > 11 ))
+    if(date < current_date || (parseInt(`${cron_day}`) < 1 && parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 && parseInt(`${cron_month_minus_one}`) > 11 ))
     {
         client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
         command_list.splice(0, command_list.length);
@@ -914,7 +915,7 @@ async function issueReminders()
             if(issue_list_for_each_repo)
             {
                 all_issues_list = all_issues_list.concat(issue_list_for_each_repo);
-                console.log(repository_names_list[i], all_issues_list.length);
+                // console.log(repository_names_list[i], all_issues_list.length);
             }
         }
     // Step 3: After getting all the issues, need to check with the database if the issue exists
@@ -985,25 +986,6 @@ async function issueReminders()
     });
     job.start();
 }
-
-// async function tempfunc()
-// {
-//     let issue_reminder_date = new Date();
-// issue_reminder_date.setSeconds(issue_reminder_date.getSeconds() + 2);
-// const issue_reminder_job = new cron.CronJob(issue_reminder_date, function() {
-//     console.log("CronJob kicked in");
-// }, null, "start");  
-// issue_reminder_job_dict["i1"] = issue_reminder_job;
-// console.log(Object.values(issue_reminder_job_dict));
-
-// setTimeout(function(){
-//     issue_reminder_job.stop();
-//     console.log(Object.values(issue_reminder_job_dict));
-// }, 5000);
-
-// }
-
-
 
 
 (async () => 
