@@ -26,6 +26,9 @@ import axios from "axios";
 //importing calendar.js
 //Required for importing google calendar
 import "./calendar.js";
+//Importing the create calendar event function from
+//calendar.js
+import {createcalEvent} from "./calendar.js";
 
 //import firebase_data from './firebase_data.json';
 // const Client = require('mattermost-client');
@@ -245,13 +248,7 @@ async function displayCreateCalendarMessage(msg)
     
     client.postMessage("\u261B Enter Name of event: ", channel);
 }
-async function displayCreateCalendarMessagedesc(msg)
-{
-    let channel = msg.broadcast.channel_id;
-    end =  post.message;
-    client.postMessage("\u261B Enter a brief description of event: ", channel);
 
-}
 async function displayCreateCalendarMessagestart(msg)
 {
     let channel = msg.broadcast.channel_id;
@@ -265,26 +262,30 @@ async function displayCreateCalendarMessageend(msg)
     client.postMessage("\u261B Enter End date of event: ", channel);
 }
 
+async function displayCreateCalendarMessagedesc(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    end =  post.message;
+    client.postMessage("\u261B Enter a brief description of event: ", channel);
+
+}
 
 
-async function createCalenderPayload(event, desc, start, end)
+async function createCalendarPayload(event, desc, start, end)
 {   
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     cal_payload = post.message;
-    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, cal_payload).catch( (err) => {
+    let status_of_api = await createcalEvent(event, desc, start, end).catch( (err) => {
         client.postMessage("Unable to complete request, sorry!", channel);
         command_list.splice(0,command_list.length); 
     });
     if(status_of_api)
     {
-        client.postMessage("Issue has been created!", channel);
+        client.postMessage("Calendar event has been created!", channel);
     }
 }
-
-
-
 
 
         //********************************************************************************************************************
