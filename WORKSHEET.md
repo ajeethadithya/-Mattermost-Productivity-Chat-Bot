@@ -7,7 +7,7 @@
 | User adds tasks to a List (Add To-Do)| Completed with formatting | Initial Dev: Storage in a global array. Sprint1: Database integration of tasks |
 | Delete tasks specified by user from the To-Do List (Remove To-Do) | Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/26 - The issues comments specify the tasks completed iteratively|
 | Unit Tests | Complete | showtodo(), displayAddTodoMessage(), addTodo(), removeTodo()  |
-| Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | #36-Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), removeTodo() |
+| Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/36 - Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), removeTodo() |
 
 
 | Deliverable | Item/Status | Issues/Tasks |
