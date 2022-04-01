@@ -38,6 +38,12 @@
 | **Use Case: Scheduling a Meeting** |  |   |
 | Create events on users calendar (Create Calendar Event) | Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/27 |
 | User retrieves the events in their calendar (Get Events)| Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/43 |
-| User removes events from their calendar (Delete Events) - Bonus functionality not mentioned in Use Case | Completed. Must test on Mattermost | Retrieve Event id for deletion |
-| Unit Tests | Complete |  |
+| User removes events from their calendar (Delete Events) | Completed. Must test on Mattermost | Retrieve Event id for deletion |
+| Unit Tests | In Progress | getEvents(), createcalEvent() |
+
+
+| Deliverable | Item/Status | Issues/Tasks |
+| --- | --- | --- |
+| **Use Case: Automatic Reminders for Github Issues** |  |   |
+| Automatic reminders for github issues that are newly created. Ideally, Reminders are displayed 3 days after issue is created but for testing purpose it will be displayed after a minute. If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. (Issue Reminders) | Implementation has been completed and successfully tested on our MatterMost Channel | |
 
