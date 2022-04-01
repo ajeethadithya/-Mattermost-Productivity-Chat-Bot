@@ -1,5 +1,11 @@
 **Process**
 
+**Kanban Board (Github Project)**
+
+![image](https://media.github.ncsu.edu/user/22704/files/660ba641-2c0f-4719-8e1d-f1fe57ca89e0)
+
+The tasks under To-do correspond to the error handling part and future deployment.
+
 **Iteration Worksheet**
 
 Link to WORKSHEET.md : https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
