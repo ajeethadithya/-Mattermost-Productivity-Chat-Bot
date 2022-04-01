@@ -38,6 +38,6 @@
 | **Use Case: Scheduling a Meeting** |  |   |
 | Create events on users calendar (Create Calendar Event) | Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/27 |
 | User retrieves the events in their calendar (Get Events)| Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/43 |
-| User removes events from their calendar (Delete Events) |  |  |
+| User removes events from their calendar (Delete Events) - Bonus functionality not mentioned in Use Case | Completed. Must test on Mattermost | Retrieve Event id for deletion |
 | Unit Tests | Complete |  |
 
