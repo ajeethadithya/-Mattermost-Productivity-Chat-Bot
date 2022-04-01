@@ -8,6 +8,10 @@
 
 ![Iteration Worksheet 3](https://media.github.ncsu.edu/user/22704/files/25e7313c-3633-472b-907e-d776edb9f4a4)
 
+![image](https://media.github.ncsu.edu/user/22704/files/8f46b9a3-f25e-4a11-af37-7b24981b95d1)
+
+
+
 
 **Practices**
 
