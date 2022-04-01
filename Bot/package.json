@@ -19,12 +19,15 @@
     "cron": "^1.8.2",
     "express": "^4.17.3",
     "firebase": "^9.6.9",
+    "dotenv": "^16.0.0",
+    "googleapis": "^99.0.0",
     "install": "^0.13.0",
     "json-schema-traverse": "^1.0.0",
     "jsprim": "^1.4.2",
     "mattermost-client": "^6.5.0",
     "node-cron": "^3.0.0",
     "parse-link-header": "^2.0.0",
+    "prompt-sync": "^4.2.0",
     "uuid": "^8.3.2"
   }
 }

@@ -23,6 +23,8 @@ import cron from "cron";
 import crypto from "crypto";
 import { channel } from 'diagnostics_channel';
 import axios from "axios";
+import "./calendar.cjs";
+import {createcalEvent, getEvents} from "./calendar.cjs";
 
 //import firebase_data from './firebase_data.json';
 // const Client = require('mattermost-client');
@@ -67,6 +69,12 @@ let userID = "";
 // Global dictionary to save the reminder-Associated cronJob (key-value pair)
 let reminder_job_dict = {};
 let issue_reminder_job_dict = {};
+let event = ""
+let desc = ""
+let start = ""
+let end = ""
+let start_event = "";
+let end_event = "";
 
 async function main()
 {   
@@ -160,6 +168,7 @@ async function main()
                 if (temp_todo_list.length < 2) 
                 { 
                     client.postMessage('You have no tasks to remove \u2705', channel);
+                    command_list.pop();
                 }
                 else
                 {
@@ -262,6 +271,48 @@ async function main()
             removeReminders(msg);    
             command_list.pop();
         }
+        else if(hears(msg, "show meetings"))
+        {
+            displayViewCalendarMessagestart(msg);
+            command_list.push("show meetings");
+        }
+
+        else if(command_list[0] == "show meetings" && command_list[1] != "Start Date entered" && hearsForNonEmptyString(msg))
+        {   
+            displayViewCalendarMessageend(msg);
+            command_list.push("Start Date entered");
+        }
+        else if(command_list[0] == "show meetings" && command_list[1] == "Start Date entered" && hearsForNonEmptyString(msg))
+        {
+            getEventFuncFromCalendarJs(msg);
+            command_list.splice(0, command_list.length);
+        }
+        else if(hears(msg, "create calendar"))
+        {   
+            displayCreateCalendarMessage(msg);
+            command_list.push("create calendar");
+        }
+        
+        else if(command_list[0] == "create calendar" && command_list[1] != "calendar name entered" && hearsForNonEmptyString(msg))
+        {
+            displayCreateCalendarMessagestart(msg);
+            command_list.push("calendar name entered");
+        }
+        else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] != "start date entered" && hearsForNonEmptyString(msg))
+        {
+            displayCreateCalendarMessageend(msg);
+            command_list.push("start date entered");
+        }
+        else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] == "start date entered" && command_list[3] != "end date entered" && hearsForNonEmptyString(msg))
+        {
+            displayCreateCalendarMessagedesc(msg);
+            command_list.push("end date entered");
+        }
+        else if(command_list[0] == "create calendar" && command_list[1] == "calendar name entered" && command_list[2] == "start date entered" && command_list[3] == "end date entered" && hearsForNonEmptyString(msg))
+        {   
+            createCalendarPayload(msg);
+            command_list.splice(0, command_list.length);        
+        }
         else
         {   
             let channel = msg.broadcast.channel_id;
@@ -271,7 +322,7 @@ async function main()
                 client.postMessage("Repo name entered does not match with the ones given above, kindly start over", channel);
                 command_list.splice(0, command_list.length);
             }
-            else if( msg.data.sender_name != bot_name && (command_list[0] == "remove todo"))
+            else if( msg.data.sender_name != bot_name && (command_list[0] == "remove todo" || command_list[0] == "remove reminder") && !hearsForNumber(msg))
             {   
                 // Error handling for task number to remove not being valid
                 client.postMessage("Please enter a valid number, kindly start over", channel);
@@ -838,7 +889,6 @@ async function showReminders(msg)
         }).catch((error) => {
         console.error(error);
         });
-    
     for(var i= 1; i < temp_reminder_list.length; i++)
     {   
         let rem_array = temp_reminder_list[i].split(" ");
@@ -987,6 +1037,95 @@ async function issueReminders()
     job.start();
 }
 
+// Calendar and meeting part 
+async function displayViewCalendarMessagestart(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    client.postMessage("\u261B Enter Start date of event: ", channel);
+}
+async function displayViewCalendarMessageend(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    start_event =  post.message;
+    client.postMessage("\u261B Enter End date of event: ", channel);
+}
+
+async function getEventFuncFromCalendarJs(msg)
+{   
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    end_event =  post.message;
+    let items_to_show = [];
+    items_to_show = await getEvents(start_event, end_event);
+    if(items_to_show != "not okay")
+    {   
+        for(var i = 0; i < items_to_show.length; i++)
+        {   
+            let item_to_show_split = items_to_show[i].split(":");
+            let id_to_show = "\u2022 ID: ".concat(item_to_show_split[0])
+            let meeting_to_show = "Meeting Name: ".concat(item_to_show_split[1]); 
+            client.postMessage(`${id_to_show}
+            \u2192 ${meeting_to_show}`, channel);
+        }
+    }
+    else 
+    {
+        client.postMessage("Unable to fetch your meetings, please try again!", channel);
+    } 
+    
+}
+
+async function displayCreateCalendarMessage(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    client.postMessage("\u261B Enter Name of event: ", channel);
+}
+
+async function displayCreateCalendarMessagestart(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    event =  post.message;
+    client.postMessage("\u261B Enter Start date of event: ", channel);
+}
+async function displayCreateCalendarMessageend(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    start =  post.message;
+    client.postMessage("\u261B Enter End date of event: ", channel);
+}
+
+async function displayCreateCalendarMessagedesc(msg)
+{
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    end =  post.message;
+    client.postMessage("\u261B Enter a brief description of event: ", channel);
+    
+}
+
+async function createCalendarPayload(msg)
+{   
+    let channel = msg.broadcast.channel_id;
+    let post = JSON.parse(msg.data.post);
+    desc = post.message;
+    //cal_payload = post.message;
+    let status_of_api = await createcalEvent(event, desc, start, end).catch( (err) => {
+        client.postMessage("Unable to complete request, sorry!", channel);
+        command_list.splice(0,command_list.length); 
+    });
+    if(status_of_api == 200)
+    {
+        client.postMessage("Meeting/Event has been created in your calendar!", channel);
+    }
+    else if(status_of_api == "not okay" || status_of_api == "failed in catch")
+    {
+        client.postMessage("Unable to Create meeting, please try again!", channel);
+        command_list.splice(0, command_list.length);
+    }
+}
 
 (async () => 
 {
