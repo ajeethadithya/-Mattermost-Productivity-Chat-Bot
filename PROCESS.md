@@ -2,6 +2,8 @@
 
 **Iteration Worksheet**
 
+Link to WORKSHEET.md : https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
+
 ![Iteration Worksheet 1 ](https://media.github.ncsu.edu/user/22704/files/62eaf138-0206-42a6-b79d-ad423509202f)
 
 ![Iteration Worksheet 2](https://media.github.ncsu.edu/user/22704/files/83cf2fbf-0d0f-4316-88b2-d9ea24a149fc)
