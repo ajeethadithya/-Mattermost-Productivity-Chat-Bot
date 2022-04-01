@@ -14,3 +14,4 @@ In general, a number of software practices can be integrated during the software
 4. Extreme Programming - Core Practice
 5. Corollary Practices
 
+To build the Focus Bot, our team used a hybrid practice of the Extreme Programming and a Corollary Practice. We initially identified a core practice among the different XP's Concepts that includes fine-scale feedback, continuous process, shared understanding and programming welfare. We believed that integrating the stages of development by each member would result in easier tracking of the overall progress and hence chose the Continuous Integration Practice.    
