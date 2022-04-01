@@ -29,3 +29,15 @@
 | Delete reminders specified by the user (Remove Reminders) | Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/18 - The issues comments specify the tasks completed iteratively. |
 | Unit Tests | Complete | displayCreateReminderMessage(), displayCreateReminderMessageTwo(), createReminder(), showReminders() |
 | Error Handling/Edge Cases | Completed and Implemented on our MatterMost Channel | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/36 - Progress has been tracked and maintained in real-life (issue comments). Primary functions for error handling: main(), createReminder()[ Edge Case #39 ], removeReminders() |
+
+
+### Week 2
+
+| Deliverable | Item/Status | Issues/Tasks |
+| --- | --- | --- |
+| **Use Case: Scheduling a Meeting** |  |   |
+| Create events on users calendar (Create Calendar Event) | Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/27 |
+| User retrieves the events in their calendar (Get Events)| Completed with formatting | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/43 |
+| User removes events from their calendar (Delete Events) |  |  |
+| Unit Tests | Complete |  |
+
