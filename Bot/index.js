@@ -249,6 +249,8 @@ async function main()
                         let rem_to_post = rem_array.join(" ");
                         rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
                         client.postMessage(rem_to_post, channel);
+                        // client.postMessage(`${rem_to_post}
+                        // \u2022 ${time_details}`, channel);
                     }
                     setTimeout(function(){
                         client.postMessage("\u261B Enter the reminder number that you want to remove: ", channel);
@@ -725,7 +727,7 @@ async function createReminder(msg)
     var current_date = new Date(y,m,d, h, min);
 
     // Error handling for create reminder command. If user makes an error, making the command_list array empty so that the user starts over again
-    if(date < current_date || (parseInt(`${cron_day}`) < 1 && parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 && parseInt(`${cron_month_minus_one}`) > 11 ))
+    if(date < current_date || (parseInt(`${cron_day}`) < 1 || parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 || parseInt(`${cron_month_minus_one}`) > 11 ) || (parseInt(`${cron_hours}`) < 0 || parseInt(`${cron_hours}`) > 23) || (parseInt(`${cron_minutes}`) < 0 || parseInt(`${cron_minutes}`) > 59) || parseInt(`${cron_minutes}`) == min  )
     {
         client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
         command_list.splice(0, command_list.length);
@@ -849,7 +851,7 @@ async function showReminders(msg)
         rem_array.splice(-2,2);
         let rem_to_post = rem_array.join(" ");
         rem_to_post = i.toString().concat("."," ").concat(rem_to_post);
-        await client.postMessage(`${rem_to_post}
+        client.postMessage(`${rem_to_post}
         \u2022 ${time_details}`, channel);
     }
     
