@@ -26,6 +26,11 @@ import axios from "axios";
 import "./calendar.cjs";
 import {createcalEvent, getEvents} from "./calendar.cjs";
 
+import fs from "fs";
+
+import https from "https";
+import { ok } from 'assert';
+import { response } from 'express';
 //import firebase_data from './firebase_data.json';
 // const Client = require('mattermost-client');
 // const toDoListBot = require('./toDoListBot');
@@ -76,6 +81,11 @@ let end = ""
 let start_event = "";
 let end_event = "";
 
+let status_of_api = 0;
+var closeStatus = 0;
+let temp_todo_list = []
+
+
 async function main()
 {   
 
@@ -111,6 +121,7 @@ async function main()
         //console.log(msg);
         if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
+            
             greetingsReply(msg);
         }
         else if(hears(msg, "show issues"))
@@ -345,7 +356,7 @@ async function main()
 }
 
 // DB check is made to see if user exists else add the user
-async function checkUserInDB()
+export async function checkUserInDB()
 {
     // Getting userID using github api to get users that is common in github and mattermost as a pre-condition and checking to see if that userID exists in the database
     userID = await getUser().catch( 
@@ -369,7 +380,7 @@ async function checkUserInDB()
 }
 
 // Hears function to match the exact commands and given commands
-function hears(msg, text)
+export function hears(msg, text)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -385,7 +396,7 @@ function hears(msg, text)
 
 // Hear function that will listen to a message in a chain of commands. The chain of commands the user enters is already being stored and being checked and hence checking 
 // if what the user enters under a particular chain of commands is non empty legitimate string
-function hearsForNonEmptyString(msg)
+export function hearsForNonEmptyString(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -399,8 +410,8 @@ function hearsForNonEmptyString(msg)
     return false;
 }
 
-// Hears function just to listen to hte repo names
-function hearsForRepoName(msg, text)
+// Hears function just to listen to the repo names
+export function hearsForRepoName(msg, text)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -408,6 +419,8 @@ function hearsForRepoName(msg, text)
         let channel = msg.broadcast.channel_id;
         let post = JSON.parse(msg.data.post);
         // To store the list of repo_names as a string that is used to check if the user input repo_name is a valid one
+
+         
         let repos = Object.values(repo_names);
         for(var i = 0 ; i < repos.length; i++)
         {   
@@ -423,7 +436,7 @@ function hearsForRepoName(msg, text)
 
 // Hears function just to listen to the issue ID. Cannot be combined with any other hears function as some preprocessing i.e issue entered is being checked with the list of 
 // issues for the repo name entered. Hence separate function required.
-function hearsForIssueID(msg)
+export function hearsForIssueID(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -446,7 +459,7 @@ function hearsForIssueID(msg)
 }
 
 // Hears function for any sort of number. remove todo and remove reminder would use this 
-function hearsForNumber(msg)
+export function hearsForNumber(msg)
 {
     if( msg.data.sender_name == bot_name) return false;
     if( msg.data.post )
@@ -461,10 +474,13 @@ function hearsForNumber(msg)
     return false;
 }
 
-function greetingsReply(msg)
+export function greetingsReply(msg)
 {
+    
     let channel = msg.broadcast.channel_id;
-    client.postMessage(`Good to see you here! Hocus Pocus- Let's help you Focus \u270A`, channel);   
+    //client.postMessage(`Good to see you here! Hocus Pocus- Let's help you Focus \u270A`, channel);   
+    callClientPostMessage(`Good to see you here! Hocus Pocus- Let's help you Focus \u270A`, channel);
+    return 1;
 }
 
 function displayHelpWithCommands(msg)
@@ -488,24 +504,43 @@ function displayHelpWithCommands(msg)
     
 }
 
-async function listRepos(msg)
+export function callClientPostMessage(message,channel) {
+
+    try {
+    client.postMessage(message, channel);
+    return 200;
+    }
+    catch {
+        return 400;
+    }
+}
+
+export async function listRepos(msg)
 {   
+
     //let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
-    client.postMessage(`\u261B Enter the repo name for which you want to execute the command:`, channel);
+
+    //client.postMessage(`\u261B Enter the repo name for which you want to execute the command:`, channel);
+    let status = callClientPostMessage('\u261B Enter the repo name for which you want to execute the command:', channel);
+
     repo_names = await listAuthenicatedUserRepos().catch( (err) => {
         client.postMessage("Unable to complete request, sorry! Github server down!", channel);
         command_list.splice(0, command_list.length); 
     });
 
-    client.postMessage(JSON.stringify(repo_names, null, 4), channel);
+    
+    //client.postMessage(JSON.stringify(repo_names, null, 4), channel);
+    callClientPostMessage(JSON.stringify(repo_names, null, 4), channel);
+    
 }
 
-async function listIssues(msg, close_issue_flag)
+export async function listIssues(msg, close_issue_flag)
 {   
     let flag = 0;
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
+    //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
     req_repo_name = post.message;
     // let issue = await getIssues(owner, req_repo_name).catch( 
@@ -524,7 +559,10 @@ async function listIssues(msg, close_issue_flag)
         {
             let issue_array = issue[i].split("ID: ");
             let issue_id = issue_array[1];
-            client.postMessage(`Title: ${issue_array[0]}
+            //client.postMessage(`Title: ${issue_array[0]}
+            //\u21E7 ID: ${issue_id}`, channel);
+            
+            callClientPostMessage(`Title: ${issue_array[0]}
             \u21E7 ID: ${issue_id}`, channel);
         }
         setTimeout(function(){
@@ -539,32 +577,39 @@ async function listIssues(msg, close_issue_flag)
 }
 
 // Fucntion to close the issue specified by the issue number that the user enters in the chat
-async function closeIssueID(msg, req_repo_name, issue_id)
+export async function closeIssueID(msg, req_repo_name, issue_id)
 {   
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
     // let post = JSON.parse(msg.data.post).message;
     // const temp_array = post.split(" ");
     // let issue_id_to_close = parseInt(temp_array[1]);
-    var closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( (err) => {
+    closeStatus = await closeIssues(owner, req_repo_name, issue_id).catch( (err) => {
         client.postMessage(`Issue cannot be closed, start close issue chain again`, channel);
         command_list.splice(0, command_list.length);
     });
         if( closeStatus )
         {  
-            client.postMessage(`Issue has been successfully closed!`, channel);
+            //client.postMessage(`Issue has been successfully closed!`, channel);
+            callClientPostMessage(`Issue has been successfully closed!`, channel);
         }
 }
 
+
+
 // This show todo function uses the database to fetch the list for the user who is running the code. Previously had written the same functionality with todoList- a global list
-async function showTodo(msg)
+export async function showTodo(msg)
 {
+    
+    
     let channel = msg.broadcast.channel_id;
-    let temp_todo_list = []
+    //let temp_todo_list = []
     await get(child(dbRef, `users/` + userID)).then((snapshot) => {
         if (snapshot.exists()) 
         {
+          //console.log(snapshot);
           temp_todo_list = snapshot.val().todo_list;
+
         }
         if (temp_todo_list.length < 2) 
         { 
@@ -658,49 +703,64 @@ async function removeTodo(msg)
     }
 }
 
-async function displayCreateIssue(msg)
+export async function displayCreateIssue(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("\u261B Enter a repo to create an issue from the list below: ", channel);
+    //client.postMessage("\u261B Enter a repo to create an issue from the list below: ", channel);
+    callClientPostMessage("\u261B Enter a repo to create an issue from the list below: ", channel);
     await listRepos(msg);
 }
 
-async function displayNextMsgForCreateIssue(msg)
+export async function displayNextMsgForCreateIssue(msg)
 {   
     let channel = msg.broadcast.channel_id;
+    //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
     repo_name_for_create_issue =  post.message;
-    client.postMessage("\u261B Enter the Title of the issue", channel);
+    //client.postMessage("\u261B Enter the Title of the issue", channel);
+    callClientPostMessage("\u261B Enter the Title of the issue", channel);
 }
 
-async function displayThirdMsgForCreateIssue(msg)
+export async function displayThirdMsgForCreateIssue(msg)
 {
     let channel = msg.broadcast.channel_id;
+    //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
     issue_title =  post.message;
-    client.postMessage("\u261B Enter the body of the issue", channel);
+    //client.postMessage("\u261B Enter the body of the issue", channel);
+    callClientPostMessage("\u261B Enter the body of the issue", channel);
 }
 
-async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
+
+export async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
 {   
     let owner = msg.data.sender_name.replace('@', '');
     let channel = msg.broadcast.channel_id;
+    //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
     issue_body = post.message;
-    let status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( (err) => {
-        client.postMessage("Unable to complete request, sorry!", channel);
+    
+    status_of_api = await createIssue(owner, repo_name_for_create_issue, issue_title, issue_body).catch( (err) => {
+        //client.postMessage("Unable to complete request, sorry!", channel);
+        callClientPostMessage("Unable to complete request, sorry!", channel);
         command_list.splice(0,command_list.length); 
+
+        
     });
+
     if(status_of_api)
     {
-        client.postMessage("Issue has been created!", channel);
+        //client.postMessage("Issue has been created!", channel);
+        callClientPostMessage("Issue has been created!", channel);
     }
 }
 
-async function displayCreateReminderMessage(msg)
+export async function displayCreateReminderMessage(msg)
 {
     let channel = msg.broadcast.channel_id;
-    client.postMessage("\u261B Enter reminder: ", channel);
+    //client.postMessage("\u261B Enter reminder: ", channel);
+    callClientPostMessage("\u261B Enter reminder: ", channel);
+    return 1;
 }
 
 
@@ -1126,6 +1186,25 @@ async function createCalendarPayload(msg)
         command_list.splice(0, command_list.length);
     }
 }
+// async function tempfunc()
+// {
+//     let issue_reminder_date = new Date();
+// issue_reminder_date.setSeconds(issue_reminder_date.getSeconds() + 2);
+// const issue_reminder_job = new cron.CronJob(issue_reminder_date, function() {
+//     console.log("CronJob kicked in");
+// }, null, "start");  
+// issue_reminder_job_dict["i1"] = issue_reminder_job;
+// console.log(Object.values(issue_reminder_job_dict));
+
+// setTimeout(function(){
+//     issue_reminder_job.stop();
+//     console.log(Object.values(issue_reminder_job_dict));
+// }, 5000);
+
+// }
+
+
+
 
 (async () => 
 {
@@ -1133,3 +1212,6 @@ async function createCalendarPayload(msg)
     await main();
 
 })()
+
+export {repo_names, repo_name_for_create_issue,issue_title, status_of_api, global_issues, closeStatus, userID, temp_todo_list };
+
