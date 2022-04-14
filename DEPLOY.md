@@ -25,8 +25,7 @@ For easier evalutaion, we will type the commands pertaining to each Use-Case.
 
 ### Use-Case 1 : Personal To-Do List
 
-
-1.Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "add todo", "show todo" and "remove todo" commands are part of this use case.
+Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "add todo", "show todo" and "remove todo" commands are part of this use case.
 
 #### Add and Show To-Do List
 
@@ -86,8 +85,37 @@ i/p: show todo
 
 o/p: There is nothing to show
 
+### Use-Case 2 : Github Issues
  
+Initially type "help" to check the list of valid commands and their usage instructions. Among thme, you can see that "create issue", "show issues" and "close issue" are part of this use-case.
+ 
+#### Create Issues
 
+To create an issue in a Github repo that you own, type "create issue". The bot replies with the list of all repos in your account and asks you to specify the repo name.
 
-  
+Note: You can only create or remove issues in a repo that you own.
 
+o/p:
+
+Enter a repo to create an issue from the list below:
+
+Enter the repo name from which you want to execute the command:
+
+[
+"HW0-510"
+"HW1-510"
+"HW2-510"
+"CSC510-24"
+]
+
+i/p: HW0-510
+
+o/p: Enter the Title of the issue
+
+i/p: new issue
+
+o/p: Enter the body of the issue
+
+i/p: create a new issue
+
+o/p: Issue has been created!
