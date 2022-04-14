@@ -147,3 +147,66 @@ Title: new issue
 Create a new issue
 
 ID: 163030
+
+#### Close Issue
+
+You can close a Github issue of a particular repo by specifyig the issue ID
+
+i/p: close issue
+
+o/p:
+
+Enter the repo name for which you want to execute the command:
+
+[
+"HW0-510"
+"HW1-510"
+"HW2-510"
+"CSC510-24"
+]
+
+i/p: HW0-510
+
+o/p: 
+
+Title: new issue
+
+Create a new issue
+
+ID: 163030
+
+Enter the Issue ID of the issue that you want to close
+
+i/p: 163030
+
+o/p: Issue has been successfully closed!
+
+Now to check if the issue has been closed, type "show issues"
+
+o/p:
+
+Enter the repo name for which you want to execute the command:
+
+[
+"HW0-510"
+"HW1-510"
+"HW2-510"
+"CSC510-24"
+]
+
+i/p: HW0-510
+
+o/p: No issues in HW0-510
+
+#### Error Handling
+
+1.Entering a wrong repo name while executing either of the commands: create issue, show issue, close issue.
+
+=> The bot replies:- "Repo name entered does not match with the ones given above, kindly start over."
+
+2.Entering a wrong issue ID while trying to close an issue.
+
+=> The bot replies:- "Please enter a valid Issue ID from the ones given above, kindly start over."
+
+
+
