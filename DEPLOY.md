@@ -74,15 +74,16 @@ o/p:
 
 #### Error Handling
 
-1. Entering an invalid task number while trying to remove from the list
+1.Entering an invalid task number while trying to remove from the list
 
 => The bot replies saying, "Please enter a number from the list shown above, try again from the beginning."
 
-2. typing "show todo" when you haven't created a todo list.
+2.Typing "show todo" when you haven't created a todo list.
 
-=> i/p: show todo
+=>
+i/p: show todo
 
-   o/p: There is nothing to show
+o/p: There is nothing to show
 
  
 
