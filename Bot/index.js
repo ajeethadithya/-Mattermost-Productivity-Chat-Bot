@@ -993,8 +993,16 @@ async function issueReminders()
             console.error(error);
             });
         }
+        else
+        {
+            client.postMessage("Unable to complete request, sorry! Github server down!", "wkibg1y1qjy1pnpego1pxi8cua");
+        }
     });
-    job.start();
+    if(repository_names_list)
+    {
+        job.start();
+    }
+    
 }
 
 
