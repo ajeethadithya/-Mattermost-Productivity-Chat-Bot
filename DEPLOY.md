@@ -128,6 +128,7 @@ The bot returns the issues created in a particular repository along with their I
 i/p: show issues
 
 o/p:
+
 Enter the repo name for which you want to execute the command:
 
 [
@@ -140,6 +141,7 @@ Enter the repo name for which you want to execute the command:
 i/p: HW0-510
 
 o/p: 
+
 Title: new issue
 
 Create a new issue
