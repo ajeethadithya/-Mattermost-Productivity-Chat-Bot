@@ -289,7 +289,7 @@ ISSUE REMINDER ALERT:
 
   new issue:
   
-  HW1-510          ID: 163030
+  HW1-510                         ID: 163030
   
 Note: If the Github issue is closed before the reminder is displayed, the reminderitself gets deleted. 
  
