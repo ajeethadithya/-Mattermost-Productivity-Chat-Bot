@@ -119,3 +119,29 @@ o/p: Enter the body of the issue
 i/p: create a new issue
 
 o/p: Issue has been created!
+
+
+#### Show Issues
+
+The bot returns the issues created in a particular repository along with their ID's.
+
+i/p: show issues
+
+o/p:
+Enter the repo name for which you want to execute the command:
+
+[
+"HW0-510"
+"HW1-510"
+"HW2-510"
+"CSC510-24"
+]
+
+i/p: HW0-510
+
+o/p: 
+Title: new issue
+
+Create a new issue
+
+ID: 163030
