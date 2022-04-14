@@ -450,8 +450,14 @@ async function listRepos(msg)
         client.postMessage("Unable to complete request, sorry! Github server down!", channel);
         command_list.splice(0, command_list.length); 
     });
-
-    client.postMessage(JSON.stringify(repo_names, null, 4), channel);
+    if(repo_names.length != 0)
+    {   
+        client.postMessage(JSON.stringify(repo_names, null, 4), channel);
+    }
+    else
+    {
+        client.postMessage("No Repos found. Check GitHub to see if repos exist or wait for GitHub server to be back up", channel);
+    }
 }
 
 async function listIssues(msg, close_issue_flag)
