@@ -867,6 +867,7 @@ async function removeReminders(msg)
 {
     let channel = msg.broadcast.channel_id;
     let temp_reminder_list = []
+    let removed = []
     let post = JSON.parse(msg.data.post);
     var rem_id_to_remove = parseInt(post.message);
     await get(child(dbRef, `users/` + userID)).then((snapshot) => {
@@ -874,8 +875,7 @@ async function removeReminders(msg)
         {
             // Removing reminder from the database but haven't stopped cronJob yet
             temp_reminder_list = snapshot.val().reminders;
-            var removed = temp_reminder_list.splice(rem_id_to_remove, 1);
-
+            removed = temp_reminder_list.splice(rem_id_to_remove, 1);
             // Stopping the cronJob scheduled using cronJob.stop() method by accessing the job with the unique reminder id which is the variable "removed"
             Object.keys(reminder_job_dict).forEach((key) => {
                 if(key == removed){reminder_job_dict[key].stop()}
@@ -887,14 +887,21 @@ async function removeReminders(msg)
         }).catch((error) => {
         console.error(error);
     });
-
+    // Error handling for removing the right reminder number that exists in the list of reminders
+    if(removed.length !=0)
+    {
     //update data
     const user_reminder_data = temp_reminder_list;
     const updates = {};
     updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
     update(ref(db), updates);    
     client.postMessage("Reminder " + post.message + " successfully removed", channel);
-
+    }
+    else
+    {
+        client.postMessage("Please enter a number from the list shown above, try again from the beginning", channel);
+        command_list.splice(0, command_list.length);
+    }
 }
 
 // issueReminder function begins here
@@ -998,10 +1005,7 @@ async function issueReminders()
             client.postMessage("Unable to complete request, sorry! Github server down!", "wkibg1y1qjy1pnpego1pxi8cua");
         }
     });
-    if(repository_names_list)
-    {
-        job.start();
-    }
+    job.start();
     
 }
 
