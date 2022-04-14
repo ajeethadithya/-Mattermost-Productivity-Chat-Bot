@@ -208,5 +208,88 @@ o/p: No issues in HW0-510
 
 => The bot replies:- "Please enter a valid Issue ID from the ones given above, kindly start over."
 
+### Use-Case 3 : Reminders
+ 
+Initially type "help" to check the list of valid commands and their usage instructions. Among thme, you can see that "create reminder", "show reminders" and "remove reminder" are part of this use-case.
+ 
+#### Create Reminder
 
+i/p: create reminder
 
+o/p: Enter reminder
+
+i/p: update worksheet.md
+
+o/p: When shall I remind you? Enter date and time-24 hour format (FORMAT: YYYY-MM-DD hh:mm)
+
+i/p: 2022-04-13 17:35
+
+o/p: Reminder Created!
+
+During the specified date and time, a reminder will pop-up as follows:
+
+o/p:
+
+REMINDER ALERT:
+
+update worksheet.md
+   
+#### Show Reminders
+
+The bot returns the reminders created along with the date and time for which it's created.
+
+i/p: show reminders
+
+o/p: 
+
+1.update worksheet.md
+
+ 2022-04-13 17:35
+ 
+#### Remove Reminder
+
+i/p: remove reminder
+
+o/p: 
+
+1.update worksheet.md
+
+ 2022-04-13 17:35
+ 
+ Enter the reminder number that you want to remove:
+ 
+ i/p: 1
+ 
+ o/p: Reminder 1 successfully removed!
+ 
+ 
+ #### Error Handling
+ 
+ 1.Entering show reminders when there are no active reminders.
+ 
+ => The bot replies:- "You have no reminders"
+ 
+ 2.Entering invalid time or date while creating a reminder.
+ 
+ eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
+ 
+ => The bot replies:- "Please enter a valid date and time following the format! Try again from the beginning."
+ 
+ 3.Entering invalid reminder number while trying to remove a reminder.
+ 
+ => The bot replies:- "Please enter a valid number, kindly start over."
+ 
+### Use-Case 5 : Automatic Reminders for Github Issues
+
+Automatic reminders are created for github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute.
+
+eg. 
+
+ISSUE REMINDER ALERT:
+
+  new issue:
+  
+  HW1-510          ID: 163030
+  
+Note: If the Github issue is closed before the reminder is displayed, the reminderitself gets deleted. 
+ 
