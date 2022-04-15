@@ -699,99 +699,115 @@ async function createReminder(msg)
     let post = JSON.parse(msg.data.post);
     let reminder = "";
     let reminder_with_id = "";
-
-    // Converting String to array so that the first element can then be split according to "-" and second one according to ':'
-    let cronJob_details_array = post.message.split(" ");
     
-    let cronJob_date_array = cronJob_details_array[0].split('-');
-    let cronJob_time_array = cronJob_details_array[1].split(':');
-    
-    // Generate a cronJob for these details here from user input
-    let cron_day = cronJob_date_array[2];
-    let cron_month= cronJob_date_array[1];
-    let cron_year = cronJob_date_array[0];
-    let cron_hours =  cronJob_time_array[0];
-    let cron_minutes =  cronJob_time_array[1];
-
-    // Input being set appropriately since cronJob takes a date as an input and giving a date makes it run once and breaks. Giving an expression makes it run repeatedly
-    let date = new Date();
-    let cron_month_minus_one = parseInt(cron_month) - 1;
-    date.setDate(parseInt(`${cron_day}`));
-    date.setMonth(`${cron_month_minus_one}`);
-    date.setFullYear(cron_year);
-    date.setHours(parseInt(`${cron_hours}`));
-    date.setMinutes(parseInt(`${cron_minutes}`));
-    date.setSeconds(0);
-
-    // To get the current date and compare it with the date entered. Proceeds only if the entered date is equal or greater than the current date
-    var q = new Date();
-    var m = q.getMonth();
-    var d = q.getDate();
-    var y = q.getFullYear();
-    var h = q.getHours();
-    var min = q.getMinutes();
-    var current_date = new Date(y,m,d, h, min);
-
-    // Error handling for create reminder command. If user makes an error, making the command_list array empty so that the user starts over again
-    if(date < current_date || (parseInt(`${cron_day}`) < 1 || parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 || parseInt(`${cron_month_minus_one}`) > 11 ) || (parseInt(`${cron_hours}`) < 0 || parseInt(`${cron_hours}`) > 23) || (parseInt(`${cron_minutes}`) < 0 || parseInt(`${cron_minutes}`) > 59) || parseInt(`${cron_minutes}`) == min || (parseInt(`${cron_month_minus_one}`) == 1 && parseInt(`${cron_day}`) > 28)  )
+    // Error Handling
+    if(post.message.charAt(10) == " " || post.message.charAt(9) == " " || post.message.charAt(8) == " ")
     {
-        client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
-        command_list.splice(0, command_list.length);
+        // Converting String to array so that the first element can then be split according to "-" and second one according to ':'
+        let cronJob_details_array = post.message.split(" ");
+        if(cronJob_details_array[0].charAt(4) == "-" && (cronJob_details_array[0].charAt(6) == "-" || cronJob_details_array[0].charAt(7) == "-" ) && (cronJob_details_array[1].charAt(1) == ":" || cronJob_details_array[1].charAt(2) == ":"))
+        {
+            let cronJob_date_array = cronJob_details_array[0].split('-');
+            let cronJob_time_array = cronJob_details_array[1].split(':');
+            
+            // Generate a cronJob for these details here from user input
+            let cron_day = cronJob_date_array[2];
+            let cron_month= cronJob_date_array[1];
+            let cron_year = cronJob_date_array[0];
+            let cron_hours =  cronJob_time_array[0];
+            let cron_minutes =  cronJob_time_array[1];
 
-        // Removing the reminder that was inserted as the user has to start over as part of error handling if they entered invalid time and date
-        let temp_reminder_list = []
-        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
-            if (snapshot.exists()) 
+            // Input being set appropriately since cronJob takes a date as an input and giving a date makes it run once and breaks. Giving an expression makes it run repeatedly
+            let date = new Date();
+            let cron_month_minus_one = parseInt(cron_month) - 1;
+            date.setDate(parseInt(`${cron_day}`));
+            date.setMonth(`${cron_month_minus_one}`);
+            date.setFullYear(cron_year);
+            date.setHours(parseInt(`${cron_hours}`));
+            date.setMinutes(parseInt(`${cron_minutes}`));
+            date.setSeconds(0);
+
+            // To get the current date and compare it with the date entered. Proceeds only if the entered date is equal or greater than the current date
+            var q = new Date();
+            var m = q.getMonth();
+            var d = q.getDate();
+            var y = q.getFullYear();
+            var h = q.getHours();
+            var min = q.getMinutes();
+            var current_date = new Date(y,m,d, h, min);
+
+            // Error handling for create reminder command. If user makes an error, making the command_list array empty so that the user starts over again
+            if(date < current_date || (parseInt(`${cron_day}`) < 1 || parseInt(`${cron_day}`) > 31 ) || (parseInt(`${cron_month_minus_one}`) < 0 || parseInt(`${cron_month_minus_one}`) > 11 ) || (parseInt(`${cron_hours}`) < 0 || parseInt(`${cron_hours}`) > 23) || (parseInt(`${cron_minutes}`) < 0 || parseInt(`${cron_minutes}`) > 59) || parseInt(`${cron_minutes}`) == min || (parseInt(`${cron_month_minus_one}`) == 1 && parseInt(`${cron_day}`) > 28)  )
             {
-                // Removing the last element from the list of reminders
-                temp_reminder_list = snapshot.val().reminders;
-                var removed = temp_reminder_list.splice(temp_reminder_list.length - 1, 1);
-            } 
-            }).catch((error) => {
-            console.error(error);
-        });
-    
-        //update data
-        const user_reminder_data = temp_reminder_list;
-        const updates = {};
-        updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
-        update(ref(db), updates);
+                client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
+                command_list.splice(0, command_list.length);
+
+                // Removing the reminder that was inserted as the user has to start over as part of error handling if they entered invalid time and date
+                let temp_reminder_list = []
+                await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+                    if (snapshot.exists()) 
+                    {
+                        // Removing the last element from the list of reminders
+                        temp_reminder_list = snapshot.val().reminders;
+                        var removed = temp_reminder_list.splice(temp_reminder_list.length - 1, 1);
+                    } 
+                    }).catch((error) => {
+                    console.error(error);
+                });
+            
+                //update data
+                const user_reminder_data = temp_reminder_list;
+                const updates = {};
+                updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
+                update(ref(db), updates);
+            }
+            else
+            {
+                // Getting the reminder message to send it to the cronJob
+                let temp_reminder_list = []
+                await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+                    if (snapshot.exists()) 
+                    {  
+                    // Getting the reminder from the Database, removing the ID from it, and passing it to the cronJob here so that the cronJob will know which reminder to print
+                    // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
+                    temp_reminder_list = snapshot.val().reminders;
+                    reminder = temp_reminder_list[temp_reminder_list.length - 1];
+                    let reminder_array = reminder.split(" ");
+                    reminder_array.shift();
+                    reminder = reminder_array.join(" ");
+
+                    // After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
+                    temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
+                    reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
+
+                    } 
+                    }).catch((error) => {
+                    console.error(error);
+                    });
+
+                // Adding the time details and updating the database with the details appended to the end of the string
+                // In DB: "{Unique ID} {reminder message} {time details}"
+                const user_rem_data = temp_reminder_list;
+                const updates = {};
+                updates[`/users/` + userID + `/reminders/`] = user_rem_data;
+                update(ref(db), updates);
+
+                // createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel);
+                createCronJobs(date, reminder, reminder_with_id, channel);
+                client.postMessage("Reminder Created!", channel);
+            }
+        }
+        else
+        {
+            client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
+            command_list.splice(0, command_list.length);
+        }
     }
     else
     {
-        // Getting the reminder message to send it to the cronJob
-        let temp_reminder_list = []
-        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
-            if (snapshot.exists()) 
-            {  
-            // Getting the reminder from the Database, removing the ID from it, and passing it to the cronJob here so that the cronJob will know which reminder to print
-            // Creates a snapshot of what reminder it must post to the channel when it is being scheduled
-            temp_reminder_list = snapshot.val().reminders;
-            reminder = temp_reminder_list[temp_reminder_list.length - 1];
-            let reminder_array = reminder.split(" ");
-            reminder_array.shift();
-            reminder = reminder_array.join(" ");
-
-            // After processing the reminder for the cronJob, set the time details entered by the user to the reminder to be displayed when show reminders is called
-            temp_reminder_list[temp_reminder_list.length - 1] = temp_reminder_list[temp_reminder_list.length - 1].concat(" ").concat(post.message);
-            reminder_with_id = temp_reminder_list[temp_reminder_list.length - 1];
-
-            } 
-            }).catch((error) => {
-            console.error(error);
-            });
-
-        // Adding the time details and updating the database with the details appended to the end of the string
-        // In DB: "{Unique ID} {reminder message} {time details}"
-        const user_rem_data = temp_reminder_list;
-        const updates = {};
-        updates[`/users/` + userID + `/reminders/`] = user_rem_data;
-        update(ref(db), updates);
-
-        // createCronJobs(cron_day, cron_month, cron_year, cron_hours, cron_minutes, reminder, reminder_with_id, channel);
-        createCronJobs(date, reminder, reminder_with_id, channel);
-        client.postMessage("Reminder Created!", channel);
-    }   
+        client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
+        command_list.splice(0, command_list.length);
+    }
 }
 
 // CronJob is getting created and the respective reminder is being posted in the channel
