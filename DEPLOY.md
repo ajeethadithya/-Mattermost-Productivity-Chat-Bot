@@ -1,4 +1,7 @@
 ## Deployment Scripts
+### Screencast
+
+Link to the screencast:  
 
 ## Acceptance Testing
 ### Instructions
