@@ -1033,11 +1033,7 @@ async function removeReminders(msg)
 async function issueReminders()
 {   
     // Idea: cronJob to make an api call every minute (for now) to get issues, compare with the ones in the database, and create cronJob if it doesn't exist. Getting issues
-<<<<<<< HEAD
-    // from every repo and making a check if it exists in dbx   . Yet to think of a logic to handle a deleted issue before reminder kicks in. Might have to stop the job.
-=======
     // from every repo and making a check if it exists in db. Yet to think of a logic to handle a deleted issue before reminder kicks in. Might have to stop the job.
->>>>>>> 07c50b8d92a9410dd25e75d5db940c1da1828948
     
     // Step 1: create a cron job that will fetch all repos every 5 seconds
     // Cron expression that runs every minute
@@ -1106,11 +1102,7 @@ async function issueReminders()
                 if(db_issues.indexOf(all_issues_list[i]) == -1)
                 {   
         // Step 5: If the issues does not exist in the database, create a cronJob and set a reminder for after 1 minutes to test then update the database
-<<<<<<< HEAD
-                    let issue_reminder_date = new Date();   
-=======
                     let issue_reminder_date = new Date();
->>>>>>> 07c50b8d92a9410dd25e75d5db940c1da1828948
                     let issue_to_be_posted = all_issues_list[i];
                     issue_reminder_date.setMinutes(issue_reminder_date.getMinutes() + 1);
                     const issue_reminder_job = new cron.CronJob(issue_reminder_date, function() {
