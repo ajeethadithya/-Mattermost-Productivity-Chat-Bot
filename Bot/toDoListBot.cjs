@@ -1,5 +1,9 @@
 const axios = require('axios');
+// import "axios";
+// import "chalk";
 const chalk = require('chalk');
+const { resolve } = require('path');
+const fs = require('fs')
 
 var config = {}
 // Retrieve our api token from the environment variables.
@@ -47,6 +51,7 @@ function listAuthenicatedUserRepos()
 					repo_name.push(data[i].name);
 					//console.log(name);
 				}
+
 				resolve(Object.values(repo_name));
 			})
 			.catch(function (error) {
@@ -56,6 +61,7 @@ function listAuthenicatedUserRepos()
 		});
 	});
 };
+
 
 
 // Function to get issues and display it
@@ -69,13 +75,16 @@ function getIssues(owner, repo)
     axios(options)
       .then(function (response) {
         data = response.data
-        console.log(data);
+        //console.log(data);
         var issue_list = [];
         for(var i = 0; i < data.length; i++)
-        {
-          issue_list.push(data[i].title + ": " + data[i].body + "   ID: " + " " + data[i].id);
+        { 
+          issue_list.push(data[i].title + ":\n" + data[i].body + "   ID: " + " " + data[i].id);
         }
+
+        
         resolve(issue_list);
+        //return issue_list;
         
       })
       .catch(function (error) {
@@ -106,6 +115,7 @@ function getIssuesForClosing(owner, repo, issue_id)
             break; 
           }
         }
+
         resolve(issue_number);
         
       })
@@ -149,14 +159,38 @@ async function createIssue(owner, repo, issueName, issueBody)
 	let options = getDefaultOptions(`/repos/` + owner + '/' + repo + '/' + 'issues' , "POST");
 	options['data'] = {title: issueName, body: issueBody};
 
+  
+
 	// Send a http request to url and specify a callback that will be called upon its return.
 	return new Promise(function(resolve, reject)
 	{
 		axios(options)
 			.then(function (response) {
+
 				resolve(response.status);
 		})
 		.catch((error) => {
+			console.log(chalk.red(error));
+			reject(error);
+			return;
+		});
+	});
+}
+
+async function getUser()
+{	
+	let options = getDefaultOptions("/user", "GET");
+
+	// Send a http request to url and specify a callback that will be called upon its return.
+	return new Promise(function(resolve, reject)
+	{
+		axios(options)
+			.then(function (response) {
+				var userId = response.data.login;
+				//console.log(userId);
+				resolve(userId);
+		})
+    .catch((error) => {
 			console.log(chalk.red(error));
 			reject(error);
 			return;
@@ -170,7 +204,9 @@ exports.getIssues = getIssues;
 exports.listAuthenicatedUserRepos = listAuthenicatedUserRepos;
 exports.closeIssues = closeIssues;
 exports.createIssue = createIssue;
-
+exports.getUser = getUser;
+exports.getDefaultOptions = getDefaultOptions;
+exports.getIssuesForClosing = getIssuesForClosing;
 // (async () => {
 //     console.log("Inside async");
 //     let iss = await getIssues();
