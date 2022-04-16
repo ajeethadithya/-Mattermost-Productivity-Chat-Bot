@@ -30,7 +30,7 @@ import axios from "axios";
 
 // Credentials needed for Database Connectivity
 const firebaseApp = initializeApp({
-    apiKey: firebase_data.firebase_metadata.apiKey,
+    apiKey: `${process.env.FIREBASEAPIKEY}`,
     authDomain: firebase_data.firebase_metadata.authDomain,
     projectId: firebase_data.firebase_metadata.projectId,
     storageBucket: firebase_data.firebase_metadata.storageBucket,
