@@ -390,7 +390,7 @@ ISSUE REMINDER ALERT:
   
   HW1-510       ID: 163030
   
-Note: If the Github issue is closed before the reminder is displayed, the reminderitself gets deleted. 
+Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
  
 ## Updated Worksheet 
 Link to the Worksheet.md:   https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
