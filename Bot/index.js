@@ -436,6 +436,9 @@ function displayHelpWithCommands(msg)
         client.postMessage("\u2192 create reminder" + "\n \t \u2022 Enter {reminder}" + "\t \u2022  Enter date and time in format specified", channel);
         client.postMessage("\u2192 show reminders" + "\n \t \u2022  displays list of reminders", channel);
         client.postMessage("\u2192 remove reminder" + "\n \t \u2022  Enter {reminder number to remove}", channel);
+        client.postMessage("\u2192 show meetings" + "\n \t \u2022  Enter {start date}" + "\t \u2022  Enter {start time}" + "\t \u2022  Enter {end date}" + "\t \u2022  Enter {end time}", channel);
+        client.postMessage("\u2192 create meeting" + "\n \t \u2022  Enter {meeting name}" + "\t \u2022  Enter {start date}" + "\t \u2022  Enter {start time}" + "\t \u2022  Enter {end date}" + "\t \u2022  Enter {end time}" + "\t \u2022  Enter {description of your choice}" , channel);
+        client.postMessage("\u2192 Automatic GitHub Issue Reminders" + "\n \t \u2022  When new GitHub issues are created, automatic reminders are set for those issues" + "\t \u2022  Reminders will be shown in Team-24 channel" + "\t \u2022  Current Reminder Time for Testing: 1 minute after new GitHub issue has been created", channel);
     }, 1000);
 
     
