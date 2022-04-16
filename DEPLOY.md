@@ -361,7 +361,7 @@ Event end date is 2022-05-06
 
 #### Error Handling
 
-1. Entering invalid date format.
+1.Entering invalid date format.
 
 => 
 
