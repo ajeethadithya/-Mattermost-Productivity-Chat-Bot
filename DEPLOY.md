@@ -285,7 +285,7 @@ o/p:
 
 ### Use-Case 4 : Scheduling a Meeting
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "create calendar" and "view calendar" commands are part of this use case.
+Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "create meeting" and "show meetings" commands are part of this use case.
 
 #### Schedule a Meeting
 
@@ -361,11 +361,24 @@ Event end date is 2022-05-06
 
 #### Error Handling
 
-1. Entering date and time in a wrong format.
+1. Entering invalid date format.
 
-=>
+=> 
+
+o/p: Enter start time of event. HH:MM
+
+i/p: 2:35
+
+o/p: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process!
+
+i/p: stop
+
+o/p: Process has stopped. Enter Help for available commands !!
+
 
 ### Use-Case 5 : Automatic Reminders for Github Issues
+
+Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "Automatic Issue Github Reminders" command is part of this use case.
 
 Automatic reminders are created for github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute.
 
