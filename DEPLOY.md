@@ -24,6 +24,9 @@ Type "help" to learn the list of tasks that the bot can perform and the commands
 
 Note: The commands you type are case-sensitive. For example, if you type Help instead of help, the bot will reply saying: "I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands."
 
+![Help_Command_Screenshot](https://media.github.ncsu.edu/user/22704/files/f6b9b53c-ab8f-4ca8-9211-179aceb321c2)
+
+
 For easier evalutaion, we will type the commands pertaining to each Use-Case.
 
 ### Use-Case 1 : Personal To-Do List
