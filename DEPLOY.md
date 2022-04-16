@@ -16,7 +16,7 @@ Once you go to the channel, the bot will display the following message:
 
 Hocus Pocus - Let's focus!"
 
-You can start the conversation by typing "hi" and you should expect the following message from the Focus Bot.
+You can start the conversation by typing "hi" or "Hi" or "hello" and you should expect the following message from the Focus Bot.
 
 "Good to see you here! Hocus Pocus - Let's help you Focus."
 
@@ -378,7 +378,9 @@ o/p: Process has stopped. Enter Help for available commands !!
 
 ### Use-Case 5 : Automatic Reminders for Github Issues
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "Automatic Issue Github Reminders" command is part of this use case.
+Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "Automatic Issue Github Reminders" command is part of this use case. 
+
+Note:  This command need not be typed by the user. 
 
 Automatic reminders are created for github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute.
 
