@@ -804,12 +804,48 @@ async function createReminder(msg)
         {
             client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
             command_list.splice(0, command_list.length);
+            // Removing the reminder that was inserted as the user has to start over as part of error handling if they entered invalid time and date
+            let temp_reminder_list = []
+            await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+                if (snapshot.exists()) 
+                {
+                    // Removing the last element from the list of reminders
+                    temp_reminder_list = snapshot.val().reminders;
+                    var removed = temp_reminder_list.splice(temp_reminder_list.length - 1, 1);
+                } 
+                }).catch((error) => {
+                console.error(error);
+            });
+        
+            //update data
+            const user_reminder_data = temp_reminder_list;
+            const updates = {};
+            updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
+            update(ref(db), updates);
         }
     }
     else
     {
         client.postMessage("Please enter a valid date and time following the format! Try again from the beginning", channel);
         command_list.splice(0, command_list.length);
+        // Removing the reminder that was inserted as the user has to start over as part of error handling if they entered invalid time and date
+        let temp_reminder_list = []
+        await get(child(dbRef, `users/` + userID)).then((snapshot) => {
+            if (snapshot.exists()) 
+            {
+                // Removing the last element from the list of reminders
+                temp_reminder_list = snapshot.val().reminders;
+                var removed = temp_reminder_list.splice(temp_reminder_list.length - 1, 1);
+            } 
+            }).catch((error) => {
+            console.error(error);
+        });
+    
+        //update data
+        const user_reminder_data = temp_reminder_list;
+        const updates = {};
+        updates[`/users/` + userID + `/reminders/`] = user_reminder_data;
+        update(ref(db), updates);
     }
 }
 
