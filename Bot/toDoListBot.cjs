@@ -206,7 +206,7 @@ exports.closeIssues = closeIssues;
 exports.createIssue = createIssue;
 exports.getUser = getUser;
 exports.getDefaultOptions = getDefaultOptions;
-exports.getIssuesForClosing = getIssuesForClosing;f
+exports.getIssuesForClosing = getIssuesForClosing;
 // (async () => {
 //     console.log("Inside async");
 //     let iss = await getIssues();
