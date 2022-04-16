@@ -279,6 +279,85 @@ o/p:
  
  => The bot replies:- "Please enter a valid number, kindly start over."
  
+
+### Use-Case 4 : Scheduling a Meeting
+
+Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "create calendar" and "view calendar" commands are part of this use case.
+
+#### Schedule a Meeting
+
+User can schedule a meeting by specifying the duration (date and time)
+
+i/p: create meeting
+
+o/p: What is the event name?
+
+i/p: scrum meeting
+
+o/p: 
+
+The event name is scrum meeting
+What is the desc?
+
+i/p: Discuss about configuration tools.
+
+o/p:
+
+The event desc is Discuss about configuration tools.
+What is your start date? Please use the format YYYY-MM-DD
+
+i/p: 2022-05-05
+
+o/p:
+
+Event start date is 2022-05-05
+What is your start time? Pleae use the format HH:MM
+
+i/p:  12:35
+
+o/p:
+
+Event start time is 12:35.
+What is your end date? Please use the format YYYY-MM-DD
+
+i/p:  2022-05-06
+
+o/p:
+
+Event end date is 2022-05-06
+Event was successfully created.
+
+
+#### View Calendar
+
+User can view the list of events on a specific date and within a time frame in the calendar. 
+
+i/p: show meetings
+
+o/p: What is your start date? Please use the format YYYY-MM-DD
+
+i/p: 2022-05-05
+
+o/p:
+
+Event start date is 2022-05-05
+What is your start time? Pleae use the format HH:MM
+
+i/p:  12:35
+
+o/p:
+
+Event start time is 12:35.
+What is your end date? Please use the format YYYY-MM-DD
+
+i/p:  2022-05-06
+
+o/p:
+
+Event end date is 2022-05-06
+
+
+
 ### Use-Case 5 : Automatic Reminders for Github Issues
 
 Automatic reminders are created for github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute.
