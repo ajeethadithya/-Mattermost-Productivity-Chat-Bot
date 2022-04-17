@@ -1346,7 +1346,7 @@ async function displayViewCalendarMessagestartTime(msg)
     }
         else if((start_year_length!==4))
     {
-        client.postMessage("Please check year format. Enter Month as YYYY, Try again or enter stop to terminate the process!",channel)
+        client.postMessage("Please check year format. Enter year as YYYY, Try again or enter stop to terminate the process!",channel)
         command_list.pop();
 
         //command_list.splice(0, command_list.length);
