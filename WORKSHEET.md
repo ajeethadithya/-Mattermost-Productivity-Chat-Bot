@@ -51,11 +51,11 @@
 
 ### Week 3 - Deployment Milestone
 
-| Deliverable | Item/Status | Issues/Tasks |
-| --- | --- | --- |
+| Deliverable | ScrumBam Summary | Item/Status | Issues/Tasks |
+| --- | --- | --- | --- |
 | **Bot Deployment** |  |   |
 |  | | |
 | |  | |
-| Acceptance Testing Instructions | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |
+| Acceptance Testing Instructions | Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line    | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |
 |  |  | |
 
