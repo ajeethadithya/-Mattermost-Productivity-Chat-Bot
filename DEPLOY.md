@@ -352,7 +352,7 @@ o/p: → Meeting Name: scrum meeting
 
 => eg. 2022-9-10  The bot replies:- Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
 
-=> eg. 22-09-10
+=> eg. 22-09-10   The bot replies:- Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
 
 => eg. 
 
