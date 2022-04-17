@@ -69,6 +69,9 @@
 |  |  | 5. Proper Timezone for Calendar API in user input [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/52] |  |
 |  |  | 6. Handling date format for show meetings. [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/48] |  |
 |  |  | 7. Adding commands of UseCsse 4 in the "help" command [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/67] |  |
-|  | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Completed  |
-|  |  | |  |
+| Acceptance Testing, Final Ansible Scripts and Code | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. Day 6: Final merge and discussion about automation of environment variables setting. | 1. Documenting instructions on DEPLOY.md [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65] | Completed  |
+|  |  | 2. Testing final ansible scripts on our Mattermost channel after overnight deployment|  |
+| Demo of Running Scripts and Final Documentation  | Day 7: Screencast | 1. Recording Screencast | Completed  |
+|  |  | 2. Updating final worksheet |  |
+
 
