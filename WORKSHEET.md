@@ -58,7 +58,7 @@
 | Server Setup using Ansible | Day 2: Discussion on setting up server connection and host file. | 1. Exploring host file options  -  decided to use localhost since we are deploying on server | Completed  |
 |  |  | 2. Using scripts to install the required versions of node(16) [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/64], community.npm.general, npm |  |
 |  |  | 3. Tested server environment and cloning, forever package using WeatherBot workshop and Mattermost.|  |
-| Ansible Scripts | Day 3: Splitting Ansible script tasks | 1. Cloning private CSC Team24 repo [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/63] using Github username andd password authentication| Completed |
+| Ansible Scripts | Day 3: Splitting Ansible script tasks | 1. Cloning private CSC Team24 repo [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/63] using Github username and password authentication| Completed |
 |  |  | 2. Installing npm, nodejs (version 16), forever packages |  |
 |  |  | 3. Understanding and implementing forever package commands to deploy bot forever |  |
 |  |  | 4. Repeated Task 1 using personal access tokens  |  |
