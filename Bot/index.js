@@ -1346,7 +1346,7 @@ async function displayViewCalendarMessagestartTime(msg)
     }
         else if((start_year_length!==4))
     {
-        client.postMessage("Please check year format. Enter Month as YYYY, Try again or enter stop to terminate the process!",channel)
+        client.postMessage("Please check year format. Enter year as YYYY, Try again or enter stop to terminate the process!",channel)
         command_list.pop();
 
         //command_list.splice(0, command_list.length);
@@ -1593,6 +1593,7 @@ async function getEventFuncFromCalendarJs(msg)
                 let meeting_to_show = "Meeting Name: ".concat(item_to_show_split[1]); 
                 client.postMessage(`\u2192 ${meeting_to_show}`, channel);
             }
+        command_list.splice(0, command_list.length);
     }
     else 
         {
@@ -1614,7 +1615,7 @@ async function displayCreateCalendarMessagestartDate(msg)
     let channel = msg.broadcast.channel_id;
     let post = JSON.parse(msg.data.post);
     event =  post.message;
-    client.postMessage("\u261B Enter Start date of event: Use the format YYYY-MM-DD, Try again or enter stop to terminate the process", channel);
+    client.postMessage("\u261B Enter Start date of event: Use the format YYYY-MM-DD", channel);
 }
 
 async function displayCreateCalendarMessagestartTime(msg)
@@ -1721,7 +1722,7 @@ async function displayCreateCalendarMessageendDate(msg)
     }
 
     else{	
-          client.postMessage("\u261B Enter End date of event: Use the format YYYY-MM-DD, Try again or enter stop to terminate the process", channel);
+          client.postMessage("\u261B Enter End date of event: Use the format YYYY-MM-DD", channel);
 	}
 }
 
@@ -1786,7 +1787,7 @@ async function displayCreateCalendarMessageendTime(msg)
     }
     else
     {
-    client.postMessage("\u261B Enter End time of event: Use the format HH:MM, Try again or enter stop to terminate the process" , channel);
+    client.postMessage("\u261B Enter End time of event: Use the format HH:MM " , channel);
     }
 }
 async function displayCreateCalendarMessagedesc(msg)
@@ -1866,7 +1867,8 @@ async function createCalendarPayload(msg)
     });
     if(status_of_api == 200)
     {
-        client.postMessage("Meeting/Event has been created in your calendar! Enter View Meetings to display scheduled meetings", channel);
+
+        client.postMessage("Meeting/Event has been created in your calendar! Enter 'show meetings' to display scheduled meetings", channel);
     }
     else if(status_of_api == "not okay" || status_of_api == "failed in catch")
     {
