@@ -51,11 +51,11 @@
 
 ### Week 3 - Deployment Milestone
 
-| Deliverable | ScrumBam Summary | Item/Status | Issues/Tasks |
+| Deliverable | Item/Status | Issues/Tasks |  ScrumBam Summary  |
 | --- | --- | --- | --- |
 | **Bot Deployment** |  |   |
-|  | | |
-| |  | |
-| Acceptance Testing Instructions | Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line    | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |
+|  | Completed | | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. |
+| |  | |  |
+| Acceptance Testing Instructions | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Day5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line  |
 |  |  | |
 
