@@ -33,27 +33,27 @@ Initially, type "*help*" to check the list of valid commands and their usage ins
 
 #### Add and Show To-Do List
 
-i/p: *add todo*
+User Input: *add todo*
 
-o/p: Enter the task to be added
+Bot Reply: Enter the task to be added!
 
-i/p: Create a new repo
+User: {Enter your task to add} eg. Remind me to submit SE project proposal
 
-o/p: Task added!
+Bot Reply: Task added!
 
-i/p: add todo
+User Input: *add todo*
 
-o/p: Enter the task to be added
+Bot Reply: Enter the task to be added!
 
-i/p: Add colaborators
+User Input: {Enter task to add} eg. Review Pull Request #41
 
-o/p: Task added!
+Bot Reply: Task added!
 
-i/p: show todo
+User Input: *show todo*
 
-o/p: 
-1. Create a new repo
-2. Add colaborators
+Bot Reply: 
+1. Remind me to submit SE project proposal
+2. Review Pull Request #41
                                  
 #### Remove Tasks from your To-Do List
 
