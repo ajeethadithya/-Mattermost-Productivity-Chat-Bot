@@ -93,6 +93,9 @@ o/p: There is nothing to show
  
 Initially type "help" to check the list of valid commands and their usage instructions. Among thme, you can see that "create issue", "show issues" and "close issue" are part of this use-case.
  
+ NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. 
+ 
+ 
 #### Create Issues
 
 To create an issue in a Github repo that you own, type "create issue". The bot replies with the list of all repos in your account and asks you to specify the repo name.
