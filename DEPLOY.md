@@ -1,6 +1,12 @@
 ## Deployment Scripts
 ### Screencast
+#### 1. Instructions to run deploy.yml
+* The user should login to VCL using their NCSU credentials.
+* To access the VCL repositories, enter the following command: **ssh 'UNITY_ID' @ 'IP ADDRESS' ** 
+* Move to the respective repository using the following command: **cd /home/anaray23/ansible-files**
+* Once the directory location has changed, run the deployment scripts using the following command: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**  
 
+  
 Link to the screencast:  
 
 ## Acceptance Testing
