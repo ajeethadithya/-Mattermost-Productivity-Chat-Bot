@@ -1,28 +1,56 @@
 ## Deployment Scripts
+
+### Instructions to Run Ansible Playbook (deploy.yml)
+
+* The user should login to VCL using their NCSU credentials.
+* Move to the respective repository within the Team 24 VCL instance using the following command: **cd /home/anaray23/ansible-files**
+* Once the directory location has changed, run the deployment scripts using the following command: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+
 ### Screencast
 
 Link to the screencast:  
 
 ## Acceptance Testing
-### Instructions
+
+### Instructions to the User for any Github related functionality
+
+#### 1. Testing Deployed (Uses GitHub Personal Access Token of one of the Team Members)
+* The focus bot deployed on VCL uses one of our team member's GitHub PAT to clone using Ansible Playbook and perform any GitHub related use cases/commands  
+* We have created a Test Repository called DEPLOY_TEST_REPO and have added the TAs as collaborators.
+* When tests are performed on Mattermost on the deployed code the TAs will be able to access the Team Member's personal repositories including the DEPLOY_TEST_REPO.
+* Any GitHub related uses cases (create issue, close issue, show issues) can be performed on this repository and since the TAs are added as collaborators, the TAs will be able to see the change being reflected through their account.
+* Please use the above repository for any sort of testing
+
+#### 2. Testing Bot Using TAs PAT (Requires the PAT to be changed in the Ansible Vault that's present in the server)
+To use the TAs Personal Access Token, the TAs will have to perform the following actions and re-deploy the bot as follows:
+* Create Personal Access Tokens on Github (if there isn't one for your account already- Please see the end of page for further instructions on how to create PAT)
+* In our server, stop the already deployed code using the following command: **sudo forever stop 0**
+* Change directory to access the Ansible-Vault using the following command: **cd /home/anaray23/ansible-files**
+* Run the following command to decrypt the secrets.yml file: **ansible-vault decrypt secrets.yml**
+* User will be prompted to enter a passcode that has been submitted via the Google Form by Team-24
+* Kindly replace the existing GitHub PAT with your GitHub PAT and not modify anything else
+* Run the following command to encrypt the file again using the following command: **ansible-vault encrypt secrets.yml**
+* Run the playbook as follows: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+
+**P.S: GitHub related functionalities are aimed at increasing personal productivity and hence is designed to access only repositories created/owned by the user. Hence, the TA will be able to view all their repositories however can only access the repositories that are owned by them. If the TAs prefer testing through their PAT, kindly create a Test Respository of your choice and use that to perform any sort of testing**
+
+### Instructions to test the Bot
 
 Use the following link to access the Focus Bot on the Mattermost Channel (Team-24) 
 
    https://chat.robotcodelab.com/csc510-s22/channels/team-24
 
-Once you go to the channel, the bot will display the following message:
+Once you go to the channel, the bot will display the following message when it is run for the first time/ code restarts on server.:
 
-"Hi there! I am PAM - your Personal Accountability Manager
+![Initial message](https://media.github.ncsu.edu/user/22704/files/37e9cf93-d1cd-483a-bb6c-18ca0be941b3)
 
-Hocus Pocus - Let's focus!"
-
-You can start the conversation by typing "hi" or "Hi" or "hello" and you should expect the following message from the Focus Bot.
+You can start the conversation by typing "*hi*" or "*Hi*" or "*hello*" and you should expect the following message from the Focus Bot.
 
 "Good to see you here! Hocus Pocus - Let's help you Focus."
 
-Type "help" to learn the list of tasks that the bot can perform and the commands that you can use for the same.
+Type "*help*" to learn the list of tasks that the bot can perform and the commands that you can use for the same.
 
-Note: The commands you type are case-sensitive. For example, if you type Help instead of help, the bot will reply saying: "I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands."
+Note: The commands you type are case-sensitive. For example, if you type *Help* instead of *help*, the bot will reply saying: "I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands."
 
 ![Help_Command_Screenshot](https://media.github.ncsu.edu/user/22704/files/f6b9b53c-ab8f-4ca8-9211-179aceb321c2)
 
@@ -31,124 +59,113 @@ For easier evalutaion, we will type the commands pertaining to each Use-Case.
 
 ### Use-Case 1 : Personal To-Do List
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "add todo", "show todo" and "remove todo" commands are part of this use case.
+Commands part of this use case:
+1. *add todo*
+2. *show todo*
+3. *remove todo*
 
 #### Add and Show To-Do List
 
-i/p: add todo
+User Input: *add todo*
 
-o/p: Enter the task to be added
+Bot Reply: Enter the task to be added!
 
-i/p: Create a new repo
+User: {Enter your task to add} eg. Remind me to submit SE project proposal
 
-o/p: Task added!
+Bot Reply: Task added!
 
-i/p: add todo
+User Input: *add todo*
 
-o/p: Enter the task to be added
+Bot Reply: Enter the task to be added!
 
-i/p: Add colaborators
+User Input: {Enter task to add} eg. Review Pull Request #41
 
-o/p: Task added!
+Bot Reply: Task added!
 
-i/p: show todo
+User Input: *show todo*
 
-o/p: 
-1. Create a new repo
-2. Add colaborators
+Bot Reply: 
+1. Remind me to submit SE project proposal
+2. Review Pull Request #41
                                  
 #### Remove Tasks from your To-Do List
 
-i/p: remove todo
+User Input: *remove todo*
 
 The bot returns your To-Do List and asks you the specific task that you want to remove.
 
-o/p: 
-1. Create a new repo
-2. Add colaborators      
+Bot Reply: 
+1. Remind me to submit SE project proposal
+2. Review Pull Request #41  
 Enter the task number that you want to remove.
       
-i/p: 1
+User Input: {Enter task number} eg. 1
 
-o/p: Task 1 successfully removed!
+Bot Reply: Task 1 successfully removed!
 
-Now to check if the task has been removed, type "show todo"
+Now to check if the task has been removed, type "*show todo*"
 
 o/p: 
-1. add colaborators
+1. Review Pull Request #41 
 
 #### Error Handling
 
 1.Entering an invalid task number while trying to remove from the list
 
-=> The bot replies saying, "Please enter a number from the list shown above, try again from the beginning."
+=> Bot Reply: "Please enter a number from the list shown above, try again from the beginning."
 
-2.Typing "show todo" when you haven't created a todo list.
+2.Typing "*show todo*" when you haven't created a todo list.
 
-=>
-
-i/p: show todo
-
-o/p: There is nothing to show
+=> Bot Reply: "There is nothing to show"
 
 ### Use-Case 2 : Github Issues
  
-Initially type "help" to check the list of valid commands and their usage instructions. Among thme, you can see that "create issue", "show issues" and "close issue" are part of this use-case.
+Commands part of this use case:
+1. *create issue*
+2. *show issues*
+3. *close issue*
+ 
+ NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. 
+ 
  
 #### Create Issues
 
-To create an issue in a Github repo that you own, type "create issue". The bot replies with the list of all repos in your account and asks you to specify the repo name.
+To create an issue in a Github repo that you own, type "*create issue*". The bot replies with the list of all repos in your account and asks you to specify the repo name.
 
 Note: You can only create or remove issues in a repo that you own.
 
-o/p:
+Bot Reply:
 
 Enter a repo to create an issue from the list below:
 
 Enter the repo name from which you want to execute the command:
 
-[
-"HW0-510"
-"HW1-510"
-"HW2-510"
-"CSC510-24"
-]
+User Input: {Enter repo name} eg. HW0-510
 
-i/p: HW0-510
+Bot Reply: Enter the Title of the issue
 
-o/p: Enter the Title of the issue
+User Input: {Enter title} eg. new issue
 
-i/p: new issue
+Bot Reply: Enter the body of the issue
 
-o/p: Enter the body of the issue
+User Input: {Enter Body} eg. create a new issue
 
-i/p: create a new issue
-
-o/p: Issue has been created!
+Bot Reply: Issue has been created!
 
 
 #### Show Issues
 
 The bot returns the issues created in a particular repository along with their ID's.
 
-i/p: show issues
+User Input: *show issues*
 
-o/p:
+Bot Reply: Enter the repo name for which you want to execute the command:
 
-Enter the repo name for which you want to execute the command:
+User Input: {Enter repo name} eg. HW0-510
 
-[
-"HW0-510"
-"HW1-510"
-"HW2-510"
-"CSC510-24"
-]
+Bot Reply: 
 
-i/p: HW0-510
-
-o/p: 
-
-Title: new issue
+eg. Title: new issue
 
 Create a new issue
 
@@ -158,24 +175,15 @@ ID: 163030
 
 You can close a Github issue of a particular repo by specifyig the issue ID
 
-i/p: close issue
+User Input: *close issue*
 
-o/p:
+Bot Reply: Enter the repo name for which you want to execute the command:
 
-Enter the repo name for which you want to execute the command:
+User Input: {Enter repo name} eg. HW0-510
 
-[
-"HW0-510"
-"HW1-510"
-"HW2-510"
-"CSC510-24"
-]
+Bot Reply: 
 
-i/p: HW0-510
-
-o/p: 
-
-Title: new issue
+eg. Title: new issue
 
 Create a new issue
 
@@ -183,60 +191,54 @@ ID: 163030
 
 Enter the Issue ID of the issue that you want to close
 
-i/p: 163030
+User Input: {Enter issue ID} eg. 163030
 
-o/p: Issue has been successfully closed!
+Bot Reply: Issue has been successfully closed!
 
-Now to check if the issue has been closed, type "show issues"
+Now to check if the issue has been closed, type "*show issues*"
 
-o/p:
+Bot Reply: Enter the repo name for which you want to execute the command:
 
-Enter the repo name for which you want to execute the command:
+User Input: {Enter repo name} eg. HW0-510
 
-[
-"HW0-510"
-"HW1-510"
-"HW2-510"
-"CSC510-24"
-]
-
-i/p: HW0-510
-
-o/p: No issues in HW0-510
+Bot Reply: eg. No issues in HW0-510
 
 #### Error Handling
 
-1.Entering a wrong repo name while executing either of the commands: create issue, show issue, close issue.
+1.Entering a wrong repo name while executing either of the commands: *create issue*, *show issue*, *close issue*.
 
-=> The bot replies:- "Repo name entered does not match with the ones given above, kindly start over."
+=> Bot Reply: "Repo name entered does not match with the ones given above, kindly start over."
 
 2.Entering a wrong issue ID while trying to close an issue.
 
-=> The bot replies:- "Please enter a valid Issue ID from the ones given above, kindly start over."
+=> Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
 
 ### Use-Case 3 : Reminders
- 
-Initially type "help" to check the list of valid commands and their usage instructions. Among thme, you can see that "create reminder", "show reminders" and "remove reminder" are part of this use-case.
- 
+
+Commands part of this use case:
+1. *create reminder*
+2. *show reminders*
+3. *remove reminder*
+
 #### Create Reminder
 
-i/p: create reminder
+User Input: *create reminder*
 
-o/p: Enter reminder
+Bot Reply: Enter reminder
 
-i/p: update worksheet.md
+User Input: {Enter reminder} eg. update worksheet.md
 
-o/p: When shall I remind you? Enter date and time-24 hour format (FORMAT: YYYY-MM-DD hh:mm)
+Bot Reply: When shall I remind you? Enter date and time-24 hour format (FORMAT: YYYY-MM-DD hh:mm)
 
-i/p: 2022-04-13 17:35
+User input: {Enter date and time} eg. 2022-04-13 17:35
 
-o/p: Reminder Created!
+Bot Reply: Reminder Created!
 
 During the specified date and time, a reminder will pop-up as follows:
 
-o/p:
+Bot Reply:
 
-REMINDER ALERT:
+eg. REMINDER ALERT:
 
 update worksheet.md
    
@@ -244,9 +246,11 @@ update worksheet.md
 
 The bot returns the reminders created along with the date and time for which it's created.
 
-i/p: show reminders
+User Input: *show reminders*
 
-o/p: 
+Bot Reply: 
+
+eg. 
 
 1.update worksheet.md
 
@@ -254,9 +258,11 @@ o/p:
  
 #### Remove Reminder
 
-i/p: remove reminder
+User Input: *remove reminder*
 
-o/p: 
+Bot Reply: 
+
+eg.
 
 1.update worksheet.md
 
@@ -264,124 +270,121 @@ o/p:
  
  Enter the reminder number that you want to remove:
  
- i/p: 1
+User Input: {Enter reminder number} eg. 1
  
- o/p: Reminder 1 successfully removed!
+Bot Reply: Reminder 1 successfully removed!
  
  
  #### Error Handling
  
  1.Entering show reminders when there are no active reminders.
  
- => The bot replies:- "You have no reminders"
+ => Bot Reply: "You have no reminders"
  
  2.Entering invalid time or date while creating a reminder.
  
  eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
  
- => The bot replies:- "Please enter a valid date and time following the format! Try again from the beginning."
+ => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
  
  3.Entering invalid reminder number while trying to remove a reminder.
  
- => The bot replies:- "Please enter a valid number, kindly start over."
+ => Bot Reply: "Please enter a valid number, kindly start over."
  
 
 ### Use-Case 4 : Scheduling a Meeting
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "create meeting" and "show meetings" commands are part of this use case.
+Commands part of this use case:
+1. *create meeting*
+2. *show meetings*
 
 #### Schedule a Meeting
 
 User can schedule a meeting by specifying the duration (date and time)
 
-i/p: create meeting
+User Input: *create meeting*
 
-o/p: What is the event name?
+Bot Reply: Enter Name of event.
 
-i/p: scrum meeting
+User Input: {Enter event name} eg. scrum meeting
 
-o/p: 
+Bot Reply: Enter Start date of event: Use the format YYYY-MM-DD.
 
-The event name is scrum meeting
-What is the desc?
+User Input: {Enter date} eg. 2022-04-15
 
-i/p: Discuss about configuration tools.
+Bot Reply: Enter Start time of event: Use the format HH:MM
 
-o/p:
+User Input: {Enter time} eg. 07:35
 
-The event desc is Discuss about configuration tools.
-What is your start date? Please use the format YYYY-MM-DD
+Bot Reply: Enter End date of event: Use the format YYYY-MM-DD.
 
-i/p: 2022-05-05
+User Input: {Enter date} eg. 2022-04-16
 
-o/p:
+Bot Reply: Enter End time of event: Use the format HH:MM.
 
-Event start date is 2022-05-05
-What is your start time? Pleae use the format HH:MM
+User Input: {Enter time} eg. 04:45
 
-i/p:  12:35
+Bot Reply: Enter a brief description of event: 
 
-o/p:
+User Input: {Enter desc} eg. Progress update on the worksheet towards the end of the milestone.
 
-Event start time is 12:35.
-What is your end date? Please use the format YYYY-MM-DD
+Bot Reply: Meeting/Event has been created in your calendar! Enter show meetings to display scheduled meetings 
 
-i/p:  2022-05-06
-
-o/p:
-
-Event end date is 2022-05-06
-Event was successfully created.
-
-
-#### View Calendar
+#### View Meetings
 
 User can view the list of events on a specific date and within a time frame in the calendar. 
 
-i/p: show meetings
+User Input: *show meetings*
 
-o/p: What is your start date? Please use the format YYYY-MM-DD
+Bot Reply: Enter Start date of event: Use the format YYYY-MM-DD
 
-i/p: 2022-05-05
+User Input: {Enter date} eg. 2022-04-15
 
-o/p:
+Bot Reply: Enter Start time of event: HH:MM
 
-Event start date is 2022-05-05
-What is your start time? Pleae use the format HH:MM
+User Input: {Enter time} eg. 07:35
 
-i/p:  12:35
+Bot Reply: Enter End date of event: Use the format YYYY-MM-DD
 
-o/p:
+User Input: {Enter date} eg. 2022-04-16
 
-Event start time is 12:35.
-What is your end date? Please use the format YYYY-MM-DD
+Bot Reply: Enter End time of event: Use the format HH:MM
 
-i/p:  2022-05-06
+User Input: {Enter time} eg. 04:45
 
-o/p:
+Bot Reply: eg. → Meeting Name: scrum meeting
 
-Event end date is 2022-05-06
+All the created meetings can be viewed on the Google Calendar as well. 
+
+The link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
 
 #### Error Handling
 
 1.Entering invalid date format.
 
-=> 
+=> eg. 2022-9-10  Bot Reply: Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
 
-o/p: Enter start time of event. HH:MM
+=> eg. 22-09-10   Bot Reply: Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
 
-i/p: 2:35
+=> eg. 2022-03-2  Bot Reply:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
 
-o/p: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process!
+2.Entering invalid time format.
 
-i/p: stop
+=> eg. 2:35  Bot Reply: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
 
-o/p: Process has stopped. Enter Help for available commands !!
+=> eg. 05:5  Bot Reply: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
+
+=> eg. 01:78 Bot Reply: Please enter a valid time following the format! Try again or enter stop to terminate the process
+
+User Input: stop
+
+Bot Reply: Process has stopped. Enter help for available commands !!
 
 
 ### Use-Case 5 : Automatic Reminders for Github Issues
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "Automatic Issue Github Reminders" command is part of this use case. 
+Commands part of this use case:
+1. *Automatic Issue Github Reminders*
 
 Note:  This command need not be typed by the user. 
 
@@ -396,6 +399,21 @@ ISSUE REMINDER ALERT:
   HW1-510       ID: 163030
   
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
- 
+
+## Exploratory Testing and Code Inspection
+
+Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use cases under "Acceptance Testing". Additionaly, you can try your own input to interact with the bot and stay productive!  
+
+## Additional Instructions
+### Creating Personal Access Tokens on Github
+
+Verify email address.
+In the upper right corner, select settings → Developer Settings → Personal Access Tokens → Generate New Token → provide valid name, expiration date, and scope → Select Generate Token.
+
+Use the following link for further reference: 
+
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+
 ## Updated Worksheet 
 Link to the Worksheet.md:   https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 

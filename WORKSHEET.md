@@ -51,11 +51,27 @@
 
 ### Week 3 - Deployment Milestone
 
-| Deliverable | Item/Status | Issues/Tasks |
-| --- | --- | --- |
-| **Bot Deployment** |  |   |
-|  | | |
-| |  | |
-| Acceptance Testing Instructions | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |
-|  |  | |
+| Deliverable | ScrumBan Summary | Issues/Tasks | Item/Status |
+| --- | --- | --- | --- |
+| Initial Ansible Setup | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. | 1. Figuring out which configuration tool to use among the ones mentioned in the lecture. | Completed |
+|  |  | 2. Understanding the services and packages required for our bot with suitable versions to create an environment |  |
+| Server Setup using Ansible | Day 2: Discussion on setting up server connection and host file. | 1. Exploring host file options  -  decided to use localhost since we are deploying on server | Completed  |
+|  |  | 2. Using scripts to install the required versions of node(16) [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/64], community.npm.general, npm |  |
+|  |  | 3. Tested server environment and cloning, forever package using WeatherBot workshop and Mattermost.|  |
+| Ansible Scripts | Day 3: Splitting Ansible script tasks | 1. Cloning private CSC Team24 repo [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/63] using Github username and password authentication| Completed |
+|  |  | 2. Installing npm, nodejs (version 16), forever packages |  |
+|  |  | 3. Understanding and implementing forever package commands to deploy bot forever |  |
+|  |  | 4. Repeated Task 1 using personal access tokens  |  |
+| Extra Edge Case Handling of Use Cases apart from Sprint 1 and 2 | Day 4: Edge Case Discussion | 1. Entering invalid reminder number while trying to delete [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/62] | Completed |
+|  |  | 2. Handling the issue when trying to access empty repo on Github - listrepos() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/61] |  |
+|  |  | 3. Entering invalid month format while trying to create a reminder [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/60] |  |
+|  |  | 4. Handling situations when Github server is down and list of repos can't be accessed - issueReminders() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/66] |  |
+|  |  | 5. Proper Timezone for Calendar API in user input [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/52] |  |
+|  |  | 6. Handling date format for show meetings. [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/48] |  |
+|  |  | 7. Adding commands of UseCase 4 in the "help" command [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/67] |  |
+| Acceptance Testing, Final Ansible Scripts and Code | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. Day 6: Final merge and discussion about automation of environment variables setting. | 1. Documenting instructions on DEPLOY.md [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65] | Completed  |
+|  |  | 2. Testing final ansible scripts on our Mattermost channel after overnight deployment|  |
+| Demo of Running Scripts and Final Documentation  | Day 7: Screencast | 1. Recording Screencast | Completed  |
+|  |  | 2. Updating final worksheet |  |
+
 
