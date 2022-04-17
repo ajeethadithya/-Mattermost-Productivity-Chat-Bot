@@ -352,7 +352,7 @@ o/p: → Meeting Name: scrum meeting
 
 => eg. 22-09-10   The bot replies:- Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
 
-=> eg. 
+=> eg. 2022-03-2  The bot replies:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
 
 2.Entering invalid time format.
 
