@@ -296,83 +296,71 @@ User can schedule a meeting by specifying the duration (date and time)
 
 i/p: create meeting
 
-o/p: What is the event name?
+o/p: Enter Name of event.
 
 i/p: scrum meeting
 
-o/p: 
+o/p: Enter Start date of event: Use the format YYYY-MM-DD.
 
-The event name is scrum meeting
-What is the desc?
+i/p: 2022-04-15
 
-i/p: Discuss about configuration tools.
+o/p: Enter Start time of event: Use the format HH:MM
 
-o/p:
+i/p: 07:35
 
-The event desc is Discuss about configuration tools.
-What is your start date? Please use the format YYYY-MM-DD
+o/p: Enter End date of event: Use the format YYYY-MM-DD.
 
-i/p: 2022-05-05
+i/p: 2022-04-16
 
-o/p:
+o/p: Enter End time of event: Use the format HH:MM.
 
-Event start date is 2022-05-05
-What is your start time? Pleae use the format HH:MM
+i/p:  04:45
 
-i/p:  12:35
+o/p: Enter a brief description of event: 
 
-o/p:
+i/p: Progress update on the worksheet towards the end of the milestone.
 
-Event start time is 12:35.
-What is your end date? Please use the format YYYY-MM-DD
+o/p: Meeting/Event has been created in your calendar! Enter show meetings to display scheduled meetings 
 
-i/p:  2022-05-06
-
-o/p:
-
-Event end date is 2022-05-06
-Event was successfully created.
-
-
-#### View Calendar
+#### View Meetings
 
 User can view the list of events on a specific date and within a time frame in the calendar. 
 
 i/p: show meetings
 
-o/p: What is your start date? Please use the format YYYY-MM-DD
+o/p: Enter Start date of event: Use the format YYYY-MM-DD
 
-i/p: 2022-05-05
+i/p: 2022-04-15
 
-o/p:
+o/p: Enter Start time of event: HH:MM
 
-Event start date is 2022-05-05
-What is your start time? Pleae use the format HH:MM
+i/p: 07:35
 
-i/p:  12:35
+o/p: Enter End date of event: Use the format YYYY-MM-DD
 
-o/p:
+i/p: 2022-04-16
 
-Event start time is 12:35.
-What is your end date? Please use the format YYYY-MM-DD
+o/p: Enter End time of event: Use the format HH:MM
 
-i/p:  2022-05-06
+i/p: 04:45
 
-o/p:
-
-Event end date is 2022-05-06
+o/p: → Meeting Name: scrum meeting
 
 #### Error Handling
 
 1.Entering invalid date format.
 
-=> 
+=> eg. 2022-9-10  The bot replies:- Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
 
-o/p: Enter start time of event. HH:MM
+=> eg. 22-09-10
 
-i/p: 2:35
+=> eg. 
 
-o/p: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process!
+2.Entering invalid time format.
+
+=> eg. 2:35  The bot replies:- Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
+
+=> eg. 05:5 
 
 i/p: stop
 
