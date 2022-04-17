@@ -62,10 +62,13 @@
 |  |  | 2. Installing npm, nodejs (version 16), forever packages |  |
 |  |  | 3. Understanding and implementing forever package commands to deploy bot forever |  |
 |  |  | 4. Repeated Task 1 using personal access tokens  |  |
-| Extra edge case handling of use cases apart from sprint 1 and 2 | Day 4: Edge Case Discussion | 1. Entering invalid reminder number while trying to delete [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/62] | Completed |
+| Extra Edge Case Handling of Use Cases apart from Sprint 1 and 2 | Day 4: Edge Case Discussion | 1. Entering invalid reminder number while trying to delete [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/62] | Completed |
 |  |  | 2. Handling the issue when trying to access empty repo on Github - listrepos() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/61] |  |
 |  |  | 3. Entering invalid month format while trying to create a reminder [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/60] |  |
 |  |  | 4. Handling situations when Github server is down and list of repos can't be accessed - issueReminders() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/66] |  |
+|  |  | 5. Proper Timezone for Calendar API in user input [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/52] |  |
+|  |  | 6. Handling date format for show meetings. [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/48] |  |
+|  |  | 7. Adding commands of UseCsse 4 in the "help" command [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/67] |  |
 |  | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Completed  |
 |  |  | |  |
 
