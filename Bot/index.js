@@ -638,7 +638,8 @@ export async function listRepos(msg)
 export async function listIssues(msg, close_issue_flag)
 {   
     let flag = 0;
-    let owner = msg.data.sender_name.replace('@', '');
+    //let owner = msg.data.sender_name.replace('@', '');
+    let owner = userID;
     let channel = msg.broadcast.channel_id;
     //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
@@ -680,7 +681,8 @@ export async function listIssues(msg, close_issue_flag)
 // Fucntion to close the issue specified by the issue number that the user enters in the chat
 export async function closeIssueID(msg, req_repo_name, issue_id)
 {   
-    let owner = msg.data.sender_name.replace('@', '');
+    // let owner = msg.data.sender_name.replace('@', '');
+    let owner = userID;
     let channel = msg.broadcast.channel_id;
     // let post = JSON.parse(msg.data.post).message;
     // const temp_array = post.split(" ");
@@ -835,7 +837,8 @@ export async function displayThirdMsgForCreateIssue(msg)
 
 export async function createIssueBody(msg, issue_title, repo_name_for_create_issue)
 {   
-    let owner = msg.data.sender_name.replace('@', '');
+    // let owner = msg.data.sender_name.replace('@', '');
+    let owner = userID;
     let channel = msg.broadcast.channel_id;
     //let post = msg.data.post;
     let post = JSON.parse(msg.data.post);
