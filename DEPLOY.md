@@ -347,6 +347,8 @@ i/p: 04:45
 
 o/p: → Meeting Name: scrum meeting
 
+All the created meetings can be viewed on the Google Calendar as well. The link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+
 #### Error Handling
 
 1.Entering invalid date format.
