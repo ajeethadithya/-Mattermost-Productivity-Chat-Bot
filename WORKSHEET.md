@@ -53,7 +53,7 @@
 
 | Deliverable | ScrumBan Summary | Issues/Tasks | Item/Status |
 | --- | --- | --- | --- |
-| Initial Ansible Setup | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. | 1. Figuring out which configuration tool to use that are mentioned in the lecture. | Completed |
+| Initial Ansible Setup | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. | 1. Figuring out which configuration tool to use among the ones mentioned in the lecture. | Completed |
 |  |  | 2. Understanding the services and packages required for our bot with suitable versions to create an environment |  |
 | Server Setup using Ansible | Day 2: Discussion on setting up server connection and host file. | 1. Exploring host file options  -  decided to use localhost since we are deploying on server | Completed  |
 |  |  | 2. Using scripts to install the required versions of node(16) [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/64], community.npm.general, npm |  |
