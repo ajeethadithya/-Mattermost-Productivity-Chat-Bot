@@ -358,7 +358,9 @@ o/p: → Meeting Name: scrum meeting
 
 => eg. 2:35  The bot replies:- Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
 
-=> eg. 05:5 
+=> eg. 05:5  The bot replies: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
+
+=> eg. 01:78  The bot replies:- Please enter a valid time following the format! Try again or enter stop to terminate the process
 
 i/p: stop
 
