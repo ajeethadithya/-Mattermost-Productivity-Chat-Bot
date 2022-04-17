@@ -14,11 +14,11 @@ Once you go to the channel, the bot will display the following message when it i
 
 ![Initial message](https://media.github.ncsu.edu/user/22704/files/37e9cf93-d1cd-483a-bb6c-18ca0be941b3)
 
-You can start the conversation by typing "hi" or "Hi" or "hello" and you should expect the following message from the Focus Bot.
+You can start the conversation by typing "*hi*" or "*Hi*" or "*hello*" and you should expect the following message from the Focus Bot.
 
 "Good to see you here! Hocus Pocus - Let's help you Focus."
 
-Type "help" to learn the list of tasks that the bot can perform and the commands that you can use for the same.
+Type "*help*" to learn the list of tasks that the bot can perform and the commands that you can use for the same.
 
 Note: The commands you type are case-sensitive. For example, if you type Help instead of help, the bot will reply saying: "I can only understand a few commands! After all I am a bot! Please type help for a list of valid commands."
 
@@ -29,11 +29,11 @@ For easier evalutaion, we will type the commands pertaining to each Use-Case.
 
 ### Use-Case 1 : Personal To-Do List
 
-Initially, type "help" to check the list of valid commands and their usage instructions. Among the list, you can see that "add todo", "show todo" and "remove todo" commands are part of this use case.
+Initially, type "*help*" to check the list of valid commands and their usage instructions. Among the list, you can see that "add todo", "show todo" and "remove todo" commands are part of this use case.
 
 #### Add and Show To-Do List
 
-i/p: add todo
+i/p: *add todo*
 
 o/p: Enter the task to be added
 
