@@ -51,12 +51,12 @@
 
 ### Week 3 - Deployment Milestone
 
-| ScrumBan Summary | Item/Status | Issues/Tasks | Deliverable |
+| Deliverable | ScrumBan Summary | Issues/Tasks | Item/Status |
 | --- | --- | --- | --- |
 | **Bot Deployment** |  |   |
-| Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. | Completed | 1. Figuring out which configuration tool to use that are mentioned in the lecture. | Initial Ansible Setup |
+| Initial Ansible Setup | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. | 1. Figuring out which configuration tool to use that are mentioned in the lecture. | Completed |
 |  |  | 2. Understanding the services and packages required for our bot with suitable versions to create an environment |  |
-| Day 2: Discussion on setting up server connection and host file. | Completed  | 1. Exploring host file options  -  decided to use localhost since we are deploying on server |  |
-| Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |   |
+|  | Day 2: Discussion on setting up server connection and host file. | 1. Exploring host file options  -  decided to use localhost since we are deploying on server | Completed  |
+|  | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Completed  |
 |  |  | |  |
 
