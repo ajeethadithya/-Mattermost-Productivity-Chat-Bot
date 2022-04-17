@@ -135,6 +135,7 @@ async function main()
     let request = await client.tokenLogin(process.env.FOCUSBOTTOKEN);
     client.on('message', function(msg)
     {
+    if(msg.broadcast.channel_id != "9pzcihbz77go9xjt569y57spgy"){
         //console.log(msg);
 	 if(hears(msg, "Hi") || hears(msg, "hi") || hears(msg, "Hello"))
         {   
@@ -445,7 +446,7 @@ async function main()
             }
             
         }
-
+    }
     });
 }
 
