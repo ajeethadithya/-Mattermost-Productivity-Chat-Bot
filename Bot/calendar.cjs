@@ -19,27 +19,11 @@ const auth = new google.auth.JWT(
     CREDENTIALS.private_key,
     SCOPES
 );
-// let eventId = 'm8ispit4tg7qib6d7s6slve07o';
 
 
-// Get date-time string for calender
-// const dateTimeForCalander = () => {
 
-//     let event = '2022-03-30T19:46:00.000Z';
-//     let startDate = event;
-//     // Delay in end time is 1
-//     // let endDate = new Date(new Date(startDate).setHours(startDate.getHours()+1));
-//     let endDate = '2022-03-31T19:46:00.000Z';
 
-//     return {
-//         'start': startDate,
-//         'end': endDate
-//     }
-// };
 
-//console.log(dateTimeForCalander())
-
-//let dateTime = dateTimeForCalander();
 
 const prompt = require('prompt-sync')();
 
@@ -180,51 +164,8 @@ const getEvents = async (startview, endview) => {
     }
 };
 
-//Harcoded for testing purposes
-//let start = '2022-03-22T19:46:00.000Z';
-//let end = '2022-03-24T20:46:00.000Z';
 
-// getEvents(startview, endview)
-//     .then((res) => {
-//         console.log(res);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
-//     
-// const eventId = prompt('What is the ID you wish to delete');
-// console.log(`Event ID is  ${eventId}`);
 
-// //Delete an event from eventID
-// const deleteEvent = async (eventId) => {	
-
-//     try {
-//         let response = await calendar.events.delete({
-//             auth: auth,
-//             calendarId: calendarId,
-//             eventId: eventId
-//         });
-
-//         if (response.data === '') {
-//         console.log("Event was successfully deleted");
-//         
-//         } else {
-//         console.log("Event Deletion Failed");
-//         
-//         }
-//     } catch (error) {
-//         console.log(`Delete Event --> ${error}`);
-//         
-//     }
-// };
-
-// deleteEvent(eventId)
-//     .then((res) => {
-//         console.log(res);
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
 
 exports.createcalEvent = createcalEvent;
 exports.getEvents = getEvents;
