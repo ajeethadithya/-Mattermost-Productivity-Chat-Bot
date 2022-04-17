@@ -5,7 +5,7 @@ Link to the screencast:
 
 ## Acceptance Testing
 
-## Instructions to the User for any Github related functionality
+### Instructions to the User for any Github related functionality
 
 #### 1. Testing Deployed (Uses GitHub Personal Access Token of one of the Team Members)
 * The focus bot deployed on VCL uses one of our team member's GitHub PAT to clone using Ansible Playbook and perform any GitHub related use cases/commands  
