@@ -4,7 +4,30 @@
 Link to the screencast:  
 
 ## Acceptance Testing
-### Instructions
+
+## Instructions to the User for any Github related functionality
+
+#### 1. Testing Deployed (Uses GitHub Personal Access Token of one of the Team Members)
+* The focus bot deployed on VCL uses one of our team member's GitHub PAT to clone using Ansible Playbook and perform any GitHub related use cases/commands  
+* We have created a Test Repository called DEPLOY_TEST_REPO and have added the TAs as collaborators.
+* When tests are performed on Mattermost on the deployed code the TAs will be able to access the Team Member's personal repositories including the DEPLOY_TEST_REPO.
+* Any GitHub related uses cases (create issue, close issue, show issues) can be performed on this repository and since the TAs are added as collaborators, the TAs will be able to see the change being reflected through their account.
+* Please use the above repository for any sort of testing
+
+#### 2. Testing Bot Using TAs PAT (Requires the PAT to be changed in the Ansible Vault that's present in the server)
+To use the TAs Personal Access Token, the TAs will have to perform the following actions and re-deploy the bot as follows:
+* Create Personal Access Tokens on Github (if there isn't one for your account already- Please see the end of page for further instructions on how to create PAT)
+* In our server, stop the already deployed code using the following command: **sudo forever stop 0**
+* Change directory to access the Ansible-Vault using the following command: **cd /home/anaray23/ansible-files**
+* Run the following command to decrypt the secrets.yml file: **ansible-vault decrypt secrets.yml**
+* User will be prompted to enter a passcode that has been submitted via the Google Form by Team-24
+* Kindly replace the existing GitHub PAT with your GitHub PAT and not modify anything else
+* Run the following command to encrypt the file again using the following command: **ansible-vault encrypt secrets.yml**
+* Run the playbook as follows: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+
+**P.S: GitHub related functionalities are aimed at increasing personal productivity and hence is designed to access only repositories created/owned by the user. Hence, the TA will be able to view all their repositories however can only access the repositories that are owned by them. If the TAs prefer testing through their PAT, kindly create a Test Respository of your choice and use that to perform any sort of testing**
+
+### Instructions to test the Bot
 
 Use the following link to access the Focus Bot on the Mattermost Channel (Team-24) 
 
@@ -370,28 +393,16 @@ ISSUE REMINDER ALERT:
   
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
 
-
 ## Additional Instructions
-
 ### Creating Personal Access Tokens on Github
 
 Verify email address.
 In the upper right corner, select settings → Developer Settings → Personal Access Tokens → Generate New Token → provide valid name, expiration date, and scope → Select Generate Token.
-In Ansible, enter the following command to access the Ansible-Vault.
-
-ansible-vault decrypt secrets.yml
-
-Enter the vault passcode shared in the Google Docs for Team-24
-
-Once the environment variable is modified, enter the following command:
-
-ansible-vault encrypt secrets.yml
-
-ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass
 
 Use the following link for further reference: 
 
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
- 
+
+
 ## Updated Worksheet 
 Link to the Worksheet.md:   https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
