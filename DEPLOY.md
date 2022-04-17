@@ -391,6 +391,29 @@ ISSUE REMINDER ALERT:
   HW1-510       ID: 163030
   
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
+
+
+## Additional Instructions
+
+### Creating Personal Access Tokens on Github
+
+Verify email address.
+In the upper right corner, select settings → Developer Settings → Personal Access Tokens → Generate New Token → provide valid name, expiration date, and scope → Select Generate Token.
+In Ansible, enter the following command to access the Ansible-Vault.
+
+ansible-vault decrypt secrets.yml
+
+Enter the vault passcode shared in the Google Docs for Team-24
+
+Once the environment variable is modified, enter the following command:
+
+ansible-vault encrypt secrets.yml
+
+ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass
+
+Use the following link for further reference: 
+
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
  
 ## Updated Worksheet 
 Link to the Worksheet.md:   https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
