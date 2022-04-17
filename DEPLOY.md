@@ -402,7 +402,7 @@ Note: If the Github issue is closed before the reminder is displayed, the remind
 
 ## Exploratory Testing and Code Inspection
 
-Edge cases and errors are handled to the best of our knowledge. They can be tested using the examples provided for each use cases under "Acceptance Testing".
+Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use cases under "Acceptance Testing". Additionaly, you can try your own input to interact with the bot and stay productive!  
 
 ## Additional Instructions
 ### Creating Personal Access Tokens on Github
