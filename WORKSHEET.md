@@ -54,8 +54,8 @@
 | Deliverable | Item/Status | Issues/Tasks |  ScrumBam Summary  |
 | --- | --- | --- | --- |
 | **Bot Deployment** |  |   |
-|  | Completed | | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. |
-| |  | |  |
+| 1. Figuring out which configuration tool to use that are mentioned in the lecture. | Completed | | Day 1: Discussion on which configuration tool to use for deployment and how to reuse the task done for HW3. |
+| 2. Understanding the services and packages required for our bot with suitable versions to create an environment |  | |  |
 | Acceptance Testing Instructions | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Day5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line  |
 |  |  | |
 
