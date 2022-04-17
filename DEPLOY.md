@@ -1,12 +1,13 @@
 ## Deployment Scripts
-### Screencast
 
 ### Instructions to Run Ansible Playbook (deploy.yml)
+
 * The user should login to VCL using their NCSU credentials.
 * Move to the respective repository within the Team 24 VCL instance using the following command: **cd /home/anaray23/ansible-files**
 * Once the directory location has changed, run the deployment scripts using the following command: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
 
-  
+### Screencast
+
 Link to the screencast:  
 
 ## Acceptance Testing
@@ -398,6 +399,10 @@ ISSUE REMINDER ALERT:
   HW1-510       ID: 163030
   
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
+
+## Exploratory Testing and Code Inspection
+
+Edge cases and errors are handled to the best of our knowledge. They can be tested using the examples provided for each use cases under "Acceptance Testing".
 
 ## Additional Instructions
 ### Creating Personal Access Tokens on Github
