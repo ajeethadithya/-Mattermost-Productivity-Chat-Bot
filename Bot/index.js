@@ -673,6 +673,7 @@ export async function listIssues(msg, close_issue_flag)
     else if(issue && issue.length == 0)
     {   // Accessible repo but no issues in the repo so "issue" list will be empty
         client.postMessage(`No issues in ${req_repo_name}`, channel);
+        command_list.splice(0, command_list.length);
     }   
 }
 
