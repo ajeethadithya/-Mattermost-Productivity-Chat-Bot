@@ -57,7 +57,15 @@
 |  |  | 2. Understanding the services and packages required for our bot with suitable versions to create an environment |  |
 | Server Setup using Ansible | Day 2: Discussion on setting up server connection and host file. | 1. Exploring host file options  -  decided to use localhost since we are deploying on server | Completed  |
 |  |  | 2. Using scripts to install the required versions of node(16) [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/64], community.npm.general, npm |  |
-|  |  | 3. |  |
+|  |  | 3. Tested server environment and cloning, forever package using WeatherBot workshop and Mattermost.|  |
+| Ansible Scripts | Day 3: Splitting Ansible script tasks | 1. Cloning private CSC Team24 repo [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/63] using Github username andd password authentication| Completed |
+|  |  | 2. Installing npm, nodejs (version 16), forever packages |  |
+|  |  | 3. Understanding and implementing forever package commands to deploy bot forever |  |
+|  |  | 4. Repeated Task 1 using personal access tokens  |  |
+| Extra edge case handling of use cases apart from sprint 1 and 2 | Day 4: Edge Case Discussion | 1. Entering invalid reminder number while trying to delete [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/62] | Completed |
+|  |  | 2. Handling the issue when trying to access empty repo on Github - listrepos() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/61] |  |
+|  |  | 3. Entering invalid month format while trying to create a reminder [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/60] |  |
+|  |  | 4. Handling situations when Github server is down and list of repos can't be accessed - issueReminders() [https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/66] |  |
 |  | Day 5: Structuring Acceptance Testing Instructions and discussing forever (npm package) issues caused when run through ansible but not through server command line. | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 | Completed  |
 |  |  | |  |
 
