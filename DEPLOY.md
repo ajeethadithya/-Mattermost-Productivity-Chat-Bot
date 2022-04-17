@@ -12,9 +12,7 @@ Use the following link to access the Focus Bot on the Mattermost Channel (Team-2
 
 Once you go to the channel, the bot will display the following message:
 
-"Hi there! I am PAM - your Personal Accountability Manager
-
-Hocus Pocus - Let's focus!"
+![Initial message](https://media.github.ncsu.edu/user/22704/files/37e9cf93-d1cd-483a-bb6c-18ca0be941b3)
 
 You can start the conversation by typing "hi" or "Hi" or "hello" and you should expect the following message from the Focus Bot.
 
