@@ -1593,6 +1593,7 @@ async function getEventFuncFromCalendarJs(msg)
                 let meeting_to_show = "Meeting Name: ".concat(item_to_show_split[1]); 
                 client.postMessage(`\u2192 ${meeting_to_show}`, channel);
             }
+        command_list.splice(0, command_list.length);
     }
     else 
         {
@@ -1866,6 +1867,7 @@ async function createCalendarPayload(msg)
     });
     if(status_of_api == 200)
     {
+
         client.postMessage("Meeting/Event has been created in your calendar! Enter 'show meetings' to display scheduled meetings", channel);
     }
     else if(status_of_api == "not okay" || status_of_api == "failed in catch")

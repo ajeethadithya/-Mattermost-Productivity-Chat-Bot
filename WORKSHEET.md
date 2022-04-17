@@ -47,3 +47,15 @@
 | **Use Case: Automatic Reminders for Github Issues** |  |   |
 | Automatic reminders for github issues that are newly created. Ideally, Reminders are displayed 3 days after issue is created but for testing purpose it will be displayed after a minute. If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. (Issue Reminders) | Implementation has been completed and successfully tested on our MatterMost Channel | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/41 - The issues comments specify the tasks completed iteratively. |
 
+
+
+### Week 3 - Deployment Milestone
+
+| Deliverable | Item/Status | Issues/Tasks |
+| --- | --- | --- |
+| **Bot Deployment** |  |   |
+|  | | |
+| |  | |
+| Acceptance Testing Instructions | Completed | https://github.ncsu.edu/csc510-s2022/CSC510-24/issues/65 |
+|  |  | |
+
