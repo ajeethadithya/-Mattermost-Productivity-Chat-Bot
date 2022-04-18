@@ -68,7 +68,7 @@
      register: pm2_list
      changed_when: false
 
-   - name: "Get infromation from list of NodeJS apps running"
+   - name: "Get information from list of NodeJS apps running"
      command: pm2 list | grep <app_name> | awk '{print $18}'
      register: APP_STATUS
      changed_when: false
