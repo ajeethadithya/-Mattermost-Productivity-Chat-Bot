@@ -26,10 +26,11 @@ To use the TAs Personal Access Token, the TAs will have to perform the following
 * Create Personal Access Tokens on Github (if there isn't one for your account already- Please see the end of page for further instructions on how to create PAT)
 * In our server, stop the already deployed code using the following command: **sudo pm2 stop 0**
 * Change directory to access the Ansible-Vault using the following command: **cd /home/anaray23/ansible-files**
-* Run the following command to decrypt the secrets.yml file: **ansible-vault decrypt secrets.yml**
+* Run the following command to decrypt the secrets.yml file: **sudo ansible-vault decrypt secrets.yml**
 * User will be prompted to enter a passcode that has been submitted via the Google Form by Team-24
 * Kindly replace the existing GitHub PAT with your GitHub PAT and not modify anything else
-* Run the following command to encrypt the file again using the following command: **ansible-vault encrypt secrets.yml**
+* Run the following command to encrypt the file again using the following command: **sudo ansible-vault encrypt secrets.yml**
+* User will be prompted twice to set a new passcode. (User can set the same passcode set during decryption)  
 * Run the playbook as follows: **sudo ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
 
 **P.S: GitHub related functionalities are aimed at increasing personal productivity and hence is designed to access only repositories created/owned by the user. Hence, the TA will be able to view all their repositories however can only access the repositories that are owned by them. If the TAs prefer testing through their PAT, kindly create a Test Respository of your choice and use that to perform any sort of testing**
