@@ -110,6 +110,8 @@ Now to check if the task has been removed, type "*show todo*" to see the reflect
 
 
 ### Use-Case 2 : Github Issues
+
+*NOTE: Github servers can be glitchy sometimes and API calls may not return a success code. In such cases, Team 24 gets an alert every 5 seconds saying the Github server is down.*
  
 Commands part of this use case:
 1. *create issue*
