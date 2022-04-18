@@ -93,12 +93,12 @@ Bot Reply:
 
 User Input: *remove todo*
 
-The bot returns your To-Do List and asks you the specific task that you want to remove.
+The bot returns your personal To-Do List and asks you the task number to remove.
 
 Bot Reply: 
 1. Remind me to submit SE project proposal
 2. Review Pull Request #41  
-Enter the task number that you want to remove.
+Enter the task number that you want to remove:
       
 User Input: {Enter task number} eg. 1
 
@@ -106,18 +106,8 @@ Bot Reply: Task 1 successfully removed!
 
 Now to check if the task has been removed, type "*show todo*"
 
-o/p: 
-1. Review Pull Request #41 
+Bot Reply: 1. Review Pull Request #41 
 
-#### Error Handling
-
-1.Entering an invalid task number while trying to remove from the list
-
-=> Bot Reply: "Please enter a number from the list shown above, try again from the beginning."
-
-2.Typing "*show todo*" when you haven't created a todo list.
-
-=> Bot Reply: "There is nothing to show"
 
 ### Use-Case 2 : Github Issues
  
@@ -203,16 +193,6 @@ Bot Reply: Enter the repo name for which you want to execute the command:
 User Input: {Enter repo name} eg. HW0-510
 
 Bot Reply: eg. No issues in HW0-510
-
-#### Error Handling
-
-1.Entering a wrong repo name while executing either of the commands: *create issue*, *show issue*, *close issue*.
-
-=> Bot Reply: "Repo name entered does not match with the ones given above, kindly start over."
-
-2.Entering a wrong issue ID while trying to close an issue.
-
-=> Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
 
 ### Use-Case 3 : Reminders
 
@@ -403,7 +383,27 @@ Note: If the Github issue is closed before the reminder is displayed, the remind
 
 ## Exploratory Testing and Code Inspection
 
-Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use cases under "Acceptance Testing". Additionaly, you can try your own input to interact with the bot and stay productive!  
+Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use cases below. Additionaly, you can try your own input to interact with the bot and stay productive!  
+
+#### Error Handling for Use Case 1
+
+1.Entering an invalid task number while trying to remove from the list
+
+=> Bot Reply: "Please enter a number from the list shown above, try again from the beginning."
+
+2.Typing "*show todo*" when you haven't created a todo list.
+
+=> Bot Reply: "There is nothing to show"
+
+#### Error Handling for Use Case 2
+
+1.Entering a wrong repo name while executing either of the commands: *create issue*, *show issue*, *close issue*.
+
+=> Bot Reply: "Repo name entered does not match with the ones given above, kindly start over."
+
+2.Entering a wrong issue ID while trying to close an issue.
+
+=> Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
 
 ## Additional Instructions
 ### Creating Personal Access Tokens on Github
