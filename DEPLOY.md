@@ -4,9 +4,18 @@ Link to the Ansible Scripts: https://github.ncsu.edu/csc510-s2022/CSC510-24/blob
 
 ### Instructions to Run Ansible Playbook (deploy.yml)
 
-* The user should login to VCL using their NCSU credentials.
-* Move to the respective repository within the Team 24 VCL instance using the following command: **cd /home/anaray23/ansible-files**
-* Once the directory location has changed, run the deployment scripts using the following command: **sudo ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+* The user should login to Team 24's VCL instance using their NCSU credentials.
+* Change directory within the Team 24 VCL instance using the following command: **cd /home/anaray23/ansible-files**
+* The bot would already be deployed in this directory. TA's can re-run the deployment script to check for idempotence or stop the deployed bot using the following command: **sudo pm2 stop 0** and then deploy the bot as given below.
+* In **/home/anaray23/ansible-files**, run the deployment script using the following command: **sudo ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+
+The Ansible Playbook utilizes a secrets.yml file that contains the necessary tokens which is stored in a passcode protected manner in the Ansible vault. 
+
+If the Ansible Playbook is run when the bot has been already deployed, the pm2 process manager will identify if the bot is running using pm2 list command. If so, it skips the task. 
+
+If the bot is deployed for the first time with no other processes running, the pm2 process manager executes the pm2 start command and deploys the bot. 
+
+If the code crashes due to bugs, the pm2 process manager will restart the bot on its own. While performing Acceptance Testing, if the bot crashes and certain inputs do not perform as expected, then it is safe to assume that the pm2 process manager has restarted the bot.
 
 ### Screencast
 
