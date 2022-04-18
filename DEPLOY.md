@@ -256,22 +256,6 @@ User Input: {Enter reminder number} eg. 1
 Bot Reply: Reminder 1 successfully removed!
  
  
- #### Error Handling
- 
- 1.Entering show reminders when there are no active reminders.
- 
- => Bot Reply: "You have no reminders"
- 
- 2.Entering invalid time or date while creating a reminder.
- 
- eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
- 
- => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
- 
- 3.Entering invalid reminder number while trying to remove a reminder.
- 
- => Bot Reply: "Please enter a valid number, kindly start over."
- 
 
 ### Use-Case 4 : Scheduling a Meeting
 
@@ -339,28 +323,6 @@ All the created meetings can be viewed on the Google Calendar as well.
 
 The link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
 
-#### Error Handling
-
-1.Entering invalid date format.
-
-=> eg. 2022-9-10  Bot Reply: Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
-
-=> eg. 22-09-10   Bot Reply: Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
-
-=> eg. 2022-03-2  Bot Reply:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
-
-2.Entering invalid time format.
-
-=> eg. 2:35  Bot Reply: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
-
-=> eg. 05:5  Bot Reply: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
-
-=> eg. 01:78 Bot Reply: Please enter a valid time following the format! Try again or enter stop to terminate the process
-
-User Input: stop
-
-Bot Reply: Process has stopped. Enter help for available commands !!
-
 
 ### Use-Case 5 : Automatic Reminders for Github Issues
 
@@ -404,6 +366,44 @@ Edge cases and errors are handled to the best of our knowledge. They could be te
 2.Entering a wrong issue ID while trying to close an issue.
 
 => Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
+
+#### Error Handling for Use Case 3
+ 
+ 1.Entering show reminders when there are no active reminders.
+ 
+ => Bot Reply: "You have no reminders"
+ 
+ 2.Entering invalid time or date while creating a reminder.
+ 
+ eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
+ 
+ => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
+ 
+ 3.Entering invalid reminder number while trying to remove a reminder.
+ 
+ => Bot Reply: "Please enter a valid number, kindly start over."
+
+#### Error Handling for Use Case 4
+
+1.Entering invalid date format.
+
+=> eg. 2022-9-10  Bot Reply: Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
+
+=> eg. 22-09-10   Bot Reply: Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
+
+=> eg. 2022-03-2  Bot Reply:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
+
+2.Entering invalid time format.
+
+=> eg. 2:35  Bot Reply: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
+
+=> eg. 05:5  Bot Reply: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
+
+=> eg. 01:78 Bot Reply: Please enter a valid time following the format! Try again or enter stop to terminate the process
+
+User Input: stop
+
+Bot Reply: Process has stopped. Enter help for available commands !!
 
 ## Additional Instructions
 ### Creating Personal Access Tokens on Github
