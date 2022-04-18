@@ -14,7 +14,7 @@ Link to the screencast:
 
 ### Instructions to the User for any Github related functionality
 
-#### 1. Testing Deployed (Uses GitHub Personal Access Token of one of the Team Members)
+#### 1. Testing already Deployed Bot (Uses GitHub Personal Access Token of one of the Team Members)
 * The focus bot deployed on VCL uses one of our team member's GitHub PAT to clone using Ansible Playbook and perform any GitHub related use cases/commands  
 * We have created a Test Repository called DEPLOY_TEST_REPO and have added the TAs as collaborators.
 * When tests are performed on Mattermost on the deployed code the TAs will be able to access the Team Member's personal repositories including the DEPLOY_TEST_REPO.
