@@ -4,7 +4,7 @@
 
 * The user should login to VCL using their NCSU credentials.
 * Move to the respective repository within the Team 24 VCL instance using the following command: **cd /home/anaray23/ansible-files**
-* Once the directory location has changed, run the deployment scripts using the following command: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+* Once the directory location has changed, run the deployment scripts using the following command: **sudo ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
 
 ### Screencast
 
@@ -30,7 +30,7 @@ To use the TAs Personal Access Token, the TAs will have to perform the following
 * User will be prompted to enter a passcode that has been submitted via the Google Form by Team-24
 * Kindly replace the existing GitHub PAT with your GitHub PAT and not modify anything else
 * Run the following command to encrypt the file again using the following command: **ansible-vault encrypt secrets.yml**
-* Run the playbook as follows: **ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
+* Run the playbook as follows: **sudo ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass**
 
 **P.S: GitHub related functionalities are aimed at increasing personal productivity and hence is designed to access only repositories created/owned by the user. Hence, the TA will be able to view all their repositories however can only access the repositories that are owned by them. If the TAs prefer testing through their PAT, kindly create a Test Respository of your choice and use that to perform any sort of testing**
 
@@ -417,3 +417,6 @@ https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/c
 
 ## Updated Worksheet 
 Link to the Worksheet.md:   https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/WORKSHEET.md 
+
+## Final Code
+Link to the final code: https://github.ncsu.edu/csc510-s2022/CSC510-24/tree/main/Bot
