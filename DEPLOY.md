@@ -41,7 +41,7 @@ Use the following link to access the Focus Bot on the Mattermost Channel (Team-2
 
    https://chat.robotcodelab.com/csc510-s22/channels/team-24
 
-Once you go to the channel, the bot will display the following message when it is run for the first time/ code restarts on server.:
+On Team-24's Channel, the bot will display the following message when it is run for the first time/ code restarts on server.:
 
 ![Initial message](https://media.github.ncsu.edu/user/22704/files/37e9cf93-d1cd-483a-bb6c-18ca0be941b3)
 
