@@ -123,7 +123,7 @@ Commands part of this use case:
 
 To create an issue in a Github repo that you own, type "*create issue*". The bot replies with the list of all repos in your account and asks you to specify the repo name.
 
-Note: You can only create or remove issues in a repo that you own.
+Note: You can only create or remove issues in a repo that you own. Current code has been deployed using one of the team member's PAT. Use repository DEPLOY_TEST_REPO for testing purposes.
 
 Bot Reply:
 
