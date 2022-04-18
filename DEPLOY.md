@@ -17,9 +17,11 @@ If the bot is deployed for the first time with no other processes running, the p
 
 If the code crashes due to bugs, the pm2 process manager will restart the bot on its own. While performing Acceptance Testing, if the bot crashes and certain inputs do not perform as expected, then it is safe to assume that the pm2 process manager has restarted the bot.
 
+Since we are running the Ansible Script in the VCL server instance itself, we are not storing the hosts in a seperate host file but instead using locahost in the Ansible Playbook as the bot is deployed on the same server. 
+
 ### Screencast
 
-Link to the screencast:  
+Link to the screencast:  https://drive.google.com/file/d/17y5jUZ0knqyHxYlmN0CQYK7jNCAdztfd/view?usp=sharing 
 
 ## Acceptance Testing
 
