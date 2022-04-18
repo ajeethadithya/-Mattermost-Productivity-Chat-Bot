@@ -1,0 +1,89 @@
+---
+#sudo apt update
+#sudo apt install ansible
+#ansible-galaxy collection install community.general
+#ansible-vault encrypt secrets.yml
+#ansible-playbook deploy.yml --extra-vars @secrets.yml --ask-vault-pass
+- name: "Focus Bot Deployment"
+  hosts: localhost
+  connection: local
+  become: yes
+  environment:
+          #GITHUBTOKEN: "{{ lookup('env', 'GITHUBTOKEN') }}"
+          #FOCUSBOTTOKEN: "{{ lookup('env', 'FOCUSBOTTOKEN') }}"
+    GITHUBTOKEN: "{{ github }}"
+    FOCUSBOTTOKEN: "{{ focusbot }}"
+    FIREBASEAPIKEY: "{{ fbkey }}"
+    #CALENDAR_ID: "{{ calendar }}"
+    #CREDENTIALS: "{{ cred }}"
+  tasks:
+
+   - include_vars: secrets.yml
+   
+   - name: "Install key for NodeJS LTS"
+     become: true
+     apt_key:
+       url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+       state: present
+
+   - name: "Install NodeJS LTS"
+     become: true
+     apt_repository:
+       repo: "deb https://deb.nodesource.com/node_16.x focal main"
+       state: present
+       update_cache: yes
+
+   - name: "Install NodeJS"
+     become: true
+     apt:
+       name: nodejs
+       state: present
+       update_cache: yes
+
+   - name: "Install PM2 globally"
+     community.general.npm:
+       name: pm2
+       global: yes
+       state: present
+
+   - name: "Clone the private GitHub repository"
+     git:
+       repo: "https://{{ user }}:{{ github }}@github.ncsu.edu/csc510-s2022/CSC510-24.git"
+       version: main
+       dest: "{{ playbook_dir }}/CSC510-24"
+       clone: yes
+       update: yes
+       force: yes
+       #update: no
+       accept_hostkey: yes
+     register: info
+
+   - name: "Install NPM Packages"
+     npm:
+       path: "{{ playbook_dir }}/CSC510-24/Bot"
+       state: latest
+
+   - name: "Check list of NodeJS app running"
+     command: pm2 list
+     register: pm2_list
+     changed_when: false
+
+   - name: "Get infromation from list of NodeJS apps running"
+     command: pm2 list | grep <app_name> | awk '{print $18}'
+     register: APP_STATUS
+     changed_when: false
+
+   - name: "Run app: PM2 start index.js"
+     ignore_errors: yes
+     environment:
+       GITHUBTOKEN: "{{ github }}"
+       FOCUBOTTOKEN: "{{ focusbot }}"
+     command: pm2 start index.js
+     args:
+       chdir: "{{ playbook_dir }}/CSC510-24/Bot" 
+     failed_when: APP_STATUS == "online"
+     #when: "forever_list.stdout.find('home/anaray23/ansible-files/CSC510-24/Bot/index.js') == -1"
+     #when: pm2_list.stdout.status == "stopped"
+
+   - name: "See Console"
+     debug: var=pm2_list.stdout_lines
