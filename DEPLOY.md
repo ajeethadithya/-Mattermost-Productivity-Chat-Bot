@@ -110,15 +110,15 @@ Now to check if the task has been removed, type "*show todo*" to see the reflect
 
 
 ### Use-Case 2 : Github Issues
-
-*NOTE: Github servers can be glitchy sometimes and API calls may not return a success code. In such cases, Team 24 gets an alert every 5 seconds saying the Github server is down.*
  
 Commands part of this use case:
 1. *create issue*
 2. *show issues*
 3. *close issue*
  
-*NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. You could also try refreshing the Github page for the changes to be updated.*
+NOTE:
+1. Github servers can be glitchy sometimes and API calls may not return a success code. In such cases, Team 24 gets an alert every 5 seconds saying that "Unable to complete request, sorry! Github server down!"
+2. While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. You could also try refreshing the Github page for the changes to be updated.
  
  
 #### Create Issues
