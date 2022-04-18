@@ -1,5 +1,7 @@
 ## Deployment Scripts
 
+Link to the Ansible Scripts: https://github.ncsu.edu/csc510-s2022/CSC510-24/blob/main/deploy.yml
+
 ### Instructions to Run Ansible Playbook (deploy.yml)
 
 * The user should login to VCL using their NCSU credentials.
