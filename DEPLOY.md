@@ -365,17 +365,17 @@ Edge cases and errors are handled to the best of our knowledge. They could be te
 
 #### Error Handling for Use Case 3: Reminders
  
- 1. Entering show reminders when there are no active reminders.
+1. Entering show reminders when there are no active reminders.
  
    => Bot Reply: "You have no reminders"
  
- 2. Entering invalid time or date while creating a reminder.
+2. Entering invalid time or date while creating a reminder.
  
    eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
  
    => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
  
- 3. Entering invalid reminder number/ gibberish while trying to remove a reminder.
+3. Entering invalid reminder number/ gibberish while trying to remove a reminder.
  
    => Bot Reply: "Please enter a valid number, kindly start over."
 
