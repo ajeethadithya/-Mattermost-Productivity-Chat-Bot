@@ -125,7 +125,7 @@ Commands part of this use case:
 2. *show issues*
 3. *close issue*
  
- NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. 
+ NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. You could also try refreshing the Github page for the changes to be updated.
  
  
 #### Create Issues
