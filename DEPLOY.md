@@ -24,7 +24,7 @@ Link to the screencast:
 #### 2. Testing Bot Using TAs PAT (Requires the PAT to be changed in the Ansible Vault that's present in the server)
 To use the TAs Personal Access Token, the TAs will have to perform the following actions and re-deploy the bot as follows:
 * Create Personal Access Tokens on Github (if there isn't one for your account already- Please see the end of page for further instructions on how to create PAT)
-* In our server, stop the already deployed code using the following command: **sudo forever stop 0**
+* In our server, stop the already deployed code using the following command: **sudo pm2 stop 0**
 * Change directory to access the Ansible-Vault using the following command: **cd /home/anaray23/ansible-files**
 * Run the following command to decrypt the secrets.yml file: **ansible-vault decrypt secrets.yml**
 * User will be prompted to enter a passcode that has been submitted via the Google Form by Team-24
