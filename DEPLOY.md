@@ -104,9 +104,7 @@ User Input: {Enter task number} eg. 1
 
 Bot Reply: Task 1 successfully removed!
 
-Now to check if the task has been removed, type "*show todo*"
-
-Bot Reply: 1. Review Pull Request #41 
+Now to check if the task has been removed, type "*show todo*" to see the reflected changes.
 
 
 ### Use-Case 2 : Github Issues
@@ -116,30 +114,32 @@ Commands part of this use case:
 2. *show issues*
 3. *close issue*
  
- NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. You could also try refreshing the Github page for the changes to be updated.
+*NOTE: While displaying and closing issues, wait for a couple of seconds (depending on the Github server) for the changes to be reflected before checking the flow of instructions. You could also try refreshing the Github page for the changes to be updated.*
  
  
 #### Create Issues
 
 To create an issue in a Github repo that you own, type "*create issue*". The bot replies with the list of all repos in your account and asks you to specify the repo name.
 
-Note: You can only create or remove issues in a repo that you own. Current code has been deployed using one of the team member's PAT. Use repository DEPLOY_TEST_REPO for testing purposes.
+Note: You can only create or remove issues in a repo that you own. Currently the BOT has been deployed using one of the team member's Github PAT. Use repository DEPLOY_TEST_REPO to view, create and close issues (TA's are added as collaborators and changes can be viewed using their account)
+
+User Input: *create issue*
 
 Bot Reply:
 
-Enter a repo to create an issue from the list below:
+Enter a repo to create an issue from the list below: 
 
-Enter the repo name from which you want to execute the command:
+[repo_name_1, repo_name_2, repo_name_3, .....]
 
-User Input: {Enter repo name} eg. HW0-510
+User Input: {Enter repo name} eg. DEPLOY_TEST_REPO 
 
 Bot Reply: Enter the Title of the issue
 
-User Input: {Enter title} eg. new issue
+User Input: {Enter title} eg. Bug Fixes in index.js
 
 Bot Reply: Enter the body of the issue
 
-User Input: {Enter Body} eg. create a new issue
+User Input: {Enter Body} eg. Missing brackets and paranthesis.
 
 Bot Reply: Issue has been created!
 
@@ -152,13 +152,15 @@ User Input: *show issues*
 
 Bot Reply: Enter the repo name for which you want to execute the command:
 
-User Input: {Enter repo name} eg. HW0-510
+[repo_name_1, repo_name_2, repo_name_3, .....]
+
+User Input: {Enter repo name} eg. DEPLOY_TEST_REPO
 
 Bot Reply: 
 
-eg. Title: new issue
+eg. Title: Bug Fixes in index.js
 
-Create a new issue
+Missing brackets and paranthesis
 
 ID: 163030
 
@@ -170,13 +172,15 @@ User Input: *close issue*
 
 Bot Reply: Enter the repo name for which you want to execute the command:
 
-User Input: {Enter repo name} eg. HW0-510
+[repo_name_1, repo_name_2, repo_name_3, .....]
+
+User Input: {Enter repo name} eg. DEPLOY_TEST_REPO
 
 Bot Reply: 
 
-eg. Title: new issue
+eg. Title: Bug Fixes in index.js
 
-Create a new issue
+Missing brackets and paranthesis
 
 ID: 163030
 
@@ -186,13 +190,8 @@ User Input: {Enter issue ID} eg. 163030
 
 Bot Reply: Issue has been successfully closed!
 
-Now to check if the issue has been closed, type "*show issues*"
+Now to check if the issue has been closed, type "*show issues*" or check your Github repo to see the reflected changes.
 
-Bot Reply: Enter the repo name for which you want to execute the command:
-
-User Input: {Enter repo name} eg. HW0-510
-
-Bot Reply: eg. No issues in HW0-510
 
 ### Use-Case 3 : Reminders
 
@@ -205,17 +204,17 @@ Commands part of this use case:
 
 User Input: *create reminder*
 
-Bot Reply: Enter reminder
+Bot Reply: Enter reminder:
 
 User Input: {Enter reminder} eg. update worksheet.md
 
 Bot Reply: When shall I remind you? Enter date and time-24 hour format (FORMAT: YYYY-MM-DD hh:mm)
 
-User input: {Enter date and time} eg. 2022-04-13 17:35
+User input: {Enter date and time} eg. 2022-04-30 17:35
 
 Bot Reply: Reminder Created!
 
-During the specified date and time, a reminder will pop-up as follows:
+During the specified date and time, a reminder will pop-up as follows (On the channel you created):
 
 Bot Reply:
 
@@ -235,7 +234,7 @@ eg.
 
 1.update worksheet.md
 
- 2022-04-13 17:35
+ 2022-04-30 17:35
  
 #### Remove Reminder
 
@@ -247,7 +246,7 @@ eg.
 
 1.update worksheet.md
 
- 2022-04-13 17:35
+ 2022-04-30 17:35
  
  Enter the reminder number that you want to remove:
  
@@ -265,13 +264,13 @@ Commands part of this use case:
 
 #### Schedule a Meeting
 
-User can schedule a meeting by specifying the duration (date and time)
+User can schedule a meeting by specifying the duration (name, start date and time, end date and time)
 
 User Input: *create meeting*
 
-Bot Reply: Enter Name of event.
+Bot Reply: Enter Name of event:
 
-User Input: {Enter event name} eg. scrum meeting
+User Input: {Enter event name} eg. Meeting with Team 24
 
 Bot Reply: Enter Start date of event: Use the format YYYY-MM-DD.
 
@@ -291,13 +290,17 @@ User Input: {Enter time} eg. 04:45
 
 Bot Reply: Enter a brief description of event: 
 
-User Input: {Enter desc} eg. Progress update on the worksheet towards the end of the milestone.
+User Input: {Enter desc} eg. Discussion of deployment phase
 
-Bot Reply: Meeting/Event has been created in your calendar! Enter show meetings to display scheduled meetings 
+Bot Reply: Meeting/Event has been created in your calendar! Enter *show meetings* to display scheduled meetings 
+
+All the created meetings can be viewed on the Google Calendar. 
+
+The link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
 
 #### View Meetings
 
-User can view the list of events on a specific date and within a time frame in the calendar. 
+User can view the list of meetings on a specific date and within a time frame in the calendar. 
 
 User Input: *show meetings*
 
@@ -317,93 +320,88 @@ Bot Reply: Enter End time of event: Use the format HH:MM
 
 User Input: {Enter time} eg. 04:45
 
-Bot Reply: eg. → Meeting Name: scrum meeting
+Bot Reply: eg. → Meeting Name: Meeting with Team 24
 
-All the created meetings can be viewed on the Google Calendar as well. 
-
-The link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
+To verify, use the link to the calendar:  https://calendar.google.com/calendar/u/2?cid=MDdkYmZmcTdlNTQ4c21icXMzN2Jrb3J1NzBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ
 
 
 ### Use-Case 5 : Automatic Reminders for Github Issues
 
-Commands part of this use case:
-1. *Automatic Issue Github Reminders*
-
-Note:  This command need not be typed by the user. 
-
-Automatic reminders are created for github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute.
+Automatic reminders are set for Github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute (on Team 24's Channel).
 
 eg. 
 
 ISSUE REMINDER ALERT:
 
-  new issue:
+  Bug Fixes on index.js:
   
-  HW1-510       ID: 163030
+  DEPLOY_TEST_REPO       ID: 163030
   
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted. 
 
 ## Exploratory Testing and Code Inspection
 
-Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use cases below. Additionaly, you can try your own input to interact with the bot and stay productive!  
+Edge cases and errors are handled to the best of our knowledge. They could be tested using the examples provided for each use case below. Additionaly, you can try your own input to interact with the bot and stay productive!  
 
-#### Error Handling for Use Case 1
+#### Error Handling for Use Case 1: Personal To-Do List.
 
-1.Entering an invalid task number while trying to remove from the list
+1. Entering an invalid task number/ gibberish while trying to remove from the list
 
-=> Bot Reply: "Please enter a number from the list shown above, try again from the beginning."
+   => Bot Reply: "Please enter a number from the list shown above, try again from the beginning."
 
-2.Typing "*show todo*" when you haven't created a todo list.
+2. Typing "*show todo*" when you don't have taks in your todo list.
 
-=> Bot Reply: "There is nothing to show"
+   => Bot Reply: "There is nothing to show"
 
-#### Error Handling for Use Case 2
+#### Error Handling for Use Case 2: Github Issues
 
-1.Entering a wrong repo name while executing either of the commands: *create issue*, *show issue*, *close issue*.
+1. Entering a wrong repo name while executing either of the commands: *create issue*, *show issue*, *close issue*.
 
-=> Bot Reply: "Repo name entered does not match with the ones given above, kindly start over."
+   => Bot Reply: "Repo name entered does not match with the ones given above, kindly start over."
 
-2.Entering a wrong issue ID while trying to close an issue.
+2. Entering a wrong issue ID while trying to close an issue.
 
-=> Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
+   => Bot Reply: "Please enter a valid Issue ID from the ones given above, kindly start over."
 
-#### Error Handling for Use Case 3
+#### Error Handling for Use Case 3: Reminders
  
- 1.Entering show reminders when there are no active reminders.
+ 1. Entering show reminders when there are no active reminders.
  
- => Bot Reply: "You have no reminders"
+   => Bot Reply: "You have no reminders"
  
- 2.Entering invalid time or date while creating a reminder.
+ 2. Entering invalid time or date while creating a reminder.
  
- eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
+   eg. 2022-08-19 40:40 (or) 2022-02-31 15:45 (or) 2022-02-27 15:45 (past date)
  
- => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
+   => Bot reply: "Please enter a valid date and time following the format! Try again from the beginning."
  
- 3.Entering invalid reminder number while trying to remove a reminder.
+ 3. Entering invalid reminder number/ gibberish while trying to remove a reminder.
  
- => Bot Reply: "Please enter a valid number, kindly start over."
+   => Bot Reply: "Please enter a valid number, kindly start over."
 
-#### Error Handling for Use Case 4
+#### Error Handling for Use Case 4: Scheduling a Meeting
 
-1.Entering invalid date format.
+1. Entering invalid date format.
 
-=> eg. 2022-9-10  Bot Reply: Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
+   => eg. 2022-9-10  Bot Reply: Please check month format. Enter Month as MM, Try again or enter stop to terminate the process.
 
-=> eg. 22-09-10   Bot Reply: Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
+   => eg. 22-09-10   Bot Reply: Please check year format. Enter Year as YYYY, Try again or enter stop to terminate the process
 
-=> eg. 2022-03-2  Bot Reply:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
+   => eg. 2022-03-2  Bot Reply:  Please check day format. Enter Day as DD, Try again or enter stop to terminate the process!
 
-2.Entering invalid time format.
+2. Entering invalid time format.
 
-=> eg. 2:35  Bot Reply: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
+   => eg. 2:35  Bot Reply: Please check 'hours' format. Enter hours as 'HH', Try again or enter stop to terminate the process.
 
-=> eg. 05:5  Bot Reply: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
+   => eg. 05:5  Bot Reply: Please check 'minutes' format. Enter minutes as 'MM', Try again or enter stop to terminate the process
 
-=> eg. 01:78 Bot Reply: Please enter a valid time following the format! Try again or enter stop to terminate the process
+   => eg. 01:78 Bot Reply: Please enter a valid time following the format! Try again or enter stop to terminate the process
 
-User Input: stop
+**Note** : For this use case, if invalid input is entered, the user is given multiple attempts to correct the input or can simply type *stop* to start over. 
 
-Bot Reply: Process has stopped. Enter help for available commands !!
+User Input: *stop*
+
+Bot Reply: Process has stopped. Enter *help* for available commands !!
 
 ## Additional Instructions
 ### Creating Personal Access Tokens on Github
