@@ -98,6 +98,10 @@ The bot provides a feature for users to create reminders. Once created, the remi
 
 ![remove reminder](https://media.github.ncsu.edu/user/22704/files/cf348ecf-39a7-41ad-87b0-6c2057301f17)
 
+During the specified date and time, the reminder is displayed as follows:
+
+![reminder alert](https://media.github.ncsu.edu/user/22704/files/71196086-c422-427d-a756-6fa809e9edbb)
+
 => **Scheduling a Meeting**
 
 The main features of this use case includes:
@@ -119,7 +123,7 @@ The bot enables the users to schedule meetings by specifying the duration (start
 
 Automatic reminders are set for Github issues that are newly created. Ideally, reminders are displayed 3 days after issue has been created but for testing purpose, it will be displayed after a minute (on Team 24's Channel).
 
-![reminder alert](https://media.github.ncsu.edu/user/22704/files/71196086-c422-427d-a756-6fa809e9edbb)
+![image](https://media.github.ncsu.edu/user/22704/files/ea452ce8-2000-4e5e-b062-54842fb4cfd9)
 
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted.
 
