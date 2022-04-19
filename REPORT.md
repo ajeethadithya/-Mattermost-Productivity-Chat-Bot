@@ -28,7 +28,7 @@ Our Focus Bot has five primary use cases:
 4. Scheduling a Meeting
 5. Automatic Reminders for Github Issues
 
-=> Personal To-Do List
+=> **Personal To-Do List**
 
 The main features of this use case includes:
 
@@ -36,7 +36,7 @@ The main features of this use case includes:
 2. *show todo*
 3. *remove todo*
 
-Our Focus Bot enables the users to create their own personal to-do list. Once created, the users have the option to view and remove tasks from the list. This feature allows the user to keep track of the tasks that they should do and don't have any backlogs.
+The Focus Bot enables the users to create their own personal to-do list. Once created, the users have the option to view and remove tasks from the list. This feature allows the users to keep track of their tasks and make sure they don't have any backlogs.
 
 * *add todo*
 
@@ -50,7 +50,7 @@ Our Focus Bot enables the users to create their own personal to-do list. Once cr
 
 ![remove todo](https://media.github.ncsu.edu/user/22704/files/29e74448-7463-431c-a47f-b1c825caf41d)
 
-=> Github Issues
+=> **Github Issues**
 
 The main features of this use case includes:
 
@@ -58,7 +58,7 @@ The main features of this use case includes:
 2. *show issues*
 3. *close issue*
 
-The bot allows the users to create issues in a specific repo. The created issues will be updated in Github and the users can view and close issues on the channel itself. The purpose of this feature is to facilate users to smoothly update issues in the channel itself instead of them going to Github everytime to update the status of an issue. 
+The bot allows the users to create issues in a specific repository. The created issues will be updated in Github and the users can view and close issues on the channel itself. The purpose of this feature is to facilate users to smoothly update issues in the channel itself instead of them going to Github everytime to update the status of an issue. 
 
 * *create issue*
 
@@ -74,7 +74,7 @@ The bot allows the users to create issues in a specific repo. The created issues
 
 ![check close issue](https://media.github.ncsu.edu/user/22704/files/fa9ce375-d27c-4cb1-a0d5-8d033ecb49d0)
 
-=> Reminders
+=> **Reminders**
 
 The main features of this use case includes:
 
@@ -82,7 +82,7 @@ The main features of this use case includes:
 2. *show reminders*
 3. *remove reminder*
 
-The bot provides a feature for users to create reminders. Once created, the reminders can be viewed and also removed when required. This allows the user to keep updated about the events or tasks that need to be performed.
+The bot provides a feature for users to create reminders. Once created, the reminders can be viewed and also removed when required. This allows the user to keep updated about the events or tasks that need to be completed.
 
 * *create reminder*
 
@@ -98,7 +98,7 @@ The bot provides a feature for users to create reminders. Once created, the remi
 
 ![remove reminder](https://media.github.ncsu.edu/user/22704/files/cf348ecf-39a7-41ad-87b0-6c2057301f17)
 
-=> Scheduling a Meeting
+=> **Scheduling a Meeting**
 
 The main features of this use case includes:
 
@@ -121,7 +121,7 @@ Automatic reminders are set for Github issues that are newly created. Ideally, r
 
 ![reminder alert](https://media.github.ncsu.edu/user/22704/files/71196086-c422-427d-a756-6fa809e9edbb)
 
-
+Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted.
 
 
 
