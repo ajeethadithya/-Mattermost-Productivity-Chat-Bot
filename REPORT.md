@@ -128,4 +128,7 @@ Automatic reminders are set for Github issues that are newly created. Ideally, r
 Note: If the Github issue is closed before the reminder is displayed, the reminder itself gets deleted.
 
 
+### Reflection on Development Process and Project
+
+### Limitations and Future Work
 
