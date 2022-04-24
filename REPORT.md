@@ -140,17 +140,29 @@ Design Milestone:
 
 The first milestone was critical in setting up the foundation of the PAM-BOT. The designing of usecases(and other associated UML diagrams) provided a lucid image on how we expect our bot to function. The incorporation of wireframes provided a basic idea about the bot layout and it's iteractions. The storyboard designs provided us an opportunity to understand the bot, both as a developer and end-user.
 
-What we achieved: 
+What we achieved: Was able to understand what problem our bot solves and how we expect our bot to address these issues.
+
+Bot Milestone:
+
+
+
 
 
 Process Milestone:
 
+The team employed a hybrid approach of "Extreme Programming (Core practice) and Corollary practice" . 
+
+We employed a few corollary practices such as "Team Continuity" and "Shared Code". Team members were encouraged to provide constructive criticism which furthered the development of the PAM-BOT. 
+
 The incorporation of the Scrumban approach meant that the work was split into small shippable deliverables. The Kanban workflow facilitated a visual workflow management. The card-like task prioritizing ensured that the each individual's role was well defined. This also allowed the management of the collective work of the team.
+
+Deployment Milestone:
+
+The culminating milestone provided a comprehensive overview of the BOT. Seeing the deployed bot allowed us to look back and better appreciate the software practices we employed throughout the bot's development. Creating the various acceptance tests allowed us to get into the end-user's mindset and work around the various edge-cases and error control mechanisms.
 
 ### Limitations and Future Work
 
 * Limitations:
-Limitation:
 
 1. Our bot focuses on increasing an individual's productivity and hence currently the GitHub API calls that are being made to close, create, and show issues can only be done on repositories that are owned by the user. However, the user will be able to see member and owned repositories but access only owned repositories. 
 
