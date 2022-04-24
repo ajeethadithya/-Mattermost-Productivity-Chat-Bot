@@ -149,3 +149,17 @@ The incorporation of the Scrumban approach meant that the work was split into sm
 
 ### Limitations and Future Work
 
+* Limitations:
+Limitation:
+
+1. Our bot focuses on increasing an individual's productivity and hence currently the GitHub API calls that are being made to close, create, and show issues can only be done on repositories that are owned by the user. However, the user will be able to see member and owned repositories but access only owned repositories. 
+
+2. Our bot depends on GitHub a bit more than desired as GitHub API calls have a tendency to fail often over a long period of time (From our observation over the entire project). In order to ensure that the username in GitHub is the same as the user's name in the Firebase Database, an API call is being made to get the user ID from GitHub. If GitHub is down when a new user is using the bot, the user may not be registered to the database which is something we would look to fix. However, all other functionalities will execute normally even when servers are down (eg. to-do list, reminders, meetings, etc.)
+
+3. In order to set automatic reminders for newly created Issues on owned GitHub repositories, a cronJob (hits the API every 5 seconds) is set up that makes an API call to check if there are any new issues in all the owned repositories. This API call returns a success or a failure message. If the servers are up and running, the issues from the repositories are returned with a success code otherwise an error is caught and is printed to the Mattermost chat server (To the Team-24 Channel). This print would happen every 5 seconds since it is the exception caught as pat of the cronJob that sets out every 5 seconds.
+
+These are the primary limitations.
+
+* Future Work
+
+
