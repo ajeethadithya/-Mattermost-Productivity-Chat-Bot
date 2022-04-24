@@ -140,6 +140,8 @@ Design Milestone:
 
 The first milestone was critical in setting up the foundation of the PAM-BOT. The designing of usecases(and other associated UML diagrams) provided a lucid image on how we expect our bot to function. The incorporation of wireframes provided a basic idea about the bot layout and it's iteractions. The storyboard designs provided us an opportunity to understand the bot, both as a developer and end-user.
 
+What we achieved: 
+
 
 Process Milestone:
 
