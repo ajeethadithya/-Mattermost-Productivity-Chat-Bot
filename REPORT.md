@@ -9,8 +9,9 @@ Link to the presentation video:
 ### Problem the Bot Solved
 
 *HOCUS POCUS, DON’T LOSE YOUR FOCUS*
+ 
+The primary problem we expected to solve over the course of our BOT development is mitigating the effects of productivity loss particularly targetting these effects in a remote work environment.
 
-“Working at home features distractions and more than one in 10 millennials admitted being distracted by playing video games during the workday and one in five boomers did laundry during the workday.”
 
 https://www.techrepublic.com/article/distractions-and-the-downsides-to-working-from-home/
 
@@ -109,7 +110,7 @@ The main features of this use case includes:
 1. *create meeting*
 2. *show meetings*
 
-The bot enables the users to schedule meetings by specifying the duration (start and end date, start and end time). These meetings are updated on the users Google Calendar account. Additionally, these meetings can be viewed on the channel as well as the calendar.
+The bot enables the users to schedule meetings by specifying the name, description and duration (start and end date, start and end time). These meetings are updated on the users Google Calendar account. Additionally, these meetings can be viewed on the channel as well as the calendar by entering the "view meetings" command.
 
 * *create meeting*
 
@@ -129,6 +130,12 @@ Note: If the Github issue is closed before the reminder is displayed, the remind
 
 
 ### Reflection on Development Process and Project
+
+Through the course of the bot development, various software development best practices were rigorously followed. The presctibed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
+
+Process Milestone:
+
+The incorporation of the Scrumban approach meant that the work was split into small shippable deliverables. The Kanban workflow facilitated a visual workflow management. The card-like task prioritizing ensured that the each individual's role was well defined. This also allowed the team to manage the collective work of the team.
 
 ### Limitations and Future Work
 
