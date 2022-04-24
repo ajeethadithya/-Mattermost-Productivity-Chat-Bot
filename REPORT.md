@@ -131,7 +131,7 @@ Note: If the Github issue is closed before the reminder is displayed, the remind
 
 ### Reflection on Development Process and Project
 
-Through the course of the bot development, various software development best practices were rigorously followed. The presctibed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
+Through the course of the bot development, various software development practices were rigorously followed. The presctibed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
 
 Process Milestone:
 
