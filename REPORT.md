@@ -131,11 +131,19 @@ Note: If the Github issue is closed before the reminder is displayed, the remind
 
 ### Reflection on Development Process and Project
 
-Through the course of the bot development, various software development practices were rigorously followed. The presctibed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
+Reflection and consistent improvement is one of the key aspects of software development. 
+
+
+Through the course of the bot development, various software development practices were rigorously followed. The prescribed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
+
+Design Milestone:
+
+The first milestone was critical in setting up the foundation of the PAM-BOT. The designing of usecases(and other associated UML diagrams) provided a lucid image on how we expect our bot to function. The incorporation of wireframes provided a basic idea about the bot layout and it's iteractions. The storyboard designs provided us an opportunity to understand the bot, both as a developer and end-user.
+
 
 Process Milestone:
 
-The incorporation of the Scrumban approach meant that the work was split into small shippable deliverables. The Kanban workflow facilitated a visual workflow management. The card-like task prioritizing ensured that the each individual's role was well defined. This also allowed the team to manage the collective work of the team.
+The incorporation of the Scrumban approach meant that the work was split into small shippable deliverables. The Kanban workflow facilitated a visual workflow management. The card-like task prioritizing ensured that the each individual's role was well defined. This also allowed the management of the collective work of the team.
 
 ### Limitations and Future Work
 
