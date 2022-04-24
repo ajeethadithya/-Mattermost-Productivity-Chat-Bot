@@ -136,19 +136,19 @@ Reflection and consistent improvement is one of the key aspects of software deve
 
 Through the course of the bot development, various software development practices were rigorously followed. The prescribed milestones provided high-level goals whilst also giving the freedom to implement them. The milestones also provided a structure to the bot development which ensured the team was able to manage the timely deliverables. The incorporation of milestones was particularly appreciated during the initial stages of the development wherein the team was able to iteratively define and decide the processes and technologies (such as platform, tools) that the PAM Bot would eventually incorporate.
 
-Design Milestone:
+*Design Milestone*:
 
 The first milestone was critical in setting up the foundation of the PAM-BOT. The designing of usecases(and other associated UML diagrams) provided a lucid image on how we expect our bot to function. The incorporation of wireframes provided a basic idea about the bot layout and it's iteractions. The storyboard designs provided us an opportunity to understand the bot, both as a developer and end-user.
 
 What we achieved: Was able to understand what problem our bot solves and how we expect our bot to address these issues.
 
-Bot Milestone:
+*Bot Milestone*:
 
 
 
 
 
-Process Milestone:
+*Process Milestone*:
 
 The team employed a hybrid approach of "Extreme Programming (Core practice) and Corollary practice" . 
 
@@ -156,13 +156,13 @@ We employed a few corollary practices such as "Team Continuity" and "Shared Code
 
 The incorporation of the Scrumban approach meant that the work was split into small shippable deliverables. The Kanban workflow facilitated a visual workflow management. The card-like task prioritizing ensured that the each individual's role was well defined. This also allowed the management of the collective work of the team.
 
-Deployment Milestone:
+*Deployment Milestone*:
 
 The culminating milestone provided a comprehensive overview of the BOT. Seeing the deployed bot allowed us to look back and better appreciate the software practices we employed throughout the bot's development. Creating the various acceptance tests allowed us to get into the end-user's mindset and work around the various edge-cases and error control mechanisms.
 
 ### Limitations and Future Work
 
-* Limitations:
+* *Limitations*:
 
 1. Our bot focuses on increasing an individual's productivity and hence currently the GitHub API calls that are being made to close, create, and show issues can only be done on repositories that are owned by the user. However, the user will be able to see member and owned repositories but access only owned repositories. 
 
@@ -170,9 +170,8 @@ The culminating milestone provided a comprehensive overview of the BOT. Seeing t
 
 3. In order to set automatic reminders for newly created Issues on owned GitHub repositories, a cronJob (hits the API every 5 seconds) is set up that makes an API call to check if there are any new issues in all the owned repositories. This API call returns a success or a failure message. If the servers are up and running, the issues from the repositories are returned with a success code otherwise an error is caught and is printed to the Mattermost chat server (To the Team-24 Channel). This print would happen every 5 seconds since it is the exception caught as pat of the cronJob that sets out every 5 seconds.
 
-These are the primary limitations.
 
-* Future Work:
+* *Future Work*:
 
 1. In order to increase the Team's productivity further, we would like our bot to act as a scrum master. The bot would send a message at a specified time every morning of the week to every channel ID/ user part of the Team (eg. members of Team 24) asking them to give thier summary as how they would in a scrum meeting. The bot would collect the replies from the users and post to the the Group channel (eg. Team 24 Channel) for everyone to get the summary of the scrum meeting. This would be ideal especially in these times where remote working is becoming a norm. This would also reduce the necessity to get on call and would continue the tradition of frequent/ daily scrum meetings amongst teams. The summary can also be stored for reviewing progress and performance of the individuals.
 
