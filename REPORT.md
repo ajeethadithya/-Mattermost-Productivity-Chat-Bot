@@ -172,6 +172,11 @@ The culminating milestone provided a comprehensive overview of the BOT. Seeing t
 
 These are the primary limitations.
 
-* Future Work
+* Future Work:
 
+1. In order to increase the Team's productivity further, we would like our bot to act as a scrum master. The bot would send a message at a specified time every morning of the week to every channel ID/ user part of the Team (eg. members of Team 24) asking them to give thier summary as how they would in a scrum meeting. The bot would collect the replies from the users and post to the the Group channel (eg. Team 24 Channel) for everyone to get the summary of the scrum meeting. This would be ideal especially in these times where remote working is becoming a norm. This would also reduce the necessity to get on call and would continue the tradition of frequent/ daily scrum meetings amongst teams. The summary can also be stored for reviewing progress and performance of the individuals.
+
+2. We would extend this bot to access owned as well as member repositories to create, show, and close issues. Currently the bot can show repositories that a user owns and is a member of but can only make changes with respect to issues on repositories that the user owns. This could be changed to owned and member repositories as this means Team projects/ repositories can be accessed and all users can create, close, and view the Team's GitHub issues for different repositories.
+
+3. We could also include the concept of Conversational Aritficial Intelligence and empower our bot to do more complex tasks and develop the ability to understand human language. Keyword based querying would be reduced and natural language understanding could be increased. It would be easier to integrate user authentication with such a bot.
 
