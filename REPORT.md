@@ -144,9 +144,12 @@ What we achieved: Was able to understand what problem our bot solves and how we 
 
 * *Bot Milestone*:
 
+In this milestone, the team began working on all phases laid out in the design milestone.
 
+One of the most important components of software testing is to create a test plan. The team carried out software testing throughout the entirety of the project.
+Functional testing was used to ensure that each module of the project is operating as expected, and fulfilling the requirements. Moreover, it allowed us to detect bugs at the early stages of the software development. 
 
-
+Mocking was primarily used during unit testing, so that external dependencies were not a constraint to the test phase. Mocking allowed the testing to start early, since all units of the project can be carried out in parallel without waiting for all modules of the application to be entirely ready.
 
 * *Process Milestone*:
 
